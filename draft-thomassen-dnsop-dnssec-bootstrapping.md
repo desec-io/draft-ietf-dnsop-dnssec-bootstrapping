@@ -309,9 +309,11 @@ Operator signs the zones and publishes records at the Signaling Names.)
 
 **Note to the RFC Editor**: please remove this entire section before publication.
 
+* Knot DNS supports manual creation of CDS/CDNSKEY records on non-apex names.
+
 * PowerDNS supports manual creation of CDS/CDNSKEY records on non-apex names.
 
-* TODO Proof of concept
+* Proof of concept is in progress (as of 2021-06-30)
 
 
 # Security Considerations
