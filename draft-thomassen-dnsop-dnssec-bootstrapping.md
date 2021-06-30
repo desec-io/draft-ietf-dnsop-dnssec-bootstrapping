@@ -134,10 +134,12 @@ publication of CDS/CDNSKEY RRset to the parent publishing the
 synchronized DS RRset should be as short as possible.
 
 This goal is achieved by transferring trust from the Child DNS Operator.
+Implementation by Child DNS Operators and Parental Agents is RECOMMENDED.
 
 ## Preconditions
 
-In order to use this technique, the following conditions have to be met:
+If a Child DNS Operator implements the protocol, the following conditions
+have to be met:
 
 1. The Child DNS Operator SHOULD publish CDS/CDNSKEY records at the
    Child's apex, as described in [@!RFC7344].
@@ -231,9 +233,11 @@ which is authoritative for the respective Bootstrapping Domain.
 
 ### Steps Taken by the Parental Agent
 
-When the Parental Agent receives a new NS record set (or additionally
-at any other time considered appropriate), the Parental Agent,
-knowing both the Child zone name and its NS hostnames,
+When a Parental Agent implementing this protocol receives a new NS
+record set for a Child, the Parental Agent, knowing both the Child
+zone name and its NS hostnames,
+
+0. MUST verify that the Child is not currently securely delegated;
 
 1. MUST query the CDS/CDNSKEY records located at each of the Signaling
    Names (using standard DNS resolution);
@@ -244,14 +248,16 @@ knowing both the Child zone name and its NS hostnames,
    directly from each of the authoritative nameservers as given in the
    Child NS record set;
 
-4. MUST checks that all CDS/CDNSKEY record sets retrieved in Steps 1 and
+4. MUST check that all CDS/CDNSKEY record sets retrieved in Steps 1 and
    3 have equal record contents;
 
 5. SHOULD derive a DS record set from the retrieved CDS/CDNSKEY record
    sets and publish it in the Parent zone, as to secure the Child's
    delegation.
 
-If an error condition occurs during Steps 1--4, in particular:
+If an error condition occurs before Step 5, in particular:
+
+- The Child is already securely delegated (Step 0),
 
 - DNS resolution failure during retrieval of CDS/CDNSKEY records from
   any Signaling Name (Step 1), or failure of DNSSEC validation (Step 2),
