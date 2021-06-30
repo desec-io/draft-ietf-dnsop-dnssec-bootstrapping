@@ -56,13 +56,13 @@ missing.
 
 How the keying material is conveyed to the Parent during initial DNSSEC
 bootstrapping depends on the relationship the Child has with the Parent.
-In many cases this is a manual process -- and not an easy one.  The
-communication has to occur between the DNS Operator and, depending on
-the circumstances, the Registry or the Registrar, possibly via the
-Registrant (for details, see [@!RFC7344], Appendix A).  Any manual
+The communication has to occur between the DNS Operator and, depending
+on the circumstances, the Registry or the Registrar, possibly via the
+Registrant (for details, see [@!RFC7344], Appendix A).  In many cases,
+this is a manual process -- and not an easy one.  Any manual
 process is susceptible to mistakes and/or errors.  In addition, due to
-the annoyance factor of the process, Operators may avoid the process
-of getting a DS record set published at the Parent.
+the annoyance factor of the process, involved parties may avoid the
+process of getting a DS record set published at the Parent.
 
 DNSSEC provides data integrity to information published in DNS; thus,
 DNS publication can be used to automate maintenance of delegation
@@ -73,7 +73,7 @@ Readers are expected to be familiar with DNSSEC, including [@!RFC4033],
 [@!RFC4034], [@!RFC4035], [@!RFC6781], [@!RFC7344], and [@!RFC8078].
 
 This document describes a method for automated provisioning of the
-delegation trust information and proposes a polled/periodic trigger
+delegation trust information and proposes a simple trigger
 for simplicity.  Some users may prefer a different trigger.
 These alternate additional triggers are not discussed in this
 document.
@@ -101,7 +101,7 @@ Parental Agent
 
 Bootstrapping Domain
 : Given an authoritative nameserver hostname from the Child's
-  NS record set, that hostname prefixed the label `_boot`.
+  NS record set, that hostname prefixed with the label `_boot`.
 
 Signaling Name
 : A Bootstrapping Domain prefixed with a label encoding the
@@ -143,10 +143,10 @@ In order to use this technique, the following conditions have to be met:
    Child's apex, as described in [@!RFC7344].
 
 2. Each Bootstrapping Domain MUST be part of a securely delegated
-   zone, i.e. has a valid DNSSEC chain of trust from the root.
+   zone, i.e. have a valid DNSSEC chain of trust from the root.
 
 3. The Child DNS Operator MUST be able to maintain and publish DNS
-   information in these zone (i.e. under the Bootstrapping Domains).
+   information in these zones (i.e. under the Bootstrapping Domains).
 
 For operational or other reasons, a Bootstrapping Domain MAY coincide
 with a zone cut.
@@ -173,9 +173,8 @@ the Child DNS Operator.  If the Bootstrapping Domain does not coincide
 with a zone cut, these conditions are instead imposed on the containing
 zone (such as `example.net`).
 
-The "Bootstrapping Domain" terminology is necessary to describe the
-bootstrapping mechanism without regard to whether there is a zone cut
-at these names or not.
+The "Bootstrapping Domain" terminology helps describing the mechanism
+without regard to whether there is a zone cut at these names or not.
 
 
 ## Bootstrapping Method
@@ -194,11 +193,11 @@ This label MUST be equal to the SHA-256 hash digest of the Child's
 name in "Base 32 Encoding with Extended Hex Alphabet", as specified
 in [@!RFC4648].  Trailing padding characters ("=") MUST be dropped.
 
-Previous uses of CDS/CDNSKEY records are specified at the apex only
+Previous use of CDS/CDNSKEY records is specified at the apex only
 ([@!RFC7344], Section 4.1).  This protocol extends the use of these
-record types on non-apex owner names for the purpose of DNSSEC
-bootstrapping.  To avoid the possibility of semantic collision, there
-MUST NOT be a zone cut at a Signaling Name.
+record types at non-apex owner names for the purpose of DNSSEC
+bootstrapping.  To exclude the possibility of semantic collision,
+there MUST NOT be a zone cut at a Signaling Name.
 
 **TODO Remove Note 1:** The purpose of the hash function is to avoid
 the possibility of exceeding the maximum length of a DNS name.  This
@@ -263,6 +262,10 @@ If an error condition occurs during Steps 1--4, in particular:
 - Inconsistent responses (Step 4),
 
 the Parental Agent MUST NOT proceed to Step 5.
+
+In addition to triggering this procedure whenever the Child's NS
+records are updated, the Parental Agent MAY also trigger the
+procedure at any other time deemed appropriate by local policy.
 
 #### Example
 
