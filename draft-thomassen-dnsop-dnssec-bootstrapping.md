@@ -148,9 +148,6 @@ have to be met:
 2. Each Bootstrapping Domain MUST be part of a securely delegated
    zone, i.e. have a valid DNSSEC chain of trust from the root.
 
-3. The Child DNS Operator MUST be able to maintain and publish DNS
-   information in these zones (i.e. under the Bootstrapping Domains).
-
 For operational or other reasons, a Bootstrapping Domain MAY coincide
 with a zone cut.
 
@@ -165,8 +162,6 @@ DNS Operator
 2. needs to ensure that a valid DNSSEC chain of trust exists for the
    zone(s) that are authoritative for the Bootstrapping Domains
    `_boot.ns1.example.net` and `_boot.ns2.example.net`;
-
-3. must be able to maintain and publish DNS information in these zones.
 
 ### Zone Cut Clarification
 
