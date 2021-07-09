@@ -234,7 +234,7 @@ which is authoritative for the respective Bootstrapping Domain.
 
 ### Steps Taken by the Parental Agent
 
-When a Parental Agent implementing this protocol receives a new NS
+When a Parental Agent implementing this protocol receives a new or updated NS
 record set for a Child, the Parental Agent, knowing both the Child
 zone name and its NS hostnames,
 
