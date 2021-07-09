@@ -240,6 +240,7 @@ respective Bootstrapping Zone.
 **TODO:** 1.) Should hash input include trailing dot?
 2.) Should hash input include bootstrapping domain (to prevent DNAME redirects)?
 (Command was: `echo -n example.com | openssl dgst -binary -sha256 | base32hex | tr -d =`)
+3.) Should the hash use wire format?
 
 {#bootstrapping}
 ### Steps Taken by the Parental Agent
