@@ -488,6 +488,16 @@ Thoughts (to be expanded):
     * mitigation exists by diversifying e.g. the nameserver hostname's TLDs,
       which is advisable anyways.
 
+- Prevention of accidental misprovisioning / enforcing explicit provisioning:
+    * In addition to facilitating Child zone discovery and simplifying
+      debugging, the Child-specific PTR record also prevents the use of
+      wildcards records under the Bootstrapping Domain.  As a result,
+      signaling records have to be provisioned explicitly.
+    * Similarly, operators could deflect a Bootstrapping Domain onto
+      another one, by means of a DNAME record.  This can be prevented by
+      incorporating the Bootstrapping Domain's name into the hash used to
+      construct the Signal Name.
+
 # IANA Considerations
 
 **TODO:** reserve `_boot`?
