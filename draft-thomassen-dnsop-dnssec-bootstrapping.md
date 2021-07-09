@@ -501,6 +501,15 @@ brainstorming.
 
 # Change History (to be removed before final publication)
 
+* draft-thomassen-dnsop-dnssec-bootstrapping-01
+
+> Added PTR record at Signaling Name.
+
+> Added NSEC recommendation for Bootstrapping Zones.
+
+> Added multi-signer use case.
+
+
 * draft-thomassen-dnsop-dnssec-bootstrapping-00
 
 > Initial public draft.
