@@ -301,7 +301,7 @@ If an error condition occurs before Step 6, in particular:
 
 - Inconsistent responses (Step 5),
 
-the Parental Agent MUST abort the procedure and MUST NOT proceed to Step 5.
+the Parental Agent MUST abort the procedure and MUST NOT proceed to Step 6.
 
 In addition to triggering this procedure whenever the Child's NS
 records are updated, the Parental Agent MAY also trigger the
