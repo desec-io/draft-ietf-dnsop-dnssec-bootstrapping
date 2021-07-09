@@ -208,7 +208,7 @@ tenants in shared hosting environments from creating collisions.
 the Signaling Name should support sharding of Child names, i.e.,
 be separated into a couple of labels.
 
-## Bootstrapping of DNSSEC Delegations
+## Bootstrapping a DNSSEC Delegation
 
 {#signalingrecords}
 ### Signaling Records
@@ -270,19 +270,19 @@ zone name and its NS hostnames,
    Child NS record set;
 
 3. MUST query the PTR record located at each of the Signaling Names
-   and verify that its content is equal to the Child's name;
+   and verify that its content matches the Child's name;
 
 4. MUST query the CDS/CDNSKEY records located at each of the Signaling
    Names;
 
 5. MUST check (separately by record type) that all record sets
-   retrieved in Steps 2, 3 and 4 have equal contents;
+   retrieved in Steps 2 (if present), 3 and 4 have equal contents;
 
 6. SHOULD derive a DS record set from the retrieved CDS/CDNSKEY record
-   sets and publish it in the Parent zone, as to secure the Child's
+   sets and publish it in the Parent zone, so as to secure the Child's
    delegation.
 
-For above queries, the Parental Agent MUST use a trusted and validating
+For the above queries, the Parental Agent MUST use a trusted validating
 DNS resolver and MUST treat responses with unauthenticated data
 (AD bit not set) as an error condition, unless indicated otherwise.
 
@@ -292,7 +292,8 @@ If an error condition occurs before Step 6, in particular:
 
 - Any failure during the retrieval of the CDS/CDNSKEY records located
   at the Child apex from the Child's authoritative nameservers (Step 2),
-  with an empty record set not qualifying as a failure,
+  with an empty record set returned from all authoritative nameservers
+  not qualifying as a failure,
 
 - The PTR record does not match (Step 3),
 
@@ -301,7 +302,7 @@ If an error condition occurs before Step 6, in particular:
 
 - Inconsistent responses (Step 5),
 
-the Parental Agent MUST abort the procedure and MUST NOT proceed to Step 6.
+the Parental Agent MUST abort the procedure.
 
 In addition to triggering this procedure whenever the Child's NS
 records are updated, the Parental Agent MAY also trigger the
@@ -328,7 +329,7 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 
 5. checks that the PTR record sets retrieved in Step 3 agree across
    responses; ditto for the CDS/CDNSKEY record sets retrieved in
-   Step 2 and Step 4;
+   Steps 2 and 4;
 
 6. publishes a DS record set according to the information retrieved in the
    previous steps.
@@ -338,8 +339,11 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 As a special case of Step 2 failure, the Child MAY opt out from DNSSEC
 bootstrapping by publishing a CDS/CDNSKEY record with algorithm 0 and
 other fields as specified in [@!RFC8078], Section 4, at its apex.
-(This opt-out mechanism is without regard to whether the Child DNS
-Operator signs the zones and publishes records at the Signaling Names.)
+
+This mechanism is without regard to whether the Child zone's
+signatures are managed by the Child DNS Operator or by the zone owner,
+and without regard to what the Child DNS Operator decides to signal
+under the Bootstrapping Domain.
 
 
 ## Possible Extensions
