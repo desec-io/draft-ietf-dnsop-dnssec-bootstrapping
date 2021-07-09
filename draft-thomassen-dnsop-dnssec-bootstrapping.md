@@ -204,7 +204,7 @@ be separated into a couple of labels.
 ### Signaling Records
 
 To announce its willingness to act at the Child's delegated signer,
-the Child DNS operator (re-)publishes the Child's CDS/CDNSKEY
+the Child DNS operator publishes a copy of the Child's CDS/CDNSKEY
 records at the corresponding Signaling Name under each
 Bootstrapping Domain.
 
@@ -223,7 +223,7 @@ Bootstrapping Domains are `_boot.ns1.example.net` and
 Child DNS Operator
 
 - publishes a PTR record pointing to `example.com.`, and
-- (re-)publishes the Child's CDS/CDNSKEY records
+- publishes the Child's CDS/CDNSKEY records
 
 at the names
 
@@ -366,7 +366,7 @@ nameservers are `_boot.ns3.example.org` and `_boot.ns4.example.org`.
 In the zones containing these domains, the new Child DNS Operator
 
 - publishes a PTR record pointing to `example.com.`, and
-- (re-)publishes a DNSKEY record set containing the ZSK set that the
+- publishes a DNSKEY record set containing the ZSK set that the
   operator will use for signing the Child zone,
 
 at the names
