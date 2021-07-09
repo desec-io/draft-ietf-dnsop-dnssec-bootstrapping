@@ -24,6 +24,17 @@ organization = "deSEC, Secure Systems Engineering"
 [author.address.postal]
  city = "Berlin"
  country = "Germany"
+
+[[author]]
+initials = "N."
+surname = "Wisiol"
+fullname = "Nils Wisiol"
+organization = "deSEC, Technische Universität Berlin"
+[author.address]
+ email = "nils@desec.io"
+[author.address.postal]
+ city = "Berlin"
+ country = "Germany"
 %%%
 
 
