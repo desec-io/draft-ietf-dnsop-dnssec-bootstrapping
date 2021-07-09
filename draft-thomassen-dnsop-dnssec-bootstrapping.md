@@ -188,9 +188,8 @@ Bootstrapping Domain.  The signaling records are
 - one or more other DNS records, depending on the specific use
   case as described below.
 
-As these records belong to the corresponding Bootstrapping Zone,
-they MUST be signed with that zone's keys (as opposed to signing
-them with the Child zone's keys).
+These records MUST be accompanied by RRSIG records created with
+the corresponding Bootstrapping Zone's key(s).
 
 The Signaling Name contains a label derived from the Child's name.
 This label MUST be equal to the SHA-256 hash digest of the Child's
@@ -224,6 +223,10 @@ Previous use of CDS/CDNSKEY records is specified at the apex only
 record types at non-apex owner names for the purpose of DNSSEC
 bootstrapping.  To exclude the possibility of semantic collision,
 there MUST NOT be a zone cut at a Signaling Name.
+
+Unlike the CDS/CDNSKEY records at the Child's apex, bootstrapping
+records MUST be signed with the corresponding Bootstrapping Zone's
+key(s).
 
 #### Example
 
