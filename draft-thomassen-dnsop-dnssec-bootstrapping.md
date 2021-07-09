@@ -206,7 +206,7 @@ be separated into a couple of labels.
 To announce its willingness to act as the Child's delegated signer,
 the Child DNS operator publishes a copy of the Child's CDS/CDNSKEY
 records at the corresponding Signaling Name under each
-Bootstrapping Domain.
+Bootstrapping Domain as defined in #signaling.
 
 Previous use of CDS/CDNSKEY records is specified at the apex only
 ([@!RFC7344], Section 4.1).  This protocol extends the use of these
