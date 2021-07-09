@@ -252,11 +252,10 @@ zone name and its NS hostnames,
 1. MUST verify that the Child is not currently securely delegated;
 
 2. MUST query the PTR record located at each of the Signaling Names
-   (using a trusted validating DNS resolver) and verify that its
-   content is equal to the Child's name;
+   and verify that its content is equal to the Child's name;
 
 3. MUST query the CDS/CDNSKEY records located at each of the Signaling
-   Names (using a trusted validating DNS resolver);
+   Names;
 
 4. SHOULD query the CDS/CDNSKEY records located at the Child zone apex,
    directly from each of the authoritative nameservers as given in the
@@ -268,6 +267,10 @@ zone name and its NS hostnames,
 6. SHOULD derive a DS record set from the retrieved CDS/CDNSKEY record
    sets and publish it in the Parent zone, as to secure the Child's
    delegation.
+
+For above queries, the Parental Agent MUST use a trusted and validating
+DNS resolver and MUST treat responses with unauthenticated data
+(AD bit not set) as an error condition, unless indicated otherwise.
 
 If an error condition occurs before Step 6, in particular:
 
@@ -296,16 +299,14 @@ To bootstrap the Child zone `example.com` using NS records
 
 1. checks that the Child zone is not yet securely delegated;
 
-2. queries the PTR record (using a trusted validating DNS resolver)
-   located at the Signaling Names
+2. queries the PTR record located at the Signaling Names
 ```
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns1.example.net
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 ```
    and verifies that the record content is `example.com.`;
 
-3. queries CDS/CDNSKEY records (using a trusted validating DNS
-   resolver) located at the same Signaling Names;
+3. queries CDS/CDNSKEY records located at the same Signaling Names;
 
 4. queries CDS/CDNSKEY records for `example.com` directly from
    `ns1.example.net` and `ns2.example.net`;
