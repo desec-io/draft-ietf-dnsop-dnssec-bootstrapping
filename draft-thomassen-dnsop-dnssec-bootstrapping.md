@@ -104,6 +104,9 @@ Bootstrapping Domain(s)
   NS record set, the hostname prefixed with the label `_boot` is one
   of the Bootstrapping Domains for the Child Zone.
 
+Bootstrapping Zone
+: The zone which is authoritative for a given Bootstrapping Domain.
+
 Signaling Name
 : A Bootstrapping Domain prefixed with a label derived from the
   Child zone's name.
@@ -145,11 +148,8 @@ have to be met:
 1. The Child DNS Operator SHOULD publish CDS/CDNSKEY records at the
    Child's apex, as described in [@!RFC7344].
 
-2. Each Bootstrapping Domain MUST be part of a securely delegated
-   zone, i.e. have a valid DNSSEC chain of trust from the root.
-
-For operational or other reasons, a Bootstrapping Domain MAY coincide
-with a zone cut.
+2. Each Bootstrapping Zone MUST be part securely delegated zone, i.e.
+   have a valid DNSSEC chain of trust from the root.
 
 ### Example
 
@@ -162,17 +162,6 @@ DNS Operator
 2. needs to ensure that a valid DNSSEC chain of trust exists for the
    zone(s) that are authoritative for the Bootstrapping Domains
    `_boot.ns1.example.net` and `_boot.ns2.example.net`.
-
-### Zone Cut Clarification
-
-A Bootstrapping Domain such as `_boot.ns1.example.net` may be a zone of
-its own, in which case it needs to be secure and under the control of
-the Child DNS Operator.  If the Bootstrapping Domain does not coincide
-with a zone cut, these conditions are instead imposed on the containing
-zone (such as `example.net`).
-
-The "Bootstrapping Domain" terminology helps describing the mechanism
-without regard to whether there is a zone cut at these names or not.
 
 
 ## Bootstrapping Method
@@ -297,6 +286,21 @@ bootstrapping by publishing a CDS/CDNSKEY record with algorithm 0 and
 other fields as specified in [@!RFC8078], Section 4, at its apex.
 (This opt-out mechanism is without regard to whether the Child DNS
 Operator signs the zones and publishes records at the Signaling Names.)
+
+
+## Operational Recommendations
+
+Bootstrapping Domains SHOULD be delegated as zones of their own, so
+that the Bootstrapping Zone's apex coincides with the Bootstrapping
+Domain (such as `_boot.ns1.example.net`).
+While it is permissible for the Bootstrapping Domain to be contained
+in a Bootstrapping Zone of fewer labels (such as `example.net`), a
+zone cut ensures that bootstrapping activities do not require
+modifications of the zone containing the nameserver hostname.
+
+In addition, Bootstrapping Zones SHOULD use NSEC to allow consumers
+to efficiently discover pending bootstrapping operations by means of
+zone walking.
 
 
 # Implementation Status
