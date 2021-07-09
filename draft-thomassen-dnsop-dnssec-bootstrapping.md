@@ -249,7 +249,7 @@ zone name and its NS hostnames,
    sets and publish it in the Parent zone, as to secure the Child's
    delegation.
 
-If an error condition occurs before Step 5, in particular:
+If an error condition occurs before Step 4, in particular:
 
 - The Child is already securely delegated (Step 0),
 
