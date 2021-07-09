@@ -432,7 +432,13 @@ modifications of the zone containing the nameserver hostname.
 
 In addition, Bootstrapping Zones SHOULD use NSEC to allow consumers
 to efficiently discover pending bootstrapping operations by means of
-zone walking.
+zone walking.  This is especially useful for bulk processing after a
+Child DNS Operator has enabled the protocol.
+
+To keep the size of the Bootstrapping Zones minimal and zone walking
+efficient, Child DNS operators SHOULD remove signaling records which
+are found to have been acted upon, including the PTR record (when all
+other signaling records have been removed for a given Signaling Name).
 
 
 # Implementation Status
