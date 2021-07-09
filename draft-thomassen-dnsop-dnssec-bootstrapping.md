@@ -327,7 +327,7 @@ other fields as specified in [@!RFC8078], Section 4, at its apex.
 Operator signs the zones and publishes records at the Signaling Names.)
 
 
-## Relation to Other Use Cases
+## Possible Extensions
 
 By provisioning other types of signaling records, the Child DNS Operator
 can convey signals that pertain to use cases other than bootstrapping
