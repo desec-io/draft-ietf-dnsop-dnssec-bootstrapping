@@ -105,8 +105,8 @@ Bootstrapping Domain(s)
   of the Bootstrapping Domains for the Child Zone.
 
 Signaling Name
-: A Bootstrapping Domain prefixed with a label encoding the
-  Child's name.
+: A Bootstrapping Domain prefixed with a label derived from the
+  Child zone's name.
 
 CDS/CDNSKEY
 : This notation refers to CDS and/or CDNSKEY, i.e., one or both.
@@ -223,8 +223,8 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns1.example.net
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 ```
 
-where `kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g` is the
-unpadded Base32hex Encoding of `example.com`.  The records are
+where `kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g` is derived as
+outlined above  from the DNS Child Zone's name `example.com`.  The records are
 accompanied by RRSIG records created using the key(s) of the zone
 which is authoritative for the respective Bootstrapping Domain.
 
