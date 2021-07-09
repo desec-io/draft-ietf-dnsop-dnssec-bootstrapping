@@ -194,6 +194,9 @@ could occur if the Child name was used as is.
 that SHA-256 is used instead of SHA-1.  This is to prevent other
 tenants in shared hosting environments from creating collisions.
 
+**TODO Remove Note 3:** To support DNS operators with many zones,
+the Signaling Name should support sharding of Child names, i.e.,
+be separated into a couple of labels.
 
 ## Bootstrapping of DNSSEC Delegations
 
