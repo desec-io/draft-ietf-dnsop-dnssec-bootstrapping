@@ -203,7 +203,7 @@ be separated into a couple of labels.
 {#signalingrecords}
 ### Signaling Records
 
-To announce its willingness to act at the Child's delegated signer,
+To announce its willingness to act as the Child's delegated signer,
 the Child DNS operator publishes a copy of the Child's CDS/CDNSKEY
 records at the corresponding Signaling Name under each
 Bootstrapping Domain.
