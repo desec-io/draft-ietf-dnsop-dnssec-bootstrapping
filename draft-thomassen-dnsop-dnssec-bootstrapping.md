@@ -30,8 +30,8 @@ organization = "deSEC, Secure Systems Engineering"
 .# Abstract
 
 This document describes an authenticated in-band method for automatic
-signaling of a DNS zone's delegation signer information from the zone's DNS
-operator.  The zone's registrar or registry may subsequently use this
+signaling of a Child DNS zone's delegation signer information from the zone's DNS
+operator(s).  The zone's registrar or registry may subsequently use this
 signal for automatic DS record provisioning in the parent zone.
 
 {mainmatter}
@@ -41,7 +41,7 @@ signal for automatic DS record provisioning in the parent zone.
 
 **TODO remove**: this section is inspired by [@!RFC7344], Section 1.
 
-The first time a DNS Operator signs a zone, they need to communicate
+The first time a Child DNS Operator signs a zone, they need to communicate
 the keying material to the Parent.  Depending on the desires of the
 Parent, the Child might send their DNSKEY record, a DS record, or
 both.
@@ -56,7 +56,7 @@ missing.
 
 How the keying material is conveyed to the Parent during initial DNSSEC
 bootstrapping depends on the relationship the Child has with the Parent.
-The communication has to occur between the DNS Operator and, depending
+The communication has to occur between the Child DNS Operator and, depending
 on the circumstances, the Registry or the Registrar, possibly via the
 Registrant (for details, see [@!RFC7344], Appendix A).  In many cases,
 this is a manual process -- and not an easy one.  Any manual
