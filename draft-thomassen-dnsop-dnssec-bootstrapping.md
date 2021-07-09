@@ -292,6 +292,7 @@ If an error condition occurs before Step 6, in particular:
 
 - Any failure during the retrieval of the CDS/CDNSKEY records located
   at the Child apex from the Child's authoritative nameservers (Step 2),
+  with an empty record set not qualifying as a failure,
 
 - The PTR record does not match (Step 3),
 
