@@ -67,7 +67,7 @@ process of getting a DS record set published at the Parent.
 DNSSEC provides data integrity to information published in DNS; thus,
 DNS publication can be used to automate maintenance of delegation
 information.  This document describes a method to automate
-publication of inital DS records for a hitherto insecure delegation.
+publication of initial DS records for a hitherto insecure delegation.
 
 Readers are expected to be familiar with DNSSEC, including [@!RFC4033],
 [@!RFC4034], [@!RFC4035], [@!RFC6781], [@!RFC7344], and [@!RFC8078].
