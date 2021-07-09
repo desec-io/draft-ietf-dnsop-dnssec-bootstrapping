@@ -251,18 +251,18 @@ zone name and its NS hostnames,
 
 1. MUST verify that the Child is not currently securely delegated;
 
-2. MUST query the PTR record located at each of the Signaling Names
-   and verify that its content is equal to the Child's name;
-
-3. MUST query the CDS/CDNSKEY records located at each of the Signaling
-   Names;
-
-4. SHOULD query the CDS/CDNSKEY records located at the Child zone apex,
+2. MUST query the CDS/CDNSKEY records located at the Child zone apex,
    directly from each of the authoritative nameservers as given in the
    Child NS record set;
 
+3. MUST query the PTR record located at each of the Signaling Names
+   and verify that its content is equal to the Child's name;
+
+4. MUST query the CDS/CDNSKEY records located at each of the Signaling
+   Names;
+
 5. MUST check (separately by record type) that all record sets
-   retrieved in Steps 1, 2 and (if queried) 3 have equal contents;
+   retrieved in Steps 2, 3 and 4 have equal contents;
 
 6. SHOULD derive a DS record set from the retrieved CDS/CDNSKEY record
    sets and publish it in the Parent zone, as to secure the Child's
@@ -276,13 +276,13 @@ If an error condition occurs before Step 6, in particular:
 
 - The Child is already securely delegated (Step 1),
 
-- The PTR record does not match (Step 2),
+- Any failure during the retrieval of the CDS/CDNSKEY records located
+  at the Child apex from the Child's authoritative nameservers (Step 2),
+
+- The PTR record does not match (Step 3),
 
 - DNS resolution failure during retrieval of CDS/CDNSKEY records from
-  any Signaling Name, or failure of DNSSEC validation (Step 3),
-
-- Any failure during the retrieval of the CDS/CDNSKEY records located
-  at the Child apex from the Child's authoritative nameservers (Step 4),
+  any Signaling Name, or failure of DNSSEC validation (Step 4),
 
 - Inconsistent responses (Step 5),
 
@@ -299,28 +299,28 @@ To bootstrap the Child zone `example.com` using NS records
 
 1. checks that the Child zone is not yet securely delegated;
 
-2. queries the PTR record located at the Signaling Names
+2. queries CDS/CDNSKEY records for `example.com` directly from
+   `ns1.example.net` and `ns2.example.net`;
+
+3. queries the PTR record located at the Signaling Names
 ```
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns1.example.net
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 ```
    and verifies that the record content is `example.com.`;
 
-3. queries CDS/CDNSKEY records located at the same Signaling Names;
+4. queries CDS/CDNSKEY records located at the same Signaling Names;
 
-4. queries CDS/CDNSKEY records for `example.com` directly from
-   `ns1.example.net` and `ns2.example.net`;
-
-5. checks that the PTR record sets retrieved in Step 2 agree across
+5. checks that the PTR record sets retrieved in Step 3 agree across
    responses; ditto for the CDS/CDNSKEY record sets retrieved in
-   Step 3 and (if queried) Step 4;
+   Step 2 and Step 4;
 
 6. publishes a DS record set according to the information retrieved in the
    previous steps.
 
 #### Opt-out
 
-As a special case of Step 5 failure, the Child MAY opt out from DNSSEC
+As a special case of Step 2 failure, the Child MAY opt out from DNSSEC
 bootstrapping by publishing a CDS/CDNSKEY record with algorithm 0 and
 other fields as specified in [@!RFC8078], Section 4, at its apex.
 (This opt-out mechanism is without regard to whether the Child DNS
