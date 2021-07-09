@@ -161,7 +161,7 @@ DNS Operator
 
 2. needs to ensure that a valid DNSSEC chain of trust exists for the
    zone(s) that are authoritative for the Bootstrapping Domains
-   `_boot.ns1.example.net` and `_boot.ns2.example.net`;
+   `_boot.ns1.example.net` and `_boot.ns2.example.net`.
 
 ### Zone Cut Clarification
 
