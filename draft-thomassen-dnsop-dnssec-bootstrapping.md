@@ -241,18 +241,16 @@ zone name and its NS hostnames,
 0. MUST verify that the Child is not currently securely delegated;
 
 1. MUST query the CDS/CDNSKEY records located at each of the Signaling
-   Names (using standard DNS resolution);
+   Names (using a trusted validating DNS resolver);
 
-2. MUST perform DNSSEC validation of all responses retrieved in Step 1;
-
-3. SHOULD query the CDS/CDNSKEY records located at the Child zone apex,
+2. SHOULD query the CDS/CDNSKEY records located at the Child zone apex,
    directly from each of the authoritative nameservers as given in the
    Child NS record set;
 
-4. MUST check that all CDS/CDNSKEY record sets retrieved in Steps 1 and
+3. MUST check that all CDS/CDNSKEY record sets retrieved in Steps 1 and
    3 have equal record contents;
 
-5. SHOULD derive a DS record set from the retrieved CDS/CDNSKEY record
+4. SHOULD derive a DS record set from the retrieved CDS/CDNSKEY record
    sets and publish it in the Parent zone, as to secure the Child's
    delegation.
 
