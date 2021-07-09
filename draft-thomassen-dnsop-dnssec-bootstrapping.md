@@ -164,27 +164,26 @@ DNS Operator
    `_boot.ns1.example.net` and `_boot.ns2.example.net`.
 
 
-## Bootstrapping Method
+## Signaling Intent to Act as the Child's Signer
 
-### Steps Taken by the Child DNS Operator
+To signal that a Child DNS Operator whishes to act as the Child's
+delegated signer, the Child DNS Operator MUST publish one or more
+signaling records at the Child's Signaling Name under each
+Bootstrapping Domain.  The signaling records are
 
-To perform DNSSEC bootstrapping for the Child zone, the Child DNS
-Operator MUST (re-)publish the Child's CDS/CDNSKEY records at the
-corresponding Signaling Name under each Bootstrapping Domain (see
-example below).  These records belong to the autoritative zone of
-the Bootstrapping Domain, and as such they MUST be signed with that
-zone's keys, and MUST NOT be signed with the Child zone's keys.
+- a PTR record containing the Child's name as the target;
+
+- one or more other DNS records, depending on the specific use
+  case as described below.
+
+As these records belong to the corresponding Bootstrapping Zone,
+they MUST be signed with that zone's keys, and MUST NOT be signed
+with the Child zone's keys.
 
 The Signaling Name contains a label identifying the Child's name.
 This label MUST be equal to the SHA-256 hash digest of the Child's
 name in "Base 32 Encoding with Extended Hex Alphabet", as specified
 in [@!RFC4648].  Trailing padding characters ("=") MUST be dropped.
-
-Previous use of CDS/CDNSKEY records is specified at the apex only
-([@!RFC7344], Section 4.1).  This protocol extends the use of these
-record types at non-apex owner names for the purpose of DNSSEC
-bootstrapping.  To exclude the possibility of semantic collision,
-there MUST NOT be a zone cut at a Signaling Name.
 
 **TODO Remove Note 1:** The purpose of the hash function is to avoid
 the possibility of exceeding the maximum length of a DNS name.  This
@@ -194,27 +193,48 @@ could occur if the Child name was used as is.
 that SHA-256 is used instead of SHA-1.  This is to prevent other
 tenants in shared hosting environments from creating collisions.
 
+
+## Bootstrapping of DNSSEC Delegations
+
+### Signaling Records
+
+To announce its willingness to act at the Child's delegated signer,
+the Child DNS operator (re-)publishes the Child's CDS/CDNSKEY
+records at the corresponding Signaling Name under each
+Bootstrapping Domain.
+
+Previous use of CDS/CDNSKEY records is specified at the apex only
+([@!RFC7344], Section 4.1).  This protocol extends the use of these
+record types at non-apex owner names for the purpose of DNSSEC
+bootstrapping.  To exclude the possibility of semantic collision,
+there MUST NOT be a zone cut at a Signaling Name.
+
 #### Example
 
-To bootstrap the Child zone `example.com` using NS records
-`ns1.example.net` and `ns2.example.net`, the Bootstrapping Domains
-are `_boot.ns1.example.net` and `_boot.ns2.example.net`.  The Child
-DNS Operator thus (re-)publishes the Child's CDS/CDNSKEY records under
-the names
+For the purposes of bootstrapping the Child zone `example.com` with
+NS records `ns1.example.net` and `ns2.example.net`, the required
+Bootstrapping Domains are `_boot.ns1.example.net` and
+`_boot.ns2.example.net`.  In the zones containing these domains, the
+Child DNS Operator
+
+- publishes a PTR record pointing to `example.com.`, and
+- (re-)publishes the Child's CDS/CDNSKEY records
+
+at the names
 
 ```
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns1.example.net
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 ```
 
-where `kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g` is derived as
-outlined above  from the DNS Child Zone's name `example.com`.  The records are
-accompanied by RRSIG records created using the key(s) of the zone
-which is authoritative for the respective Bootstrapping Domain.
+where `kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g` is
+derived from the DNS Child Zone's name `example.com`.  The records are
+accompanied by RRSIG records created using the key(s) of the
+respective Bootstrapping Zone.
 
-**TODO remove:** Should hash input include trailing dot?
+**TODO:** 1.) Should hash input include trailing dot?
+2.) Should hash input include bootstrapping domain (to prevent DNAME redirects)?
 (Command was: `echo -n example.com | openssl dgst -binary -sha256 | base32hex | tr -d =`)
-
 
 ### Steps Taken by the Parental Agent
 
@@ -222,33 +242,39 @@ When a Parental Agent implementing this protocol receives a new or updated NS
 record set for a Child, the Parental Agent, knowing both the Child
 zone name and its NS hostnames,
 
-0. MUST verify that the Child is not currently securely delegated;
+1. MUST verify that the Child is not currently securely delegated;
 
-1. MUST query the CDS/CDNSKEY records located at each of the Signaling
+2. MUST query the PTR record located at each of the Signaling Names
+   (using a trusted validating DNS resolver) and verify that its
+   content is equal to the Child's name;
+
+3. MUST query the CDS/CDNSKEY records located at each of the Signaling
    Names (using a trusted validating DNS resolver);
 
-2. SHOULD query the CDS/CDNSKEY records located at the Child zone apex,
+4. SHOULD query the CDS/CDNSKEY records located at the Child zone apex,
    directly from each of the authoritative nameservers as given in the
    Child NS record set;
 
-3. MUST check that all CDS/CDNSKEY record sets retrieved in Steps 1 and
-   3 have equal record contents;
+5. MUST check (separately by record type) that all record sets
+   retrieved in Steps 1, 2 and (if queried) 3 have equal contents;
 
-4. SHOULD derive a DS record set from the retrieved CDS/CDNSKEY record
+6. SHOULD derive a DS record set from the retrieved CDS/CDNSKEY record
    sets and publish it in the Parent zone, as to secure the Child's
    delegation.
 
-If an error condition occurs before Step 4, in particular:
+If an error condition occurs before Step 6, in particular:
 
-- The Child is already securely delegated (Step 0),
+- The Child is already securely delegated (Step 1),
+
+- The PTR record does not match (Step 2),
 
 - DNS resolution failure during retrieval of CDS/CDNSKEY records from
-  any Signaling Name (Step 1), or failure of DNSSEC validation (Step 2),
+  any Signaling Name, or failure of DNSSEC validation (Step 3),
 
 - Failure to retrieve CDS/CDNSKEY records located at the Child apex
-  from all of the Child's authoritative nameservers (Step 3),
+  from all of the Child's authoritative nameservers (Step 4),
 
-- Inconsistent responses (Step 4),
+- Inconsistent responses (Step 5),
 
 the Parental Agent MUST NOT proceed to Step 5.
 
@@ -261,27 +287,32 @@ procedure at any other time deemed appropriate by local policy.
 To bootstrap the Child zone `example.com` using NS records
 `ns1.example.net` and `ns2.example.net`, the Parental Agent
 
-1. queries CDS/CDNSKEY records, using standard DNS resolution, for the names
+1. checks that the Child zone is not yet securely delegated;
 
+2. queries the PTR record (using a trusted validating DNS resolver)
+   located at the Signaling Names
 ```
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns1.example.net
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 ```
+   and verifies that the record content is `example.com.`;
 
-2. performs DNSSEC validation of the responses retrieved in Step 1;
+3. queries CDS/CDNSKEY records (using a trusted validating DNS
+   resolver) located at the same Signaling Names;
 
-3. queries CDS/CDNSKEY records for `example.com` directly from `ns1.example.net`
-   and `ns2.example.net`;
+4. queries CDS/CDNSKEY records for `example.com` directly from
+   `ns1.example.net` and `ns2.example.net`;
 
-4. checks that CDS record sets retrieved in Step 1 agree across responses
-   and also with the CDS record sets retrieved in Step 3; ditto for CDNSKEY;
+5. checks that the PTR record sets retrieved in Step 2 agree across
+   responses; ditto for the CDS/CDNSKEY record sets retrieved in
+   Step 3 and (if queried) Step 4;
 
-5. publishes a DS record set according to the information retrieved in the
+6. publishes a DS record set according to the information retrieved in the
    previous steps.
 
 #### Opt-out
 
-As a special case of Step 4 failure, the Child MAY opt out from DNSSEC
+As a special case of Step 5 failure, the Child MAY opt out from DNSSEC
 bootstrapping by publishing a CDS/CDNSKEY record with algorithm 0 and
 other fields as specified in [@!RFC8078], Section 4, at its apex.
 (This opt-out mechanism is without regard to whether the Child DNS
@@ -311,7 +342,10 @@ zone walking.
 
 * PowerDNS supports manual creation of CDS/CDNSKEY records on non-apex names.
 
-* Proof of concept is in progress (as of 2021-06-30)
+* Proof-of-concept bootstrapping domains exist at `_boot.ns1.desec.io`
+  and `_boot.ns2.desec.org`.  Signaling Names can be discovered via
+  NSEC walking.  Child zones can be discovered by querying PTR for a
+  Signaling Name.
 
 
 # Security Considerations
@@ -356,8 +390,8 @@ This document has no IANA actions.
 # Acknowledgements
 
 Thanks to Nils Wisiol for helping in the conceptual development of the
-protocol, and to TODO for reviewing draft proposals and offering comments and
-suggestions.
+protocol, and to Brian Dickson for reviewing draft proposals and offering
+comments and suggestions.
 
 Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for early-stage
 brainstorming.
