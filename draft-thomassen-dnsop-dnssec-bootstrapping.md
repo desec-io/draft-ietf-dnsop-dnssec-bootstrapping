@@ -164,6 +164,7 @@ DNS Operator
    `_boot.ns1.example.net` and `_boot.ns2.example.net`.
 
 
+{#signaling}
 ## Signaling Intent to Act as the Child's Signer
 
 To signal that a Child DNS Operator whishes to act as the Child's
@@ -196,6 +197,7 @@ tenants in shared hosting environments from creating collisions.
 
 ## Bootstrapping of DNSSEC Delegations
 
+{#signalingrecords}
 ### Signaling Records
 
 To announce its willingness to act at the Child's delegated signer,
@@ -236,6 +238,7 @@ respective Bootstrapping Zone.
 2.) Should hash input include bootstrapping domain (to prevent DNAME redirects)?
 (Command was: `echo -n example.com | openssl dgst -binary -sha256 | base32hex | tr -d =`)
 
+{#bootstrapping}
 ### Steps Taken by the Parental Agent
 
 When a Parental Agent implementing this protocol receives a new or updated NS
@@ -317,6 +320,84 @@ bootstrapping by publishing a CDS/CDNSKEY record with algorithm 0 and
 other fields as specified in [@!RFC8078], Section 4, at its apex.
 (This opt-out mechanism is without regard to whether the Child DNS
 Operator signs the zones and publishes records at the Signaling Names.)
+
+
+## Relation to Other Use Cases
+
+By provisioning other types of signaling records, the Child DNS Operator
+can convey signals that pertain to use cases other than bootstrapping
+a DNSSEC delegation.
+
+### Multi-Signer Setups: Onboarding a Signing Party
+
+[@!RFC8901] describes multi-signer models in which several Child DNS
+Operators serve the same Child zone.  In one of these scenarios
+(Model 2, [@!RFC8901], Section 2.1.2), each Child DNS Operator holds
+a unique KSK set and ZSK set to sign the zone.
+
+To ensure smooth resolution of Child zone queries, this scheme
+demands that participating Child DNS Operators import the ZSK sets
+of the other providers into their DNSKEY RRset.  When a new Child
+DNS Operator is joining the scheme, this synchronization has to
+occur before the new operator's nameserver hostnames are included
+in the Child's NS record set.  So far, it has been assumed that the
+ZSK export/import would happen through some proprietary API at each
+DNS operator.
+
+However, the mechanism described in (#signaling) provides a public,
+authenticated, in-band, read-only interface to the Child DNS Operator.
+It can therefore be used by a Child DNS Operator to make its own
+set of DNSKEY records available for querying by other signing parties,
+so that they can retrieve, validate, and import them.
+
+#### Signaling Records
+
+Given a Child zone `example.com` that is already securely delegated
+with authoritative nameservers `ns1.example.net` and `ns2.example.net`,
+we consider how a new Child DNS Operator using nameservers
+`ns3.example.org` and `ns4.example.org` can distribute its ZSK set to
+the existing signing parties, in order to join the multi-signer group.
+
+The Bootstrapping Domains corresponding to the new Child DNS Operator's
+nameservers are `_boot.ns3.example.org` and `_boot.ns4.example.org`.
+In the zones containing these domains, the new Child DNS Operator
+
+- publishes a PTR record pointing to `example.com.`, and
+- (re-)publishes a DNSKEY record set containing the ZSK set that the
+  operator will use for signing the Child zone,
+
+at the names
+
+```
+kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns3.example.org
+kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns4.example.org
+```
+
+where the first label is calculated as described above.  The records
+are accompanied by RRSIG records created using the key(s) of the
+respective Bootstrapping Zone.
+
+Note that DNSKEY records are not restricted to apex owner names
+([@!RFC4035], Section 2.1).  However, only apex DNSKEY records are
+used for DNSSEC validation ([@!RFC4035], Section 5).  As Signaling
+Names do not occur on zone cuts (see (#signalingrecords)), the use
+of DNSKEY records described here does not interfere with existing
+DNSKEY uses.
+
+#### Import
+
+Once the owner of `example.com` informs the existing signing parties
+of the joining Child DNS Operator's nameserver hostnames, the
+existing parties can use an algorithm similar to the one given in
+(#bootstrapping) to query and validate the joining operator's ZSK
+set, and then include it in their DNSKEY sets.
+
+To finish the joining process, CDS/CDNSKEY records may be used to
+propagate the joint delegation signer information to the parent
+([@!RFC8901], Section 8).  Signing parties can then synchronize the
+Child's NS record set to include the joining operator's
+authoritative hostnames, and use CSYNC to amend the NS record set
+at the Parent.
 
 
 ## Operational Recommendations
