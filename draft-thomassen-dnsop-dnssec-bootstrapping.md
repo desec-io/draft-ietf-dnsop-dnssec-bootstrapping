@@ -73,8 +73,8 @@ Readers are expected to be familiar with DNSSEC, including [@!RFC4033],
 [@!RFC4034], [@!RFC4035], [@!RFC6781], [@!RFC7344], and [@!RFC8078].
 
 This document describes a method for automated provisioning of the
-delegation trust information and proposes a simple trigger
-for simplicity.  Some users may prefer a different trigger.
+delegation trust information and proposes a simple provisioning trigger
+mechanism.  Some users may prefer a different trigger.
 These alternate additional triggers are not discussed in this
 document.
 
