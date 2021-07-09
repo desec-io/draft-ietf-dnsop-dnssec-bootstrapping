@@ -281,8 +281,8 @@ If an error condition occurs before Step 6, in particular:
 - DNS resolution failure during retrieval of CDS/CDNSKEY records from
   any Signaling Name, or failure of DNSSEC validation (Step 3),
 
-- Failure to retrieve CDS/CDNSKEY records located at the Child apex
-  from all of the Child's authoritative nameservers (Step 4),
+- Any failure during the retrieval of the CDS/CDNSKEY records located
+  at the Child apex from the Child's authoritative nameservers (Step 4),
 
 - Inconsistent responses (Step 5),
 
