@@ -178,8 +178,8 @@ Bootstrapping Domain.  The signaling records are
   case as described below.
 
 As these records belong to the corresponding Bootstrapping Zone,
-they MUST be signed with that zone's keys, and MUST NOT be signed
-with the Child zone's keys.
+they MUST be signed with that zone's keys (as opposed to signing
+them with the Child zone's keys).
 
 The Signaling Name contains a label derived from the Child's name.
 This label MUST be equal to the SHA-256 hash digest of the Child's
