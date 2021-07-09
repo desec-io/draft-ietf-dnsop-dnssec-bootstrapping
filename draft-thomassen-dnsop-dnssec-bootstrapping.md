@@ -1,5 +1,5 @@
 %%%
-Title = "DNSSEC Bootstrapping"
+Title = "Authenticated Bootstrapping of DNSSEC Delegations"
 abbrev = "dnssec-bootstrapping"
 docname = "@DOCNAME@"
 category = "std"
