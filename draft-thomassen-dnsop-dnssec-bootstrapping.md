@@ -99,9 +99,10 @@ Parental Agent
 : The entity that the Child has a relationship with to change
   its delegation information.
 
-Bootstrapping Domain
-: Given an authoritative nameserver hostname from the Child's
-  NS record set, that hostname prefixed with the label `_boot`.
+Bootstrapping Domain(s)
+: For any given authoritative nameserver hostname from the Child's
+  NS record set, the hostname prefixed with the label `_boot` is one
+  of the Bootstrapping Domains for the Child Zone.
 
 Signaling Name
 : A Bootstrapping Domain prefixed with a label encoding the
