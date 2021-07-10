@@ -122,6 +122,9 @@ Signaling Name
 : A Bootstrapping Domain prefixed with a label derived from the
   Child zone's name.
 
+Signaling Record
+: A DNS record located at a Signaling Name.
+
 CDS/CDNSKEY
 : This notation refers to CDS and/or CDNSKEY, i.e., one or both.
 
@@ -156,11 +159,11 @@ Implementation by Child DNS Operators and Parental Agents is RECOMMENDED.
 If a Child DNS Operator implements the protocol, the following conditions
 have to be met:
 
-1. The Child DNS Operator SHOULD publish CDS/CDNSKEY records at the
-   Child's apex, as described in [@!RFC7344].
-
-2. Each Bootstrapping Zone MUST be part securely delegated zone, i.e.
+1. Each Bootstrapping Zone MUST be securely delegated, i.e.
    have a valid DNSSEC chain of trust from the root.
+
+2. The Child DNS Operator SHOULD publish CDS/CDNSKEY records at the
+   Child's apex, as described in [@!RFC7344].
 
 ### Example
 
@@ -180,8 +183,8 @@ DNS Operator
 
 To signal that a Child DNS Operator whishes to act as the Child's
 delegated signer, the Child DNS Operator MUST publish one or more
-signaling records at the Child's Signaling Name under each
-Bootstrapping Domain.  The signaling records are
+Signaling Records at the Child's Signaling Name under each
+Bootstrapping Domain.  The Signaling Records are
 
 - a PTR record containing the Child's name as the target;
 
@@ -196,17 +199,20 @@ This label MUST be equal to the SHA-256 hash digest of the Child's
 name in "Base 32 Encoding with Extended Hex Alphabet", as specified
 in [@!RFC4648].  Trailing padding characters ("=") MUST be dropped.
 
-**TODO Remove Note 1:** The purpose of the hash function is to avoid
-the possibility of exceeding the maximum length of a DNS name.  This
-could occur if the Child name was used as is.
+**TODO Remove:** Example command: `echo -n example.com | openssl dgst -binary -sha256 | base32hex | tr -d =`
 
-**TODO Remove Note 2:** The encoding choice is like in NSEC3, except
+**TODO Remove Note:** The purpose of the hash function is to avoid
+the possibility of exceeding the maximum length of a DNS name.  This
+could occur if the Child name was prefixed to the Bootstrapping Domain as is.
+The encoding choice is like in NSEC3, except
 that SHA-256 is used instead of SHA-1.  This is to prevent other
 tenants in shared hosting environments from creating collisions.
 
-**TODO Remove Note 3:** To support DNS operators with many zones,
-the Signaling Name should support sharding of Child names, i.e.,
-be separated into a couple of labels.
+**TODO Open Questions:** 1.) Should hash input include trailing dot?
+2.) Should hash input include Bootstrapping Domain (to prevent DNAME redirects)?
+3.) Should hash input be wire format (no ambiguity if a Child label has dots)?
+4.) To support DNS operators with many zones, it should perhaps be possible to
+shard Bootstrapping Zones, by splitting the prefix into a couple of labels.
 
 ## Bootstrapping a DNSSEC Delegation
 
@@ -234,59 +240,54 @@ For the purposes of bootstrapping the Child zone `example.com` with
 NS records `ns1.example.net` and `ns2.example.net`, the required
 Bootstrapping Domains are `_boot.ns1.example.net` and
 `_boot.ns2.example.net`.  In the zones containing these domains, the
-Child DNS Operator
+Child DNS Operator publishes
 
-- publishes a PTR record pointing to `example.com.`, and
-- publishes the Child's CDS/CDNSKEY records
+- a PTR record pointing to `example.com.` and
+- the Child's CDS/CDNSKEY records
 
 at the names
-
 ```
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns1.example.net
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 ```
-
 where `kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g` is
-derived from the DNS Child Zone's name `example.com`.  The records are
+derived from the DNS Child Zone's name `example.com` as described
+in (#signaling).  The records are
 accompanied by RRSIG records created using the key(s) of the
 respective Bootstrapping Zone.
-
-**TODO:** 1.) Should hash input include trailing dot?
-2.) Should hash input include bootstrapping domain (to prevent DNAME redirects)?
-(Command was: `echo -n example.com | openssl dgst -binary -sha256 | base32hex | tr -d =`)
-3.) Should the hash use wire format?
 
 {#bootstrapping}
 ### Steps Taken by the Parental Agent
 
 When a Parental Agent implementing this protocol receives a new or updated NS
 record set for a Child, the Parental Agent, knowing both the Child
-zone name and its NS hostnames,
+zone name and its NS hostnames, MUST
 
-1. MUST verify that the Child is not currently securely delegated;
+1. verify that the Child is not currently securely delegated;
 
-2. MUST query the CDS/CDNSKEY records located at the Child zone apex,
+2. query the CDS/CDNSKEY records located at the Child zone apex,
    directly from each of the authoritative nameservers as given in the
    Child NS record set;
 
-3. MUST query the PTR record located at each of the Signaling Names
+3. query the PTR record located at each of the Signaling Names
    and verify that its content matches the Child's name;
 
-4. MUST query the CDS/CDNSKEY records located at each of the Signaling
+4. query the CDS/CDNSKEY records located at each of the Signaling
    Names;
 
-5. MUST check (separately by record type) that all record sets
+5. check (separately by record type) that all record sets
    retrieved in Steps 2 (if present), 3 and 4 have equal contents;
-
-6. SHOULD derive a DS record set from the retrieved CDS/CDNSKEY record
-   sets and publish it in the Parent zone, so as to secure the Child's
-   delegation.
 
 For the above queries, the Parental Agent MUST use a trusted validating
 DNS resolver and MUST treat responses with unauthenticated data
 (AD bit not set) as an error condition, unless indicated otherwise.
 
-If an error condition occurs before Step 6, in particular:
+If the above steps succeeded without error, the Child DNS Operator
+SHOULD derive a DS record set from the retrieved CDS/CDNSKEY record
+sets and publish it in the Parent zone, so as to secure the Child's
+delegation.
+
+If, however, an error condition occurs, in particular:
 
 - The Child is already securely delegated (Step 1),
 
@@ -318,21 +319,24 @@ To bootstrap the Child zone `example.com` using NS records
 2. queries CDS/CDNSKEY records for `example.com` directly from
    `ns1.example.net` and `ns2.example.net`;
 
-3. queries the PTR record located at the Signaling Names
+3. queries the PTR record located at the Signaling Names (see
+   (#signaling))
+
 ```
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns1.example.net
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 ```
+
    and verifies that the record content is `example.com.`;
 
 4. queries CDS/CDNSKEY records located at the same Signaling Names;
 
 5. checks that the PTR record sets retrieved in Step 3 agree across
    responses; ditto for the CDS/CDNSKEY record sets retrieved in
-   Steps 2 and 4;
+   Steps 2 and 4.
 
-6. publishes a DS record set according to the information retrieved in the
-   previous steps.
+The Parental Agent then publishes a DS record set according to the
+information retrieved in the previous steps.
 
 #### Opt-out
 
@@ -348,7 +352,7 @@ under the Bootstrapping Domain.
 
 ## Possible Extensions
 
-By provisioning other types of signaling records, the Child DNS Operator
+By provisioning other types of Signaling Records, the Child DNS Operator
 can convey signals that pertain to use cases other than bootstrapping
 a DNSSEC delegation.
 
@@ -368,7 +372,7 @@ in the Child's NS record set.  So far, it has been assumed that the
 ZSK export/import would happen through some proprietary API at each
 DNS operator.
 
-However, the mechanism described in (#signaling) provides a public,
+The mechanism described in (#signaling) provides a public,
 authenticated, in-band, read-only interface to the Child DNS Operator.
 It can therefore be used by a Child DNS Operator to make its own
 set of DNSKEY records available for querying by other signing parties,
@@ -384,20 +388,18 @@ the existing signing parties, in order to join the multi-signer group.
 
 The Bootstrapping Domains corresponding to the new Child DNS Operator's
 nameservers are `_boot.ns3.example.org` and `_boot.ns4.example.org`.
-In the zones containing these domains, the new Child DNS Operator
+In the zones containing these domains, the new Child DNS Operator publishes
 
-- publishes a PTR record pointing to `example.com.`, and
-- publishes a DNSKEY record set containing the ZSK set that the
+- a PTR record pointing to `example.com.` and
+- a DNSKEY record set containing the ZSK set that the
   operator will use for signing the Child zone,
 
-at the names
-
+at the Signaling Names
 ```
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns3.example.org
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns4.example.org
 ```
-
-where the first label is calculated as described above.  The records
+where the first label is calculated as described in (#signaling).  The records
 are accompanied by RRSIG records created using the key(s) of the
 respective Bootstrapping Zone.
 
@@ -418,9 +420,9 @@ set, and then include it in their DNSKEY sets.
 
 To finish the joining process, CDS/CDNSKEY records may be used to
 propagate the joint delegation signer information to the parent
-([@!RFC8901], Section 8).  Signing parties can then synchronize the
+([@!RFC8901], Section 8).  Signing parties can then amend the
 Child's NS record set to include the joining operator's
-authoritative hostnames, and use CSYNC to amend the NS record set
+authoritative hostnames, and use CSYNC ([!@RFC7477]) to update the NS record set
 at the Parent.
 
 
@@ -440,9 +442,9 @@ zone walking.  This is especially useful for bulk processing after a
 Child DNS Operator has enabled the protocol.
 
 To keep the size of the Bootstrapping Zones minimal and zone walking
-efficient, Child DNS operators SHOULD remove signaling records which
-are found to have been acted upon, including the PTR record (when all
-other signaling records have been removed for a given Signaling Name).
+efficient, Child DNS operators SHOULD remove Signaling Records which
+are found to have been acted upon, including final removal of the PTR
+Signaling Record after removing all others with the same owner name.
 
 
 # Implementation Status
@@ -494,11 +496,11 @@ Thoughts (to be expanded):
 
 - Prevention of accidental misprovisioning / enforcing explicit provisioning:
     * In addition to facilitating Child zone discovery and simplifying
-      debugging, the Child-specific PTR record also prevents the use of
-      wildcards records under the Bootstrapping Domain.  As a result,
-      signaling records have to be provisioned explicitly.
+      debugging, the Child-specific PTR record content also prevents the use of
+      wildcard records under the Bootstrapping Domain.  As a result,
+      Signaling Records have to be provisioned on a per-Child basis.
     * Similarly, operators could deflect a Bootstrapping Domain onto
-      another one, by means of a DNAME record.  This can be prevented by
+      another one by means of a DNAME record.  This can be prevented by
       incorporating the Bootstrapping Domain's name into the hash used to
       construct the Signal Name.
 
