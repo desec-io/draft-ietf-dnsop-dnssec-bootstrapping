@@ -171,11 +171,11 @@ When performing DNSSEC bootstrapping for the Child zone `example.com`
 using NS records `ns1.example.net` and `ns2.example.net`, the Child
 DNS Operator
 
-1. should publish CDS/CDNSKEY records at `example.com`;
-
-2. needs to ensure that a valid DNSSEC chain of trust exists for the
+1. needs to ensure that a valid DNSSEC chain of trust exists for the
    zone(s) that are authoritative for the Bootstrapping Domains
-   `_boot.ns1.example.net` and `_boot.ns2.example.net`.
+   `_boot.ns1.example.net` and `_boot.ns2.example.net`;
+
+2. should publish CDS/CDNSKEY records at `example.com`.
 
 
 {#signaling}
@@ -422,7 +422,7 @@ To finish the joining process, CDS/CDNSKEY records may be used to
 propagate the joint delegation signer information to the parent
 ([@!RFC8901], Section 8).  Signing parties can then amend the
 Child's NS record set to include the joining operator's
-authoritative hostnames, and use CSYNC ([!@RFC7477]) to update the NS record set
+authoritative hostnames, and use CSYNC ([@!RFC7477]) to update the NS record set
 at the Parent.
 
 
@@ -451,9 +451,9 @@ Signaling Record after removing all others with the same owner name.
 
 **Note to the RFC Editor**: please remove this entire section before publication.
 
-* Knot DNS supports manual creation of CDS/CDNSKEY records on non-apex names.
+* Knot DNS supports manual creation of non-apex CDS/CDNSKEY/DNSKEY records.
 
-* PowerDNS supports manual creation of CDS/CDNSKEY records on non-apex names.
+* PowerDNS supports manual creation of non-apex CDS/CDNSKEY/DNSKEY records.
 
 * Proof-of-concept bootstrapping domains exist at `_boot.ns1.desec.io`
   and `_boot.ns2.desec.org`.  Signaling Names can be discovered via
@@ -474,7 +474,7 @@ Thoughts (to be expanded):
 
 - When validating against CDS/CDNSKEY records at the Child's apex, the security
   level of the method is strictly higher than the "accept CDS/CDNSKEY after a
-  while"-approch that is already in use at several ccTLD registries ("Accept
+  while"-approach that is already in use at several ccTLD registries ("Accept
   after Delay", [@!RFC8078], Section 3.3).  This is because the method described
   here adds stronger guarantees, but removes nothing.  Perhaps this means that
   co-publication of CDS/CDNSKEY at the Child apex should be mandatory.  (This in
@@ -499,8 +499,8 @@ Thoughts (to be expanded):
       debugging, the Child-specific PTR record content also prevents the use of
       wildcard records under the Bootstrapping Domain.  As a result,
       Signaling Records have to be provisioned on a per-Child basis.
-    * Similarly, operators could deflect a Bootstrapping Domain onto
-      another one by means of a DNAME record.  This can be prevented by
+    * Similarly, operators could redirect a Bootstrapping Domain onto
+      another one by means of a DNAME record.  This could be prevented by
       incorporating the Bootstrapping Domain's name into the hash used to
       construct the Signal Name.
 
