@@ -5,8 +5,8 @@
 DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
 Intended status: Standards Track                               N. Wisiol
-Expires: 13 January 2022            deSEC, Technische Universität Berlin
-                                                            12 July 2021
+Expires: 20 January 2022            deSEC, Technische Universität Berlin
+                                                            19 July 2021
 
 
            Authenticated Bootstrapping of DNSSEC Delegations
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 January 2022.
+   This Internet-Draft will expire on 20 January 2022.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomassen & Wisiol       Expires 13 January 2022                [Page 1]
+Thomassen & Wisiol       Expires 20 January 2022                [Page 1]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -67,19 +67,19 @@ Table of Contents
      2.1.  Preconditions . . . . . . . . . . . . . . . . . . . . . .   4
        2.1.1.  Example . . . . . . . . . . . . . . . . . . . . . . .   4
      2.2.  Signaling Intent to Act as the Child's Signer . . . . . .   5
-     2.3.  Bootstrapping a DNSSEC Delegation . . . . . . . . . . . .   5
-       2.3.1.  Signaling Records . . . . . . . . . . . . . . . . . .   5
+     2.3.  Bootstrapping a DNSSEC Delegation . . . . . . . . . . . .   6
+       2.3.1.  Signaling Records . . . . . . . . . . . . . . . . . .   6
        2.3.2.  Steps Taken by the Parental Agent . . . . . . . . . .   6
      2.4.  Possible Extensions . . . . . . . . . . . . . . . . . . .   8
-       2.4.1.  Multi-Signer Setups: Onboarding a Signing Party . . .   8
+       2.4.1.  Multi-Signer Setups: Onboarding a Signing Party . . .   9
      2.5.  Operational Recommendations . . . . . . . . . . . . . . .  10
-   3.  Implementation Status . . . . . . . . . . . . . . . . . . . .  10
+   3.  Implementation Status . . . . . . . . . . . . . . . . . . . .  11
    4.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
    5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
    6.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  12
    7.  Normative References  . . . . . . . . . . . . . . . . . . . .  12
    Appendix A.  Change History (to be removed before final
-           publication)  . . . . . . . . . . . . . . . . . . . . . .  13
+           publication)  . . . . . . . . . . . . . . . . . . . . . .  14
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
 
 1.  Introduction
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomassen & Wisiol       Expires 13 January 2022                [Page 2]
+Thomassen & Wisiol       Expires 20 January 2022                [Page 2]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -165,7 +165,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
 
 
-Thomassen & Wisiol       Expires 13 January 2022                [Page 3]
+Thomassen & Wisiol       Expires 20 January 2022                [Page 3]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -221,7 +221,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
 
 
-Thomassen & Wisiol       Expires 13 January 2022                [Page 4]
+Thomassen & Wisiol       Expires 20 January 2022                [Page 4]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -243,11 +243,24 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
    The Signaling Name contains a label derived from the Child's name.
    This label MUST be equal to the SHA-256 hash digest of the Child's
-   name in "Base 32 Encoding with Extended Hex Alphabet", as specified
-   in [RFC4648].  Trailing padding characters ("=") MUST be dropped.
+   fully qualified name in wire format, using "Base 32 Encoding with
+   Extended Hex Alphabet", as specified in [RFC4648].  Trailing padding
+   characters ("=") MUST be dropped.
 
-   *TODO Remove:* Example command: "echo -n example.com | openssl dgst
-   -binary -sha256 | base32hex | tr -d ="
+   *TODO Remove:* Example command (Python, with "dnspython" package):
+
+from base64 import b32encode
+from hashlib import sha256
+
+import dns.name
+from dns.rdtypes.ANY.NSEC3 import b32_normal_to_hex
+
+
+child = 'example.com.'
+wire_format = dns.name.from_text(child).to_wire()
+digest = sha256(wire_format).digest()
+b32encode(digest).translate(b32_normal_to_hex).rstrip(b'=').lower().decode()
+# >>> 'i0n9ohifkgvslc89q6jbinevgcpol35s799b9uvu3aeobsh4dk7g'
 
    *TODO Remove Note:* The purpose of the hash function is to avoid the
    possibility of exceeding the maximum length of a DNS name.  This
@@ -256,12 +269,18 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
    SHA-256 is used instead of SHA-1.  This is to prevent other tenants
    in shared hosting environments from creating collisions.
 
-   *TODO Open Questions:* 1.)  Should hash input include trailing dot?
-   2.)  Should hash input include Bootstrapping Domain (to prevent DNAME
-   redirects)? 3.)  Should hash input be wire format (no ambiguity if a
-   Child label has dots)? 4.)  To support DNS operators with many zones,
-   it should perhaps be possible to shard Bootstrapping Zones, by
-   splitting the prefix into a couple of labels.
+   *TODO Open Questions:* 1.)  Should hash input include Bootstrapping
+   Domain (to prevent DNAME redirects)? 2.)  To support DNS operators
+   with many zones, it should perhaps be possible to shard Bootstrapping
+   Zones, by splitting the prefix into a couple of labels.
+
+
+
+
+Thomassen & Wisiol       Expires 20 January 2022                [Page 5]
+
+Internet-Draft            dnssec-bootstrapping                 July 2021
+
 
 2.3.  Bootstrapping a DNSSEC Delegation
 
@@ -271,16 +290,6 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
    the Child DNS operator publishes a copy of the Child's CDS/CDNSKEY
    records at the corresponding Signaling Name under each Bootstrapping
    Domain as defined in Section 2.2.
-
-
-
-
-
-
-Thomassen & Wisiol       Expires 13 January 2022                [Page 5]
-
-Internet-Draft            dnssec-bootstrapping                 July 2021
-
 
    Previous use of CDS/CDNSKEY records is specified at the apex only
    ([RFC7344], Section 4.1).  This protocol extends the use of these
@@ -322,21 +331,19 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 
    1.  verify that the Child is not currently securely delegated;
 
+
+
+Thomassen & Wisiol       Expires 20 January 2022                [Page 6]
+
+Internet-Draft            dnssec-bootstrapping                 July 2021
+
+
    2.  query the CDS/CDNSKEY records located at the Child zone apex,
        directly from each of the authoritative nameservers as given in
        the Child NS record set;
 
    3.  query the PTR record located at each of the Signaling Names and
        verify that its content matches the Child's name;
-
-
-
-
-
-Thomassen & Wisiol       Expires 13 January 2022                [Page 6]
-
-Internet-Draft            dnssec-bootstrapping                 July 2021
-
 
    4.  query the CDS/CDNSKEY records located at each of the Signaling
        Names;
@@ -376,6 +383,17 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
    records are updated, the Parental Agent MAY also trigger the
    procedure at any other time deemed appropriate by local policy.
 
+
+
+
+
+
+
+Thomassen & Wisiol       Expires 20 January 2022                [Page 7]
+
+Internet-Draft            dnssec-bootstrapping                 July 2021
+
+
 2.3.2.1.  Example
 
    To bootstrap the Child zone "example.com" using NS records
@@ -385,14 +403,6 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
    2.  queries CDS/CDNSKEY records for "example.com" directly from
        "ns1.example.net" and "ns2.example.net";
-
-
-
-
-Thomassen & Wisiol       Expires 13 January 2022                [Page 7]
-
-Internet-Draft            dnssec-bootstrapping                 July 2021
-
 
    3.  queries the PTR record located at the Signaling Names (see
        Section 2.2)
@@ -429,26 +439,23 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
    Operator can convey signals that pertain to use cases other than
    bootstrapping a DNSSEC delegation.
 
+
+
+
+
+
+
+Thomassen & Wisiol       Expires 20 January 2022                [Page 8]
+
+Internet-Draft            dnssec-bootstrapping                 July 2021
+
+
 2.4.1.  Multi-Signer Setups: Onboarding a Signing Party
 
    [RFC8901] describes multi-signer models in which several Child DNS
    Operators serve the same Child zone.  In one of these scenarios
    (Model 2, [RFC8901], Section 2.1.2), each Child DNS Operator holds a
    unique KSK set and ZSK set to sign the zone.
-
-
-
-
-
-
-
-
-
-
-Thomassen & Wisiol       Expires 13 January 2022                [Page 8]
-
-Internet-Draft            dnssec-bootstrapping                 July 2021
-
 
    To ensure smooth resolution of Child zone queries, this scheme
    demands that participating Child DNS Operators import the ZSK sets of
@@ -489,6 +496,16 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns3.example.org
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns4.example.org
 
+
+
+
+
+
+Thomassen & Wisiol       Expires 20 January 2022                [Page 9]
+
+Internet-Draft            dnssec-bootstrapping                 July 2021
+
+
    where the first label is calculated as described in Section 2.2.  The
    records are accompanied by RRSIG records created using the key(s) of
    the respective Bootstrapping Zone.
@@ -498,13 +515,6 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns4.example.org
    for DNSSEC validation ([RFC4035], Section 5).  As Signaling Names do
    not occur on zone cuts (see Section 2.3.1), the use of DNSKEY records
    described here does not interfere with existing DNSKEY uses.
-
-
-
-Thomassen & Wisiol       Expires 13 January 2022                [Page 9]
-
-Internet-Draft            dnssec-bootstrapping                 July 2021
-
 
 2.4.1.2.  Import
 
@@ -541,6 +551,17 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
    are found to have been acted upon, including final removal of the PTR
    Signaling Record after removing all others with the same owner name.
 
+
+
+
+
+
+
+Thomassen & Wisiol       Expires 20 January 2022               [Page 10]
+
+Internet-Draft            dnssec-bootstrapping                 July 2021
+
+
 3.  Implementation Status
 
    *Note to the RFC Editor*: please remove this entire section before
@@ -551,16 +572,6 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
    *  PowerDNS supports manual creation of non-apex CDS/CDNSKEY/DNSKEY
       records.
-
-
-
-
-
-
-Thomassen & Wisiol       Expires 13 January 2022               [Page 10]
-
-Internet-Draft            dnssec-bootstrapping                 July 2021
-
 
    *  Proof-of-concept bootstrapping domains exist at
       "_boot.ns1.desec.io" and "_boot.ns2.desec.org".  Signaling Names
@@ -599,6 +610,14 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
       -  that's also possible in the case of CDS/CDNSKEY (see previous
          point);
 
+
+
+
+Thomassen & Wisiol       Expires 20 January 2022               [Page 11]
+
+Internet-Draft            dnssec-bootstrapping                 July 2021
+
+
       -  if the Child DNS Operator doesn't control the zones in which
          its NS hostnames live (including their nameservers' A records)
          because the path from the root is untrusted, you probably don't
@@ -610,13 +629,6 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
       -  mitigation exists by diversifying e.g. the nameserver
          hostname's TLDs, which is advisable anyways.
-
-
-
-Thomassen & Wisiol       Expires 13 January 2022               [Page 11]
-
-Internet-Draft            dnssec-bootstrapping                 July 2021
-
 
    *  Prevention of accidental misprovisioning / enforcing explicit
       provisioning:
@@ -654,6 +666,14 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
+
+
+
+Thomassen & Wisiol       Expires 20 January 2022               [Page 12]
+
+Internet-Draft            dnssec-bootstrapping                 July 2021
+
+
    [RFC4033]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "DNS Security Introduction and Requirements",
               RFC 4033, DOI 10.17487/RFC4033, March 2005,
@@ -663,16 +683,6 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
               Rose, "Resource Records for the DNS Security Extensions",
               RFC 4034, DOI 10.17487/RFC4034, March 2005,
               <https://www.rfc-editor.org/info/rfc4034>.
-
-
-
-
-
-
-Thomassen & Wisiol       Expires 13 January 2022               [Page 12]
-
-Internet-Draft            dnssec-bootstrapping                 July 2021
-
 
    [RFC4035]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Protocol Modifications for the DNS Security
@@ -711,6 +721,15 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
               DOI 10.17487/RFC8901, September 2020,
               <https://www.rfc-editor.org/info/rfc8901>.
 
+
+
+
+
+Thomassen & Wisiol       Expires 20 January 2022               [Page 13]
+
+Internet-Draft            dnssec-bootstrapping                 July 2021
+
+
 Appendix A.  Change History (to be removed before final publication)
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-01
@@ -722,13 +741,6 @@ Appendix A.  Change History (to be removed before final publication)
    |  Added multi-signer use case.
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-00
-
-
-
-Thomassen & Wisiol       Expires 13 January 2022               [Page 13]
-
-Internet-Draft            dnssec-bootstrapping                 July 2021
-
 
    |  Initial public draft.
 
@@ -769,16 +781,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-Thomassen & Wisiol       Expires 13 January 2022               [Page 14]
+Thomassen & Wisiol       Expires 20 January 2022               [Page 14]

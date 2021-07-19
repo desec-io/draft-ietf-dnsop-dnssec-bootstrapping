@@ -196,10 +196,25 @@ the corresponding Bootstrapping Zone's key(s).
 
 The Signaling Name contains a label derived from the Child's name.
 This label MUST be equal to the SHA-256 hash digest of the Child's
-name in "Base 32 Encoding with Extended Hex Alphabet", as specified
-in [@!RFC4648].  Trailing padding characters ("=") MUST be dropped.
+fully qualified name in wire format, using "Base 32 Encoding with
+Extended Hex Alphabet", as specified in [@!RFC4648].  Trailing
+padding characters ("=") MUST be dropped.
 
-**TODO Remove:** Example command: `echo -n example.com | openssl dgst -binary -sha256 | base32hex | tr -d =`
+**TODO Remove:** Example command (Python, with `dnspython` package):
+```
+from base64 import b32encode
+from hashlib import sha256
+
+import dns.name
+from dns.rdtypes.ANY.NSEC3 import b32_normal_to_hex
+
+
+child = 'example.com.'
+wire_format = dns.name.from_text(child).to_wire()
+digest = sha256(wire_format).digest()
+b32encode(digest).translate(b32_normal_to_hex).rstrip(b'=').lower().decode()
+# >>> 'i0n9ohifkgvslc89q6jbinevgcpol35s799b9uvu3aeobsh4dk7g'
+```
 
 **TODO Remove Note:** The purpose of the hash function is to avoid
 the possibility of exceeding the maximum length of a DNS name.  This
@@ -208,11 +223,10 @@ The encoding choice is like in NSEC3, except
 that SHA-256 is used instead of SHA-1.  This is to prevent other
 tenants in shared hosting environments from creating collisions.
 
-**TODO Open Questions:** 1.) Should hash input include trailing dot?
-2.) Should hash input include Bootstrapping Domain (to prevent DNAME redirects)?
-3.) Should hash input be wire format (no ambiguity if a Child label has dots)?
-4.) To support DNS operators with many zones, it should perhaps be possible to
-shard Bootstrapping Zones, by splitting the prefix into a couple of labels.
+**TODO Open Questions:** 1.) Should hash input include Bootstrapping Domain (to
+prevent DNAME redirects)? 2.) To support DNS operators with many zones, it
+should perhaps be possible to shard Bootstrapping Zones, by splitting the prefix
+into a couple of labels.
 
 ## Bootstrapping a DNSSEC Delegation
 
