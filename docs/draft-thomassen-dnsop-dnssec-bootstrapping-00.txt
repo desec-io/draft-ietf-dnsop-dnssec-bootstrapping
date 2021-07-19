@@ -77,7 +77,7 @@ Table of Contents
    4.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
    5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
    6.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  12
-   7.  Normative References  . . . . . . . . . . . . . . . . . . . .  12
+   7.  Normative References  . . . . . . . . . . . . . . . . . . . .  13
    Appendix A.  Change History (to be removed before final
            publication)  . . . . . . . . . . . . . . . . . . . . . .  14
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
@@ -644,6 +644,14 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
          prevented by incorporating the Bootstrapping Domain's name into
          the hash used to construct the Signal Name.
 
+      -  In case of a hash collision, two distinct child zones may be
+         associated with the same signaling name so that their keys may
+         get mixed up.  While not currently feasible, malicious
+         customers in shared hosting environments may attempt to produce
+         such a collision.  Is it worth mitigating this by introducing a
+         salt, e.g. stored in a TXT record located at the Bootstrapping
+         Domain?  (In case of a collision, one can set a new salt.)
+
 5.  IANA Considerations
 
    *TODO:* reserve "_boot"?
@@ -659,20 +667,19 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
 
-7.  Normative References
-
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/info/rfc2119>.
-
-
 
 
 Thomassen & Wisiol       Expires 20 January 2022               [Page 12]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
+
+7.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
 
    [RFC4033]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "DNS Security Introduction and Requirements",
@@ -716,19 +723,17 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
-   [RFC8901]  Huque, S., Aras, P., Dickinson, J., Vcelak, J., and D.
-              Blacka, "Multi-Signer DNSSEC Models", RFC 8901,
-              DOI 10.17487/RFC8901, September 2020,
-              <https://www.rfc-editor.org/info/rfc8901>.
-
-
-
 
 
 Thomassen & Wisiol       Expires 20 January 2022               [Page 13]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
+
+   [RFC8901]  Huque, S., Aras, P., Dickinson, J., Vcelak, J., and D.
+              Blacka, "Multi-Signer DNSSEC Models", RFC 8901,
+              DOI 10.17487/RFC8901, September 2020,
+              <https://www.rfc-editor.org/info/rfc8901>.
 
 Appendix A.  Change History (to be removed before final publication)
 
@@ -760,11 +765,6 @@ Authors' Addresses
    Germany
 
    Email: nils@desec.io
-
-
-
-
-
 
 
 

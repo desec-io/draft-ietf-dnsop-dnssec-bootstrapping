@@ -517,6 +517,12 @@ Thoughts (to be expanded):
       another one by means of a DNAME record.  This could be prevented by
       incorporating the Bootstrapping Domain's name into the hash used to
       construct the Signal Name.
+    * In case of a hash collision, two distinct child zones may be associated
+      with the same signaling name so that their keys may get mixed up.  While
+      not currently feasible, malicious customers in shared hosting environments
+      may attempt to produce such a collision.  Is it worth mitigating this by
+      introducing a salt, e.g. stored in a TXT record located at the
+      Bootstrapping Domain?  (In case of a collision, one can set a new salt.)
 
 # IANA Considerations
 
