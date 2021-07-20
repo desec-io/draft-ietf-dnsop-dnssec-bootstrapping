@@ -1647,36 +1647,47 @@ retrieved in Steps 2 (if present), 3 and 4 have equal contents;<a href="#section
 <p id="section-2.3.2-3">For the above queries, the Parental Agent MUST use a trusted validating
 DNS resolver and MUST treat responses with unauthenticated data
 (AD bit not set) as an error condition, unless indicated otherwise.<a href="#section-2.3.2-3" class="pilcrow">¶</a></p>
-<p id="section-2.3.2-4">If the above steps succeeded without error, the Child DNS Operator
-SHOULD derive a DS record set from the retrieved CDS/CDNSKEY record
-sets and publish it in the Parent zone, so as to secure the Child's
-delegation.<a href="#section-2.3.2-4" class="pilcrow">¶</a></p>
-<p id="section-2.3.2-5">If, however, an error condition occurs, in particular:<a href="#section-2.3.2-5" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-4">If the above steps succeeded without error, the Parental Agent MUST
+construct a tentative DS record set either by copying the CDS record
+contents or by computing DS records from the CDNSKEY record set, or
+by doing both (i.e. amending the set of records copied from the CDS
+record set).<a href="#section-2.3.2-4" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-5">The Parental Agent then MUST verify that for each signature algorithm
+present, (at least) one of the keys referenced in the tentative DS
+record set signs the Child's DNSKEY record set.<a href="#section-2.3.2-5" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-6">If this is the case, the Parental Agent SHOULD publish the DS record
+set in the Parent zone, so as to secure the Child's delegation.<a href="#section-2.3.2-6" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-7">If, however, an error condition occurs, in particular:<a href="#section-2.3.2-7" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2-6.1">
-              <p id="section-2.3.2-6.1.1">The Child is already securely delegated (Step 1),<a href="#section-2.3.2-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.2-8.1">
+              <p id="section-2.3.2-8.1.1">The Child is already securely delegated (Step 1),<a href="#section-2.3.2-8.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-2.3.2-6.2">
-              <p id="section-2.3.2-6.2.1">Any failure during the retrieval of the CDS/CDNSKEY records located
+            <li class="normal" id="section-2.3.2-8.2">
+              <p id="section-2.3.2-8.2.1">Any failure during the retrieval of the CDS/CDNSKEY records located
 at the Child apex from the Child's authoritative nameservers (Step 2),
 with an empty record set returned from all authoritative nameservers
-not qualifying as a failure,<a href="#section-2.3.2-6.2.1" class="pilcrow">¶</a></p>
+not qualifying as a failure,<a href="#section-2.3.2-8.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-2.3.2-6.3">
-              <p id="section-2.3.2-6.3.1">The PTR record does not match (Step 3),<a href="#section-2.3.2-6.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-2.3.2-8.3">
+              <p id="section-2.3.2-8.3.1">The PTR record does not match (Step 3),<a href="#section-2.3.2-8.3.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-2.3.2-6.4">
-              <p id="section-2.3.2-6.4.1">DNS resolution failure during retrieval of CDS/CDNSKEY records from
-any Signaling Name, or failure of DNSSEC validation (Step 4),<a href="#section-2.3.2-6.4.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-2.3.2-8.4">
+              <p id="section-2.3.2-8.4.1">DNS resolution failure during retrieval of CDS/CDNSKEY records from
+any Signaling Name, or failure of DNSSEC validation (Step 4),<a href="#section-2.3.2-8.4.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-2.3.2-6.5">
-              <p id="section-2.3.2-6.5.1">Inconsistent responses (Step 5),<a href="#section-2.3.2-6.5.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-2.3.2-8.5">
+              <p id="section-2.3.2-8.5.1">Inconsistent responses (Step 5),<a href="#section-2.3.2-8.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.3.2-8.6">
+              <p id="section-2.3.2-8.6.1">The tentative DS record set includes a signature algorithm without
+referencing a key of that algorithm which signs the Child's DNSKEY
+record set,<a href="#section-2.3.2-8.6.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.3.2-7">the Parental Agent MUST abort the procedure.<a href="#section-2.3.2-7" class="pilcrow">¶</a></p>
-<p id="section-2.3.2-8">In addition to triggering this procedure whenever the Child's NS
+<p id="section-2.3.2-9">the Parental Agent MUST abort the procedure.<a href="#section-2.3.2-9" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-10">In addition to triggering this procedure whenever the Child's NS
 records are updated, the Parental Agent MAY also trigger the
-procedure at any other time deemed appropriate by local policy.<a href="#section-2.3.2-8" class="pilcrow">¶</a></p>
+procedure at any other time deemed appropriate by local policy.<a href="#section-2.3.2-10" class="pilcrow">¶</a></p>
 <div id="example-2">
 <section id="section-2.3.2.1">
             <h5 id="name-example-3">

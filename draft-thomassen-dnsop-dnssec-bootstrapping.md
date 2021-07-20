@@ -296,10 +296,18 @@ For the above queries, the Parental Agent MUST use a trusted validating
 DNS resolver and MUST treat responses with unauthenticated data
 (AD bit not set) as an error condition, unless indicated otherwise.
 
-If the above steps succeeded without error, the Child DNS Operator
-SHOULD derive a DS record set from the retrieved CDS/CDNSKEY record
-sets and publish it in the Parent zone, so as to secure the Child's
-delegation.
+If the above steps succeeded without error, the Parental Agent MUST
+construct a tentative DS record set either by copying the CDS record
+contents or by computing DS records from the CDNSKEY record set, or
+by doing both (i.e. amending the set of records copied from the CDS
+record set).
+
+The Parental Agent then MUST verify that for each signature algorithm
+present, (at least) one of the keys referenced in the tentative DS
+record set signs the Child's DNSKEY record set.
+
+If this is the case, the Parental Agent SHOULD publish the DS record
+set in the Parent zone, so as to secure the Child's delegation.
 
 If, however, an error condition occurs, in particular:
 
@@ -316,6 +324,10 @@ If, however, an error condition occurs, in particular:
   any Signaling Name, or failure of DNSSEC validation (Step 4),
 
 - Inconsistent responses (Step 5),
+
+- The tentative DS record set includes a signature algorithm without
+  referencing a key of that algorithm which signs the Child's DNSKEY
+  record set,
 
 the Parental Agent MUST abort the procedure.
 

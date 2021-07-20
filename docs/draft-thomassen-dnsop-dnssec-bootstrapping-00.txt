@@ -70,7 +70,7 @@ Table of Contents
      2.3.  Bootstrapping a DNSSEC Delegation . . . . . . . . . . . .   6
        2.3.1.  Signaling Records . . . . . . . . . . . . . . . . . .   6
        2.3.2.  Steps Taken by the Parental Agent . . . . . . . . . .   6
-     2.4.  Possible Extensions . . . . . . . . . . . . . . . . . . .   8
+     2.4.  Possible Extensions . . . . . . . . . . . . . . . . . . .   9
        2.4.1.  Multi-Signer Setups: Onboarding a Signing Party . . .   9
      2.5.  Operational Recommendations . . . . . . . . . . . . . . .  10
    3.  Implementation Status . . . . . . . . . . . . . . . . . . . .  11
@@ -356,10 +356,18 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
    data (AD bit not set) as an error condition, unless indicated
    otherwise.
 
-   If the above steps succeeded without error, the Child DNS Operator
-   SHOULD derive a DS record set from the retrieved CDS/CDNSKEY record
-   sets and publish it in the Parent zone, so as to secure the Child's
-   delegation.
+   If the above steps succeeded without error, the Parental Agent MUST
+   construct a tentative DS record set either by copying the CDS record
+   contents or by computing DS records from the CDNSKEY record set, or
+   by doing both (i.e. amending the set of records copied from the CDS
+   record set).
+
+   The Parental Agent then MUST verify that for each signature algorithm
+   present, (at least) one of the keys referenced in the tentative DS
+   record set signs the Child's DNSKEY record set.
+
+   If this is the case, the Parental Agent SHOULD publish the DS record
+   set in the Parent zone, so as to secure the Child's delegation.
 
    If, however, an error condition occurs, in particular:
 
@@ -377,14 +385,6 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
    *  Inconsistent responses (Step 5),
 
-   the Parental Agent MUST abort the procedure.
-
-   In addition to triggering this procedure whenever the Child's NS
-   records are updated, the Parental Agent MAY also trigger the
-   procedure at any other time deemed appropriate by local policy.
-
-
-
 
 
 
@@ -393,6 +393,16 @@ Thomassen & Wisiol       Expires 20 January 2022                [Page 7]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
+
+   *  The tentative DS record set includes a signature algorithm without
+      referencing a key of that algorithm which signs the Child's DNSKEY
+      record set,
+
+   the Parental Agent MUST abort the procedure.
+
+   In addition to triggering this procedure whenever the Child's NS
+   records are updated, the Parental Agent MAY also trigger the
+   procedure at any other time deemed appropriate by local policy.
 
 2.3.2.1.  Example
 
@@ -433,22 +443,18 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
    owner, and without regard to what the Child DNS Operator decides to
    signal under the Bootstrapping Domain.
 
-2.4.  Possible Extensions
-
-   By provisioning other types of Signaling Records, the Child DNS
-   Operator can convey signals that pertain to use cases other than
-   bootstrapping a DNSSEC delegation.
-
-
-
-
-
 
 
 Thomassen & Wisiol       Expires 20 January 2022                [Page 8]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
+
+2.4.  Possible Extensions
+
+   By provisioning other types of Signaling Records, the Child DNS
+   Operator can convey signals that pertain to use cases other than
+   bootstrapping a DNSSEC delegation.
 
 2.4.1.  Multi-Signer Setups: Onboarding a Signing Party
 
@@ -493,18 +499,15 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
    at the Signaling Names
 
-kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns3.example.org
-kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns4.example.org
-
-
-
-
 
 
 Thomassen & Wisiol       Expires 20 January 2022                [Page 9]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
+
+kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns3.example.org
+kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns4.example.org
 
    where the first label is calculated as described in Section 2.2.  The
    records are accompanied by RRSIG records created using the key(s) of
@@ -550,9 +553,6 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
    efficient, Child DNS operators SHOULD remove Signaling Records which
    are found to have been acted upon, including final removal of the PTR
    Signaling Record after removing all others with the same owner name.
-
-
-
 
 
 
