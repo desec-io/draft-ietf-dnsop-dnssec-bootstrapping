@@ -467,6 +467,8 @@ owner name.
 
 **Note to the RFC Editor**: please remove this entire section before publication.
 
+## Child DNS Operator-side
+
 * Knot DNS supports manual creation of non-apex CDS/CDNSKEY/DNSKEY records.
 
 * PowerDNS supports manual creation of non-apex CDS/CDNSKEY/DNSKEY records.
@@ -475,6 +477,17 @@ owner name.
   and `_boot.ns2.desec.org`.  Signaling Names can be discovered via
   NSEC walking.  Child zones can be discovered by querying PTR for a
   Signaling Name.
+
+* A tool to automatically generate signaling records for bootstrapping
+  purposes is not yet available.
+
+## Parental Agent-side
+
+* A tool to retrieve and process signaling records for bootstrapping
+  purposes is available at https://github.com/desec-io/dsbootstrap.
+  The tool implements the algorithm described in this document and
+  outputs the validated DS records which then can be added to the
+  parent zone.
 
 
 # Security Considerations
