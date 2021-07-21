@@ -545,8 +545,8 @@ This document has no IANA actions.
 # Acknowledgements
 
 Thanks to Nils Wisiol for helping in the conceptual development of the
-protocol, and to Brian Dickson for reviewing draft proposals and offering
-comments and suggestions.
+protocol, and to Brian Dickson and Ondřej Caletka for reviewing draft
+proposals and offering comments and suggestions.
 
 Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for early-stage
 brainstorming.

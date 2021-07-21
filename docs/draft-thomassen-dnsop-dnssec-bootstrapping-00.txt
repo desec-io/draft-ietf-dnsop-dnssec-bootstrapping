@@ -5,8 +5,8 @@
 DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
 Intended status: Standards Track                               N. Wisiol
-Expires: 20 January 2022            deSEC, Technische Universität Berlin
-                                                            19 July 2021
+Expires: 22 January 2022            deSEC, Technische Universität Berlin
+                                                            21 July 2021
 
 
            Authenticated Bootstrapping of DNSSEC Delegations
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 January 2022.
+   This Internet-Draft will expire on 22 January 2022.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022                [Page 1]
+Thomassen & Wisiol       Expires 22 January 2022                [Page 1]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022                [Page 2]
+Thomassen & Wisiol       Expires 22 January 2022                [Page 2]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -165,7 +165,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022                [Page 3]
+Thomassen & Wisiol       Expires 22 January 2022                [Page 3]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -221,7 +221,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022                [Page 4]
+Thomassen & Wisiol       Expires 22 January 2022                [Page 4]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -277,7 +277,7 @@ b32encode(digest).translate(b32_normal_to_hex).rstrip(b'=').lower().decode()
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022                [Page 5]
+Thomassen & Wisiol       Expires 22 January 2022                [Page 5]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -333,7 +333,7 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022                [Page 6]
+Thomassen & Wisiol       Expires 22 January 2022                [Page 6]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -389,7 +389,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022                [Page 7]
+Thomassen & Wisiol       Expires 22 January 2022                [Page 7]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -445,7 +445,7 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022                [Page 8]
+Thomassen & Wisiol       Expires 22 January 2022                [Page 8]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -501,7 +501,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022                [Page 9]
+Thomassen & Wisiol       Expires 22 January 2022                [Page 9]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -557,7 +557,7 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns4.example.org
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022               [Page 10]
+Thomassen & Wisiol       Expires 22 January 2022               [Page 10]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -613,7 +613,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022               [Page 11]
+Thomassen & Wisiol       Expires 22 January 2022               [Page 11]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -661,15 +661,15 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 6.  Acknowledgements
 
    Thanks to Nils Wisiol for helping in the conceptual development of
-   the protocol, and to Brian Dickson for reviewing draft proposals and
-   offering comments and suggestions.
+   the protocol, and to Brian Dickson and Ond&#345;ej Caletka for
+   reviewing draft proposals and offering comments and suggestions.
 
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022               [Page 12]
+Thomassen & Wisiol       Expires 22 January 2022               [Page 12]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -725,7 +725,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022               [Page 13]
+Thomassen & Wisiol       Expires 22 January 2022               [Page 13]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
@@ -781,4 +781,4 @@ Authors' Addresses
 
 
 
-Thomassen & Wisiol       Expires 20 January 2022               [Page 14]
+Thomassen & Wisiol       Expires 22 January 2022               [Page 14]
