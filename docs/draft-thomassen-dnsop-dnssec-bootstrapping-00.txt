@@ -70,14 +70,14 @@ Table of Contents
      2.3.  Bootstrapping a DNSSEC Delegation . . . . . . . . . . . .   6
        2.3.1.  Signaling Records . . . . . . . . . . . . . . . . . .   6
        2.3.2.  Steps Taken by the Parental Agent . . . . . . . . . .   6
-     2.4.  Possible Extensions . . . . . . . . . . . . . . . . . . .   9
+     2.4.  Possible Extensions . . . . . . . . . . . . . . . . . . .   8
        2.4.1.  Multi-Signer Setups: Onboarding a Signing Party . . .   9
      2.5.  Operational Recommendations . . . . . . . . . . . . . . .  10
-   3.  Implementation Status . . . . . . . . . . . . . . . . . . . .  11
+   3.  Implementation Status . . . . . . . . . . . . . . . . . . . .  10
    4.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
    5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
    6.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  12
-   7.  Normative References  . . . . . . . . . . . . . . . . . . . .  13
+   7.  Normative References  . . . . . . . . . . . . . . . . . . . .  12
    Appendix A.  Change History (to be removed before final
            publication)  . . . . . . . . . . . . . . . . . . . . . .  14
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
@@ -233,7 +233,8 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
    Signaling Records at the Child's Signaling Name under each
    Bootstrapping Domain.  The Signaling Records are
 
-   *  a PTR record containing the Child's name as the target;
+   *  a PTR record containing the Child's name as the target
+      (RECOMMENDED);
 
    *  one or more other DNS records, depending on the specific use case
       as described below.
@@ -276,7 +277,6 @@ b32encode(digest).translate(b32_normal_to_hex).rstrip(b'=').lower().decode()
 
 
 
-
 Thomassen & Wisiol       Expires 22 January 2022                [Page 5]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
@@ -309,7 +309,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
    "_boot.ns2.example.net".  In the zones containing these domains, the
    Child DNS Operator publishes
 
-   *  a PTR record pointing to "example.com." and
+   *  a PTR record pointing to "example.com." (recommended) and
 
    *  the Child's CDS/CDNSKEY records
 
@@ -342,14 +342,11 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
        directly from each of the authoritative nameservers as given in
        the Child NS record set;
 
-   3.  query the PTR record located at each of the Signaling Names and
-       verify that its content matches the Child's name;
-
-   4.  query the CDS/CDNSKEY records located at each of the Signaling
+   3.  query the CDS/CDNSKEY records located at each of the Signaling
        Names;
 
-   5.  check (separately by record type) that all record sets retrieved
-       in Steps 2 (if present), 3 and 4 have equal contents;
+   4.  check (separately by record type) that all record sets retrieved
+       in Steps 2 (if present) and 3 have equal contents;
 
    For the above queries, the Parental Agent MUST use a trusted
    validating DNS resolver and MUST treat responses with unauthenticated
@@ -378,13 +375,16 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
       nameservers (Step 2), with an empty record set returned from all
       authoritative nameservers not qualifying as a failure,
 
-   *  The PTR record does not match (Step 3),
-
    *  DNS resolution failure during retrieval of CDS/CDNSKEY records
-      from any Signaling Name, or failure of DNSSEC validation (Step 4),
+      from any Signaling Name, or failure of DNSSEC validation (Step 3),
 
-   *  Inconsistent responses (Step 5),
+   *  Inconsistent responses (Step 4),
 
+   *  The tentative DS record set includes a signature algorithm without
+      referencing a key of that algorithm which signs the Child's DNSKEY
+      record set,
+
+   the Parental Agent MUST abort the procedure.
 
 
 
@@ -393,12 +393,6 @@ Thomassen & Wisiol       Expires 22 January 2022                [Page 7]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
-
-   *  The tentative DS record set includes a signature algorithm without
-      referencing a key of that algorithm which signs the Child's DNSKEY
-      record set,
-
-   the Parental Agent MUST abort the procedure.
 
    In addition to triggering this procedure whenever the Child's NS
    records are updated, the Parental Agent MAY also trigger the
@@ -414,19 +408,14 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
    2.  queries CDS/CDNSKEY records for "example.com" directly from
        "ns1.example.net" and "ns2.example.net";
 
-   3.  queries the PTR record located at the Signaling Names (see
-       Section 2.2)
+   3.  queries the CDS/CDNSKEY records located at the Signaling Names
+       (see Section 2.2)
 
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns1.example.net
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 
-   and verifies that the record content is "example.com.";
-
-   4.  queries CDS/CDNSKEY records located at the same Signaling Names;
-
-   5.  checks that the PTR record sets retrieved in Step 3 agree across
-       responses; ditto for the CDS/CDNSKEY record sets retrieved in
-       Steps 2 and 4.
+   4.  checks that the CDS/CDNSKEY record sets retrieved in Steps 2 and
+       3 agree across responses.
 
    The Parental Agent then publishes a DS record set according to the
    information retrieved in the previous steps.
@@ -443,18 +432,23 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
    owner, and without regard to what the Child DNS Operator decides to
    signal under the Bootstrapping Domain.
 
+2.4.  Possible Extensions
+
+   By provisioning other types of Signaling Records, the Child DNS
+   Operator can convey signals that pertain to use cases other than
+   bootstrapping a DNSSEC delegation.
+
+
+
+
+
+
 
 
 Thomassen & Wisiol       Expires 22 January 2022                [Page 8]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
-
-2.4.  Possible Extensions
-
-   By provisioning other types of Signaling Records, the Child DNS
-   Operator can convey signals that pertain to use cases other than
-   bootstrapping a DNSSEC delegation.
 
 2.4.1.  Multi-Signer Setups: Onboarding a Signing Party
 
@@ -492,19 +486,10 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
    "_boot.ns4.example.org".  In the zones containing these domains, the
    new Child DNS Operator publishes
 
-   *  a PTR record pointing to "example.com." and
-
    *  a DNSKEY record set containing the ZSK set that the operator will
       use for signing the Child zone,
 
    at the Signaling Names
-
-
-
-Thomassen & Wisiol       Expires 22 January 2022                [Page 9]
-
-Internet-Draft            dnssec-bootstrapping                 July 2021
-
 
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns3.example.org
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns4.example.org
@@ -512,6 +497,14 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns4.example.org
    where the first label is calculated as described in Section 2.2.  The
    records are accompanied by RRSIG records created using the key(s) of
    the respective Bootstrapping Zone.
+
+
+
+
+Thomassen & Wisiol       Expires 22 January 2022                [Page 9]
+
+Internet-Draft            dnssec-bootstrapping                 July 2021
+
 
    Note that DNSKEY records are not restricted to apex owner names
    ([RFC4035], Section 2.1).  However, only apex DNSKEY records are used
@@ -552,7 +545,14 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns4.example.org
    To keep the size of the Bootstrapping Zones minimal and zone walking
    efficient, Child DNS operators SHOULD remove Signaling Records which
    are found to have been acted upon, including final removal of the PTR
-   Signaling Record after removing all others with the same owner name.
+   Signaling Record (if present) after removing all others with the same
+   owner name.
+
+3.  Implementation Status
+
+   *Note to the RFC Editor*: please remove this entire section before
+   publication.
+
 
 
 
@@ -561,11 +561,6 @@ Thomassen & Wisiol       Expires 22 January 2022               [Page 10]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
-
-3.  Implementation Status
-
-   *Note to the RFC Editor*: please remove this entire section before
-   publication.
 
    *  Knot DNS supports manual creation of non-apex CDS/CDNSKEY/DNSKEY
       records.
@@ -610,6 +605,11 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
       -  that's also possible in the case of CDS/CDNSKEY (see previous
          point);
 
+      -  if the Child DNS Operator doesn't control the zones in which
+         its NS hostnames live (including their nameservers' A records)
+         because the path from the root is untrusted, you probably don't
+         want to trust that operator as a whole;
+
 
 
 
@@ -617,11 +617,6 @@ Thomassen & Wisiol       Expires 22 January 2022               [Page 11]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
-
-      -  if the Child DNS Operator doesn't control the zones in which
-         its NS hostnames live (including their nameservers' A records)
-         because the path from the root is untrusted, you probably don't
-         want to trust that operator as a whole;
 
       -  when bootstrapping is done upon receipt of a new NS record set,
          the window of opportunity is very small (and easily monitored
@@ -634,10 +629,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
       provisioning:
 
       -  In addition to facilitating Child zone discovery and
-         simplifying debugging, the Child-specific PTR record content
-         also prevents the use of wildcard records under the
-         Bootstrapping Domain.  As a result, Signaling Records have to
-         be provisioned on a per-Child basis.
+         simplifying debugging, a child-specific PTR record also
+         precludes the use of wildcard signaling records.  Some
+         operators or consumers may find that useful.
 
       -  Similarly, operators could redirect a Bootstrapping Domain onto
          another one by means of a DNAME record.  This could be
@@ -667,14 +661,18 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
 
+7.  Normative References
+
+
+
+
+
 
 
 Thomassen & Wisiol       Expires 22 January 2022               [Page 12]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
 
-
-7.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -725,6 +723,8 @@ Internet-Draft            dnssec-bootstrapping                 July 2021
 
 
 
+
+
 Thomassen & Wisiol       Expires 22 January 2022               [Page 13]
 
 Internet-Draft            dnssec-bootstrapping                 July 2021
@@ -739,7 +739,7 @@ Appendix A.  Change History (to be removed before final publication)
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-01
 
-   |  Added PTR record at Signaling Name.
+   |  Added recommendation to create a PTR signaling record.
    |  
    |  Added NSEC recommendation for Bootstrapping Zones.
    |  

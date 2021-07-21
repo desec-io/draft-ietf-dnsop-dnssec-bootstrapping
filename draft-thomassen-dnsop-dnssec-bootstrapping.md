@@ -186,7 +186,7 @@ delegated signer, the Child DNS Operator MUST publish one or more
 Signaling Records at the Child's Signaling Name under each
 Bootstrapping Domain.  The Signaling Records are
 
-- a PTR record containing the Child's name as the target;
+- a PTR record containing the Child's name as the target (RECOMMENDED);
 
 - one or more other DNS records, depending on the specific use
   case as described below.
@@ -256,7 +256,7 @@ Bootstrapping Domains are `_boot.ns1.example.net` and
 `_boot.ns2.example.net`.  In the zones containing these domains, the
 Child DNS Operator publishes
 
-- a PTR record pointing to `example.com.` and
+- a PTR record pointing to `example.com.` (recommended) and
 - the Child's CDS/CDNSKEY records
 
 at the names
@@ -283,14 +283,11 @@ zone name and its NS hostnames, MUST
    directly from each of the authoritative nameservers as given in the
    Child NS record set;
 
-3. query the PTR record located at each of the Signaling Names
-   and verify that its content matches the Child's name;
-
-4. query the CDS/CDNSKEY records located at each of the Signaling
+3. query the CDS/CDNSKEY records located at each of the Signaling
    Names;
 
-5. check (separately by record type) that all record sets
-   retrieved in Steps 2 (if present), 3 and 4 have equal contents;
+4. check (separately by record type) that all record sets
+   retrieved in Steps 2 (if present) and 3 have equal contents;
 
 For the above queries, the Parental Agent MUST use a trusted validating
 DNS resolver and MUST treat responses with unauthenticated data
@@ -318,12 +315,10 @@ If, however, an error condition occurs, in particular:
   with an empty record set returned from all authoritative nameservers
   not qualifying as a failure,
 
-- The PTR record does not match (Step 3),
-
 - DNS resolution failure during retrieval of CDS/CDNSKEY records from
-  any Signaling Name, or failure of DNSSEC validation (Step 4),
+  any Signaling Name, or failure of DNSSEC validation (Step 3),
 
-- Inconsistent responses (Step 5),
+- Inconsistent responses (Step 4),
 
 - The tentative DS record set includes a signature algorithm without
   referencing a key of that algorithm which signs the Child's DNSKEY
@@ -345,21 +340,16 @@ To bootstrap the Child zone `example.com` using NS records
 2. queries CDS/CDNSKEY records for `example.com` directly from
    `ns1.example.net` and `ns2.example.net`;
 
-3. queries the PTR record located at the Signaling Names (see
-   (#signaling))
+3. queries the CDS/CDNSKEY records located at the Signaling Names
+   (see (#signaling))
 
 ```
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns1.example.net
 kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 ```
 
-   and verifies that the record content is `example.com.`;
-
-4. queries CDS/CDNSKEY records located at the same Signaling Names;
-
-5. checks that the PTR record sets retrieved in Step 3 agree across
-   responses; ditto for the CDS/CDNSKEY record sets retrieved in
-   Steps 2 and 4.
+4. checks that the CDS/CDNSKEY record sets retrieved in Steps 2
+   and 3 agree across responses.
 
 The Parental Agent then publishes a DS record set according to the
 information retrieved in the previous steps.
@@ -416,7 +406,6 @@ The Bootstrapping Domains corresponding to the new Child DNS Operator's
 nameservers are `_boot.ns3.example.org` and `_boot.ns4.example.org`.
 In the zones containing these domains, the new Child DNS Operator publishes
 
-- a PTR record pointing to `example.com.` and
 - a DNSKEY record set containing the ZSK set that the
   operator will use for signing the Child zone,
 
@@ -470,7 +459,8 @@ Child DNS Operator has enabled the protocol.
 To keep the size of the Bootstrapping Zones minimal and zone walking
 efficient, Child DNS operators SHOULD remove Signaling Records which
 are found to have been acted upon, including final removal of the PTR
-Signaling Record after removing all others with the same owner name.
+Signaling Record (if present) after removing all others with the same
+owner name.
 
 
 # Implementation Status
@@ -522,9 +512,9 @@ Thoughts (to be expanded):
 
 - Prevention of accidental misprovisioning / enforcing explicit provisioning:
     * In addition to facilitating Child zone discovery and simplifying
-      debugging, the Child-specific PTR record content also prevents the use of
-      wildcard records under the Bootstrapping Domain.  As a result,
-      Signaling Records have to be provisioned on a per-Child basis.
+      debugging, a child-specific PTR record also precludes the use of
+      wildcard signaling records.  Some operators or consumers may find
+      that useful.
     * Similarly, operators could redirect a Bootstrapping Domain onto
       another one by means of a DNAME record.  This could be prevented by
       incorporating the Bootstrapping Domain's name into the hash used to
@@ -557,7 +547,7 @@ brainstorming.
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
 
-> Added PTR record at Signaling Name.
+> Added recommendation to create a PTR signaling record.
 
 > Added NSEC recommendation for Bootstrapping Zones.
 

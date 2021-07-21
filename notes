@@ -4,10 +4,10 @@ Todos:
 	  that this is meant primarily for managed DNS providers hosting registrant's domains
 	  (e.g. hinted at in the name of the draft, or in the mailing list posting).
 	* add "Automatic"? / RFC 7344: Automating DNSSEC Delegation Trust Maintenance
-- not really for bootstrapping a new child, but for onboarding a Child DNS Operator as a new delegated signe
+- not really for bootstrapping a new child, but for onboarding a Child DNS Operator as a new delegated signed
+	* when joining a multi-signer group, is there a case where the operator may not want the other parties to take his keys from the CDNSKEY RRset?
 - require validation of empty CDS/CDNSKEY record set at the Child apex using bootstrapping keys?
 	* no, could be opt-out because the owner can't get the signatures correct. But one could try that and log an error.
-- opt-out via CDNSKEY 0 3 0 0?
 
 Multi-signer:
 - There may be a contradiction of goals when the new operator is in bailiwick (as other providers show up further up in the chain, somehow vouching for each other etc.).
