@@ -107,7 +107,7 @@ Child
   from the Parent.
 
 Parent
-: The domain in which the Child is registered.
+: The zone that contains the Child's delegation records.
 
 Child DNS Operator
 : The entity that maintains and publishes the zone information
@@ -176,15 +176,15 @@ have to be met:
 
 ### Example
 
-When performing DNSSEC bootstrapping for the Child zone `example.com`
-using NS records `ns1.example.net` and `ns2.example.net`, the Child
-DNS Operator
+When performing DNSSEC bootstrapping for the Child zone
+`example.co.uk` using NS records `ns1.example.net` and
+`ns2.example.net`, the Child DNS Operator
 
 1. needs to ensure that a valid DNSSEC chain of trust exists for the
    zone(s) that are authoritative for the Signaling Domains
    `_boot.ns1.example.net` and `_boot.ns2.example.net`;
 
-2. should publish CDS/CDNSKEY records at `example.com`.
+2. should publish CDS/CDNSKEY records at `example.co.uk`.
 
 
 {#signaling}
@@ -200,13 +200,37 @@ the corresponding Signaling Zone's key(s).  The type and contents
 of these Signaling Records depend on the specific use case as
 described below.
 
-The Signaling Name contains a label derived from the Child's name.
-This label MUST be equal to the SHA-256 hash digest of the Child's
-fully qualified name in wire format, using "Base 32 Encoding with
-Extended Hex Alphabet", as specified in [@!RFC4648].  Trailing
-padding characters ("=") MUST be dropped.
+The Signaling Name MUST consist of the following two labels:
 
-**TODO Remove:** Example command (Python, with `dnspython` package):
+1. the first label of the Child name;
+
+2. a label equal to the SHA-256 hash digest of the fully qualified
+   domain name of the Child's immediate ancestor in the DNS tree (one
+   level up), using wire format for the hash input and "Base 32
+   Encoding with Extended Hex Alphabet" as specified in [@!RFC4648]
+   for the output.  Trailing padding characters ("=") MUST be dropped.
+
+Note that the "fully qualified domain name of the Child's immediate
+ancestor in the DNS tree" coincides with the Parent's FQDN only when
+the delegation is directly (one level) under the Parent's apex.
+For deeper delegations, it also contains the labels between the
+Parent and the Child.
+
+[ The purpose of the hash function is to avoid the possibility of
+exceeding the maximum length of a DNS name, and to normalize the
+number of labels in a Signaling Name.
+The encoding choice is like in NSEC3, except that SHA-256 is used
+instead of SHA-1.  This is to prevent other tenants in shared hosting
+environments from creating collisions. ]
+
+[ Prefixing the first label verbatim minimizes the number of hash
+calculations that need to be performed by the Child DNS Operator and
+the Parental Agent, and also facilitates discovery of unprocessed
+Signaling Records by Parental Agent by means of NSEC walking the
+Signaling Domain. (If the first label was part of the hash, the
+Parental Agent would not be able to infer the Child's name.) ]
+
+[ **Example code** (Python, with `dnspython` package):
 ```
 from base64 import b32encode
 from hashlib import sha256
@@ -214,25 +238,16 @@ from hashlib import sha256
 import dns.name
 from dns.rdtypes.ANY.NSEC3 import b32_normal_to_hex
 
-
-child = 'example.com.'
-wire_format = dns.name.from_text(child).to_wire()
-digest = sha256(wire_format).digest()
-b32encode(digest).translate(b32_normal_to_hex).rstrip(b'=').lower().decode()
-# >>> 'i0n9ohifkgvslc89q6jbinevgcpol35s799b9uvu3aeobsh4dk7g'
+child = 'example.co.uk.'
+prefix, suffix = child.split('.', 1)
+suffix_wire_format = dns.name.from_text(suffix).to_wire()
+suffix_digest = sha256(suffix_wire_format).digest()
+suffix_digest = b32encode(suffix_digest).translate(b32_normal_to_hex).rstrip(b'=')
+signaling_name = prefix + '.' + suffix_digest.lower().decode()
+print(signaling_name)
+# >>> 'example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg'
 ```
-
-**TODO Remove Note:** The purpose of the hash function is to avoid
-the possibility of exceeding the maximum length of a DNS name.  This
-could occur if the Child name was prefixed to the Signaling Domain as is.
-The encoding choice is like in NSEC3, except
-that SHA-256 is used instead of SHA-1.  This is to prevent other
-tenants in shared hosting environments from creating collisions.
-
-**TODO Open Questions:** 1.) Should hash input include Bootstrapping Domain (to
-prevent DNAME redirects)? 2.) To support DNS operators with many zones, it
-should perhaps be possible to shard Bootstrapping Zones, by splitting the prefix
-into a couple of labels.
+]
 
 ## Bootstrapping a DNSSEC Delegation
 
@@ -256,7 +271,7 @@ key(s).
 
 #### Example
 
-For the purposes of bootstrapping the Child zone `example.com` with
+For the purposes of bootstrapping the Child zone `example.co.uk` with
 NS records `ns1.example.net` and `ns2.example.net`, the required
 Signaling Domains are `_boot.ns1.example.net` and
 `_boot.ns2.example.net`.  In the zones containing these domains, the
@@ -266,14 +281,14 @@ Child DNS Operator publishes
 
 at the names
 ```
-kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns1.example.net
-kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
+example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns1.example.net
+example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.net
 ```
-where `kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g` is
-derived from the DNS Child Zone's name `example.com` as described
-in (#signaling).  The records are
-accompanied by RRSIG records created using the key(s) of the
-respective Signaling Zone.
+where `example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg`
+is derived from the DNS Child Zone's name `example.co.uk` as described
+in (#signaling).
+The records are accompanied by RRSIG records created using the key(s)
+of the respective Signaling Zone.
 
 {#bootstrapping}
 ### Steps Taken by the Parental Agent
@@ -345,20 +360,20 @@ procedure at any other time deemed appropriate by local policy.
 
 #### Example
 
-To bootstrap the Child zone `example.com` using NS records
+To bootstrap the Child zone `example.co.uk` using NS records
 `ns1.example.net` and `ns2.example.net`, the Parental Agent
 
 1. checks that the Child zone is not yet securely delegated;
 
-2. queries CDS/CDNSKEY records for `example.com` directly from
+2. queries CDS/CDNSKEY records for `example.co.uk` directly from
    `ns1.example.net` and `ns2.example.net`;
 
 3. queries the CDS/CDNSKEY records located at the Signaling Names
    (see (#signaling))
 
 ```
-kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns1.example.net
-kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
+example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns1.example.net
+example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.net
 ```
 
 4. checks that the CDS/CDNSKEY record sets retrieved in Steps 2
@@ -409,7 +424,7 @@ so that they can retrieve, validate, and import them.
 
 #### Signaling Records
 
-Given a Child zone `example.com` that is already securely delegated
+Given a Child zone `example.co.uk` that is already securely delegated
 with authoritative nameservers `ns1.example.net` and `ns2.example.net`,
 we consider how a new Child DNS Operator using nameservers
 `ns3.example.org` and `ns4.example.org` can distribute its ZSK set to
@@ -424,8 +439,8 @@ In the zones containing these domains, the new Child DNS Operator publishes
 
 at the Signaling Names
 ```
-kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns3.example.org
-kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns4.example.org
+example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns3.example.org
+example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns4.example.org
 ```
 where the first label is calculated as described in (#signaling).  The records
 are accompanied by RRSIG records created using the key(s) of the
@@ -440,7 +455,7 @@ DNSKEY uses.
 
 #### Import
 
-Once the owner of `example.com` informs the existing signing parties
+Once the owner of `example.co.uk` informs the existing signing parties
 of the joining Child DNS Operator's nameserver hostnames, the
 existing parties can use an algorithm similar to the one given in
 (#bootstrapping) to query and validate the joining operator's ZSK
@@ -534,10 +549,6 @@ Thoughts (to be expanded):
       which is advisable anyways.
 
 - Prevention of accidental misprovisioning / enforcing explicit provisioning:
-    * Similarly, operators could redirect a Signaling Domain onto
-      another one by means of a DNAME record.  This could be prevented by
-      incorporating the Signaling Domain's name into the hash used to
-      construct the Signal Name.
     * In case of a hash collision, two distinct child zones may be associated
       with the same signaling name so that their keys may get mixed up.  While
       not currently feasible, malicious customers in shared hosting environments
@@ -565,6 +576,8 @@ brainstorming.
 # Change History (to be removed before final publication)
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
+
+> Reworked Signaling Name scheme.
 
 > Recommend using cold cache for consumption.
 
