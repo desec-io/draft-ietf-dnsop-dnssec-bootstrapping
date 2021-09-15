@@ -117,20 +117,22 @@ Parental Agent
 : The entity that the Child has a relationship with to change
   its delegation information.
 
-Bootstrapping Domain(s)
+Signaling Domain(s)
 : For any given authoritative nameserver hostname from the Child's
   NS record set, the hostname prefixed with the label `_boot` is one
-  of the Bootstrapping Domains for the Child Zone.
+  of the Signaling Domains for the Child Zone.
 
-Bootstrapping Zone
-: The zone which is authoritative for a given Bootstrapping Domain.
+Signaling Zone
+: The zone which is authoritative for a given Signaling Domain.
 
 Signaling Name
-: A Bootstrapping Domain prefixed with a label derived from the
+: A name under a Signaling Domain that can be mapped onto the
   Child zone's name.
 
 Signaling Record
-: A DNS record located at a Signaling Name.
+: A DNS record located at a Signaling Name under a Signaling Domain.
+  Signaling Records are used by the Child DNS Operator to publish
+  information about the Child.
 
 CDS/CDNSKEY
 : This notation refers to CDS and/or CDNSKEY, i.e., one or both.
@@ -166,7 +168,7 @@ Implementation by Child DNS Operators and Parental Agents is RECOMMENDED.
 If a Child DNS Operator implements the protocol, the following conditions
 have to be met:
 
-1. Each Bootstrapping Zone MUST be securely delegated, i.e.
+1. Each Signaling Zone MUST be securely delegated, i.e.
    have a valid DNSSEC chain of trust from the root.
 
 2. The Child DNS Operator SHOULD publish CDS/CDNSKEY records at the
@@ -179,7 +181,7 @@ using NS records `ns1.example.net` and `ns2.example.net`, the Child
 DNS Operator
 
 1. needs to ensure that a valid DNSSEC chain of trust exists for the
-   zone(s) that are authoritative for the Bootstrapping Domains
+   zone(s) that are authoritative for the Signaling Domains
    `_boot.ns1.example.net` and `_boot.ns2.example.net`;
 
 2. should publish CDS/CDNSKEY records at `example.com`.
@@ -191,10 +193,10 @@ DNS Operator
 To signal that a Child DNS Operator whishes to act as the Child's
 delegated signer, the Child DNS Operator MUST publish one or more
 Signaling Records at the Child's Signaling Name under each
-Bootstrapping Domain.
+Signaling Domain.
 
 Signaling Records MUST be accompanied by RRSIG records created with
-the corresponding Bootstrapping Zone's key(s).  The type and contents
+the corresponding Signaling Zone's key(s).  The type and contents
 of these Signaling Records depend on the specific use case as
 described below.
 
@@ -222,7 +224,7 @@ b32encode(digest).translate(b32_normal_to_hex).rstrip(b'=').lower().decode()
 
 **TODO Remove Note:** The purpose of the hash function is to avoid
 the possibility of exceeding the maximum length of a DNS name.  This
-could occur if the Child name was prefixed to the Bootstrapping Domain as is.
+could occur if the Child name was prefixed to the Signaling Domain as is.
 The encoding choice is like in NSEC3, except
 that SHA-256 is used instead of SHA-1.  This is to prevent other
 tenants in shared hosting environments from creating collisions.
@@ -240,7 +242,7 @@ into a couple of labels.
 To announce its willingness to act as the Child's delegated signer,
 the Child DNS operator publishes a copy of the Child's CDS/CDNSKEY
 records at the corresponding Signaling Name under each
-Bootstrapping Domain as defined in (#signaling).
+Signaling Domain as defined in (#signaling).
 
 Previous use of CDS/CDNSKEY records is specified at the apex only
 ([@!RFC7344], Section 4.1).  This protocol extends the use of these
@@ -248,15 +250,15 @@ record types at non-apex owner names for the purpose of DNSSEC
 bootstrapping.  To exclude the possibility of semantic collision,
 there MUST NOT be a zone cut at a Signaling Name.
 
-Unlike the CDS/CDNSKEY records at the Child's apex, bootstrapping
-records MUST be signed with the corresponding Bootstrapping Zone's
+Unlike the CDS/CDNSKEY records at the Child's apex, Signaling
+Records MUST be signed with the corresponding Signaling Zone's
 key(s).
 
 #### Example
 
 For the purposes of bootstrapping the Child zone `example.com` with
 NS records `ns1.example.net` and `ns2.example.net`, the required
-Bootstrapping Domains are `_boot.ns1.example.net` and
+Signaling Domains are `_boot.ns1.example.net` and
 `_boot.ns2.example.net`.  In the zones containing these domains, the
 Child DNS Operator publishes
 
@@ -271,7 +273,7 @@ where `kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g` is
 derived from the DNS Child Zone's name `example.com` as described
 in (#signaling).  The records are
 accompanied by RRSIG records created using the key(s) of the
-respective Bootstrapping Zone.
+respective Signaling Zone.
 
 {#bootstrapping}
 ### Steps Taken by the Parental Agent
@@ -366,7 +368,7 @@ other fields as specified in [@!RFC8078], Section 4, at its apex.
 This mechanism is without regard to whether the Child zone's
 signatures are managed by the Child DNS Operator or by the zone owner,
 and without regard to what the Child DNS Operator decides to signal
-under the Bootstrapping Domain.
+under the Signaling Domain.
 
 
 ## Possible Extensions
@@ -405,7 +407,7 @@ we consider how a new Child DNS Operator using nameservers
 `ns3.example.org` and `ns4.example.org` can distribute its ZSK set to
 the existing signing parties, in order to join the multi-signer group.
 
-The Bootstrapping Domains corresponding to the new Child DNS Operator's
+The Signaling Domains corresponding to the new Child DNS Operator's
 nameservers are `_boot.ns3.example.org` and `_boot.ns4.example.org`.
 In the zones containing these domains, the new Child DNS Operator publishes
 
@@ -419,7 +421,7 @@ kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns4.example.org
 ```
 where the first label is calculated as described in (#signaling).  The records
 are accompanied by RRSIG records created using the key(s) of the
-respective Bootstrapping Zone.
+respective Signaling Zone.
 
 Note that DNSKEY records are not restricted to apex owner names
 ([@!RFC4035], Section 2.1).  However, only apex DNSKEY records are
@@ -446,20 +448,20 @@ at the Parent.
 
 ## Operational Recommendations
 
-Bootstrapping Domains SHOULD be delegated as zones of their own, so
-that the Bootstrapping Zone's apex coincides with the Bootstrapping
+Signaling Domains SHOULD be delegated as zones of their own, so
+that the Signaling Zone's apex coincides with the Signaling
 Domain (such as `_boot.ns1.example.net`).
-While it is permissible for the Bootstrapping Domain to be contained
-in a Bootstrapping Zone of fewer labels (such as `example.net`), a
+While it is permissible for the Signaling Domain to be contained
+in a Signaling Zone of fewer labels (such as `example.net`), a
 zone cut ensures that bootstrapping activities do not require
 modifications of the zone containing the nameserver hostname.
 
-In addition, Bootstrapping Zones SHOULD use NSEC to allow consumers
+In addition, Signaling Zones SHOULD use NSEC to allow consumers
 to efficiently discover pending bootstrapping operations by means of
 zone walking.  This is especially useful for bulk processing after a
 Child DNS Operator has enabled the protocol.
 
-To keep the size of the Bootstrapping Zones minimal and zone walking
+To keep the size of the Signaling Zones minimal and zone walking
 efficient, Child DNS operators SHOULD remove Signaling Records which
 are found to have been acted upon.
 
@@ -474,7 +476,7 @@ are found to have been acted upon.
 
 * PowerDNS supports manual creation of non-apex CDS/CDNSKEY/DNSKEY records.
 
-* Proof-of-concept bootstrapping domains exist at `_boot.ns1.desec.io`
+* Proof-of-concept Signaling Domains exist at `_boot.ns1.desec.io`
   and `_boot.ns2.desec.org`.  Signaling Names can be discovered via
   NSEC walking.
 
@@ -524,16 +526,16 @@ Thoughts (to be expanded):
       which is advisable anyways.
 
 - Prevention of accidental misprovisioning / enforcing explicit provisioning:
-    * Similarly, operators could redirect a Bootstrapping Domain onto
+    * Similarly, operators could redirect a Signaling Domain onto
       another one by means of a DNAME record.  This could be prevented by
-      incorporating the Bootstrapping Domain's name into the hash used to
+      incorporating the Signaling Domain's name into the hash used to
       construct the Signal Name.
     * In case of a hash collision, two distinct child zones may be associated
       with the same signaling name so that their keys may get mixed up.  While
       not currently feasible, malicious customers in shared hosting environments
       may attempt to produce such a collision.  Is it worth mitigating this by
       introducing a salt, e.g. stored in a TXT record located at the
-      Bootstrapping Domain?  (In case of a collision, one can set a new salt.)
+      Signaling Domain?  (In case of a collision, one can set a new salt.)
 
 # IANA Considerations
 
@@ -555,6 +557,8 @@ brainstorming.
 # Change History (to be removed before final publication)
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
+
+> Updated terminology (replace "Bootstrapping" by "Signaling").
 
 > Added NSEC recommendation for Bootstrapping Zones.
 
