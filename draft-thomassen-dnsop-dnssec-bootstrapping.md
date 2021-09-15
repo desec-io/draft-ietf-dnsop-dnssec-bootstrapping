@@ -297,6 +297,14 @@ zone name and its NS hostnames, MUST
 For the above queries, the Parental Agent MUST use a trusted validating
 DNS resolver and MUST treat responses with unauthenticated data
 (AD bit not set) as an error condition, unless indicated otherwise.
+It is RECOMMENDED to perform these queries with an (initially) cold
+resolver cache as to retrieve the most current information regardless
+of TTL.
+(When a batch job is used to attempt bootstrapping for a large number
+of delegations, the cache does not need to get cleared in between.)
+[It is expected that Signaling Records have few consumers only, so
+that caching would not normally have a performance benefit. On the
+other hand, perhaps it is better to RECOMMEND low TTLs instead?]
 
 If the above steps succeeded without error, the Parental Agent MUST
 construct a tentative DS record set either by copying the CDS record
@@ -557,6 +565,8 @@ brainstorming.
 # Change History (to be removed before final publication)
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
+
+> Recommend using cold cache for consumption.
 
 > Updated terminology (replace "Bootstrapping" by "Signaling").
 
