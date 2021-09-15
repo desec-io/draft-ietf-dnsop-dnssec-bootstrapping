@@ -45,8 +45,15 @@ signaling of a Child DNS zone's delegation signer information from the zone's DN
 operator(s).  The zone's registrar or registry may subsequently use this
 signal for automatic DS record provisioning in the parent zone.
 
-{mainmatter}
+[ Ed note: Text inside square brackets ([]) is additional background
+information, answers to frequently asked questions, general musings,
+etc.  They will be removed before publication.
+This document is being collaborated on at
+<https://github.com/desec-io/draft-thomassen-dnsop-dnssec-bootstrapping/>.
+The most recent version of the document, open issues, etc. should all
+be available there.  The authors gratefully accept pull requests. ]
 
+{mainmatter}
 
 # Introduction
 
