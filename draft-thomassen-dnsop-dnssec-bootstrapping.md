@@ -191,15 +191,12 @@ DNS Operator
 To signal that a Child DNS Operator whishes to act as the Child's
 delegated signer, the Child DNS Operator MUST publish one or more
 Signaling Records at the Child's Signaling Name under each
-Bootstrapping Domain.  The Signaling Records are
+Bootstrapping Domain.
 
-- a PTR record containing the Child's name as the target (RECOMMENDED);
-
-- one or more other DNS records, depending on the specific use
-  case as described below.
-
-These records MUST be accompanied by RRSIG records created with
-the corresponding Bootstrapping Zone's key(s).
+Signaling Records MUST be accompanied by RRSIG records created with
+the corresponding Bootstrapping Zone's key(s).  The type and contents
+of these Signaling Records depend on the specific use case as
+described below.
 
 The Signaling Name contains a label derived from the Child's name.
 This label MUST be equal to the SHA-256 hash digest of the Child's
@@ -263,7 +260,6 @@ Bootstrapping Domains are `_boot.ns1.example.net` and
 `_boot.ns2.example.net`.  In the zones containing these domains, the
 Child DNS Operator publishes
 
-- a PTR record pointing to `example.com.` (recommended) and
 - the Child's CDS/CDNSKEY records
 
 at the names
@@ -465,9 +461,7 @@ Child DNS Operator has enabled the protocol.
 
 To keep the size of the Bootstrapping Zones minimal and zone walking
 efficient, Child DNS operators SHOULD remove Signaling Records which
-are found to have been acted upon, including final removal of the PTR
-Signaling Record (if present) after removing all others with the same
-owner name.
+are found to have been acted upon.
 
 
 # Implementation Status
@@ -482,8 +476,7 @@ owner name.
 
 * Proof-of-concept bootstrapping domains exist at `_boot.ns1.desec.io`
   and `_boot.ns2.desec.org`.  Signaling Names can be discovered via
-  NSEC walking.  Child zones can be discovered by querying PTR for a
-  Signaling Name.
+  NSEC walking.
 
 * A tool to automatically generate signaling records for bootstrapping
   purposes is not yet available.
@@ -531,10 +524,6 @@ Thoughts (to be expanded):
       which is advisable anyways.
 
 - Prevention of accidental misprovisioning / enforcing explicit provisioning:
-    * In addition to facilitating Child zone discovery and simplifying
-      debugging, a child-specific PTR record also precludes the use of
-      wildcard signaling records.  Some operators or consumers may find
-      that useful.
     * Similarly, operators could redirect a Bootstrapping Domain onto
       another one by means of a DNAME record.  This could be prevented by
       incorporating the Bootstrapping Domain's name into the hash used to
@@ -566,8 +555,6 @@ brainstorming.
 # Change History (to be removed before final publication)
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
-
-> Added recommendation to create a PTR signaling record.
 
 > Added NSEC recommendation for Bootstrapping Zones.
 
