@@ -413,9 +413,13 @@ under the Signaling Domain.
 
 ## Possible Extensions
 
-By provisioning other types of Signaling Records, the Child DNS Operator
-can convey signals that pertain to use cases other than bootstrapping
-a DNSSEC delegation.
+The mechanism described in (#signaling) provides a public,
+authenticated, in-band, unidirectional channel through which the
+Child DNS Operator can publish information on the zones it serves.
+
+By provisioning other types of Signaling Records, the Child DNS
+Operator can therefore convey signals that pertain to use cases other
+than bootstrapping a DNSSEC delegation.
 
 ### Multi-Signer Setups: Onboarding a Signing Party
 
@@ -426,35 +430,36 @@ a unique KSK set and ZSK set to sign the zone.
 
 To ensure smooth resolution of Child zone queries, this scheme
 demands that participating Child DNS Operators import the ZSK sets
-of the other providers into their DNSKEY RRset.  When a new Child
-DNS Operator is joining the scheme, this synchronization has to
-occur before the new operator's nameserver hostnames are included
-in the Child's NS record set.  So far, it has been assumed that the
-ZSK export/import would happen through some proprietary API at each
-DNS operator.
+of the other providers into their DNSKEY RRset.  Further, each
+operator's KSK(s) need to be included in the DS record set at the
+delegation point in the Parent zone.
+When a new Child DNS Operator is joining the scheme, these
+synchronization processes have to occur before the new operator's
+nameserver hostnames are included in the Child's NS record set.
 
-The mechanism described in (#signaling) provides a public,
-authenticated, in-band, read-only interface to the Child DNS Operator.
-It can therefore be used by a Child DNS Operator to make its own
-set of DNSKEY records available for querying by other signing parties,
-so that they can retrieve, validate, and import them.
+So far, it has been assumed that the KSK and ZSK extraction and
+provisioning would happen through some proprietary API at each
+DNS operator ([@!RFC8901], Section 9).
+We now describe how a Child DNS Operator can instead use Signaling
+Records to make its own set of DNSKEY records available for querying
+by other signing parties, so that they can retrieve, validate, and
+process them.
 
 #### Signaling Records
 
 Given a Child zone `example.co.uk` that is already securely delegated
 with authoritative nameservers `ns1.example.net` and `ns2.example.net`,
 we consider how a new Child DNS Operator using nameservers
-`ns3.example.org` and `ns4.example.org` can distribute its ZSK set to
-the existing signing parties, in order to join the multi-signer group.
+`ns3.example.org` and `ns4.example.org` can distribute its DNSKEY
+record set to the existing signing parties, in order to join the
+multi-signer group.
 
 The Signaling Domains corresponding to the new Child DNS Operator's
 nameservers are `_boot.ns3.example.org` and `_boot.ns4.example.org`.
-In the zones containing these domains, the new Child DNS Operator publishes
 
-- a DNSKEY record set containing the ZSK set that the
-  operator will use for signing the Child zone,
-
-at the Signaling Names
+In the zones containing these domains, the new Child DNS Operator
+publishes a DNSKEY record set containing the keys used by the
+operator when operating the Child zone, at the Signaling Names
 ```
 example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns3.example.org
 example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns4.example.org
@@ -475,14 +480,25 @@ DNSKEY uses.
 Once the owner of `example.co.uk` informs the existing signing parties
 of the joining Child DNS Operator's nameserver hostnames, the
 existing parties can use an algorithm similar to the one given in
-(#bootstrapping) to query and validate the joining operator's ZSK
-set, and then include it in their DNSKEY sets.
+(#bootstrapping) to query and validate the joining operator's DNSKEY
+set.
 
-To finish the joining process, CDS/CDNSKEY records may be used to
-propagate the joint delegation signer information to the parent
-([@!RFC8901], Section 8).  Signing parties can then amend the
-Child's NS record set to include the joining operator's
-authoritative hostnames, and use CSYNC ([@!RFC7477]) to update the NS record set
+The new KSKs can then be added to the delegation's DS record set as
+described in [@!RFC8901], Section 8 (i.e. via an [@!RFC7344] rollover
+using CDS/CDNSKEY records), followed by the inclusion of the new ZSKs
+in the other operators' DNSKEY record sets.
+Similarly, the new operator can import the other operators' DNSKEYs
+into its local copy of the Child zone.
+
+[ Note that the DNSKEY record set in the Child zone contains keys
+from all operators, whereas the DNSKEY record set published under the
+Signaling Domain is restricted to keys actively used by the
+publishing operator. ]
+
+After all signing parties have detected convergence on the served
+DNSKEY record sets, they can finish the joining process by amending
+the Child's NS record set to include the new operator's authoritative
+nameservers, and use CSYNC ([@!RFC7477]) to update the NS record set
 at the Parent.
 
 
@@ -591,6 +607,8 @@ brainstorming.
 # Change History (to be removed before final publication)
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
+
+> Updated multi-signer use case.
 
 > Require CDS/CDNSKEY records at the Child.
 
