@@ -171,8 +171,22 @@ have to be met:
 1. Each Signaling Zone MUST be securely delegated, i.e.
    have a valid DNSSEC chain of trust from the root.
 
-2. The Child DNS Operator SHOULD publish CDS/CDNSKEY records at the
+2. The Child DNS Operator MUST publish CDS/CDNSKEY records at the
    Child's apex, as described in [@!RFC7344].
+
+[ In the course of the bootstrapping protocol, the Parental Agent
+will fetch the CDS/CDNSKEY records from another source.  The second
+condition ensures that the Parental Agent can validate these records
+against the customary CDS/CDNSKEY records from the Child.
+The bootstrapping protocol is thus an extension of the existing
+CDS/CDNSKEY protocol, and therefore provides strictly stronger
+guarantees than the traditional model. ]
+
+[ Requiring presence of CDS/CDNSKEY records in the Child also
+faciliates simple opt-out by the zone administrator, protects against
+synchronization errors, and -- if CDS is used, whose value depends on
+the Child's name -- allows detecting situations of Child name
+confusion due to hash collisions (see (#signaling)). ]
 
 ### Example
 
@@ -184,7 +198,7 @@ When performing DNSSEC bootstrapping for the Child zone
    zone(s) that are authoritative for the Signaling Domains
    `_boot.ns1.example.net` and `_boot.ns2.example.net`;
 
-2. should publish CDS/CDNSKEY records at `example.co.uk`.
+2. publishes CDS/CDNSKEY records at `example.co.uk`.
 
 
 {#signaling}
@@ -255,9 +269,9 @@ print(signaling_name)
 ### Signaling Records
 
 To announce its willingness to act as the Child's delegated signer,
-the Child DNS operator publishes a copy of the Child's CDS/CDNSKEY
-records at the corresponding Signaling Name under each
-Signaling Domain as defined in (#signaling).
+the Child DNS operator co-publishes the Child's CDS/CDNSKEY records
+at the corresponding Signaling Name under each Signaling Domain as
+defined in (#signaling).
 
 Previous use of CDS/CDNSKEY records is specified at the apex only
 ([@!RFC7344], Section 4.1).  This protocol extends the use of these
@@ -267,19 +281,18 @@ there MUST NOT be a zone cut at a Signaling Name.
 
 Unlike the CDS/CDNSKEY records at the Child's apex, Signaling
 Records MUST be signed with the corresponding Signaling Zone's
-key(s).
+key(s).  Their contents MUST be indentical to the corresponding
+records published at the Child's apex.
 
 #### Example
 
 For the purposes of bootstrapping the Child zone `example.co.uk` with
 NS records `ns1.example.net` and `ns2.example.net`, the required
 Signaling Domains are `_boot.ns1.example.net` and
-`_boot.ns2.example.net`.  In the zones containing these domains, the
-Child DNS Operator publishes
+`_boot.ns2.example.net`.
 
-- the Child's CDS/CDNSKEY records
-
-at the names
+In the zones containing these domains, the Child DNS Operator
+publishes the Child's CDS/CDNSKEY records at the names
 ```
 example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns1.example.net
 example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.net
@@ -308,6 +321,10 @@ zone name and its NS hostnames, MUST
 
 4. check (separately by record type) that all record sets
    retrieved in Steps 2 (if present) and 3 have equal contents;
+
+[ This level of rigor is needed for various reasons, including that
+it prevents one operator from screwing up the zone in a multi-homed
+setup (where several operators serve the same zone). ]
 
 For the above queries, the Parental Agent MUST use a trusted validating
 DNS resolver and MUST treat responses with unauthenticated data
@@ -530,9 +547,7 @@ Thoughts (to be expanded):
   level of the method is strictly higher than the "accept CDS/CDNSKEY after a
   while"-approach that is already in use at several ccTLD registries ("Accept
   after Delay", [@!RFC8078], Section 3.3).  This is because the method described
-  here adds stronger guarantees, but removes nothing.  Perhaps this means that
-  co-publication of CDS/CDNSKEY at the Child apex should be mandatory.  (This in
-  turn may interact somehow with the Child's opt-out option.)
+  here adds stronger guarantees, but removes nothing.
 
 - Actors in the chain(s) of trust of the zone(s) used for bootstrapping (the DNS
   Operator themselves, plus entities further up in the chain) can undermine the
@@ -576,6 +591,8 @@ brainstorming.
 # Change History (to be removed before final publication)
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
+
+> Require CDS/CDNSKEY records at the Child.
 
 > Reworked Signaling Name scheme.
 
