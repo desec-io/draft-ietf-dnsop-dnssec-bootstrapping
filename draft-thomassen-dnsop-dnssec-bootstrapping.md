@@ -44,6 +44,15 @@ This document describes an authenticated in-band method for automatic
 signaling of a Child DNS zone's delegation signer information from the zone's DNS
 operator(s).  The zone's registrar or registry may subsequently use this
 signal for automatic DS record provisioning in the parent zone.
+The protocol is particularly useful in case of managed DNS providers
+hosting registrant's domains, where DS provisioning has so far been
+cumbersome.
+
+The signaling channel is not specific to the DS bootstrapping use
+case, but equally suitable for announcing other zone-specific
+information from the DNS Operator in an authenticated fashion.
+Further potential applications thus include, for example, key
+exchange between parties in an [@!RFC8901] multisigner setup.
 
 [ Ed note: Text inside square brackets ([]) is additional background
 information, answers to frequently asked questions, general musings,
@@ -608,6 +617,8 @@ at the Parent.
 # Change History (to be removed before final publication)
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
+
+> Improved abstract.
 
 > Updated multi-signer use case and move to appendix.
 
