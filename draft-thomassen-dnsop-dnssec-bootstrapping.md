@@ -99,12 +99,6 @@ publication of initial DS records for a hitherto insecure delegation.
 Readers are expected to be familiar with DNSSEC, including [@!RFC4033],
 [@!RFC4034], [@!RFC4035], [@!RFC6781], [@!RFC7344], and [@!RFC8078].
 
-This document describes a method for automated provisioning of the
-delegation trust information and proposes a simple provisioning trigger
-mechanism.  Some users may prefer a different trigger.
-These alternate additional triggers are not discussed in this
-document.
-
 
 ## Terminology
 
@@ -380,9 +374,19 @@ If, however, an error condition occurs, in particular:
 
 the Parental Agent MUST abort the procedure.
 
-In addition to triggering this procedure whenever the Child's NS
+This document is focused on describing the process of DNSSEC
+bootstrapping and does not fully address the question on how the
+above process is best triggered.
+In addition to triggering it whenever the Child's NS
 records are updated, the Parental Agent MAY also trigger the
 procedure at any other time deemed appropriate by local policy.
+
+[ Idea: After publishing new Signaling Records for a Child that is
+not yet securely delegated, the Child DNS Operator SHOULD send an
+[@!RFC1996] notification (NOTIFY) of type CDS and/or CDNSKEY to
+the host given by the parent's SOA MNAME, prefixed with `_boot`.
+The Parent SHOULD listen for such notifications and trigger the
+above process upon receiving one. ]
 
 #### Example
 
@@ -616,6 +620,8 @@ at the Parent.
 # Change History (to be removed before final publication)
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
+
+> Added musings on NOTIFY-based trigger.
 
 > Clarified title.
 
