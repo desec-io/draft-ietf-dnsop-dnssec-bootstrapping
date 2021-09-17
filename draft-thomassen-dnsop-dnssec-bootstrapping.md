@@ -309,9 +309,11 @@ of the respective Signaling Zone.
 {#bootstrapping}
 ### Steps Taken by the Parental Agent
 
-When a Parental Agent implementing this protocol receives a new or updated NS
-record set for a Child, the Parental Agent, knowing both the Child
-zone name and its NS hostnames, MUST
+To complete the bootstrapping process, Parental Agent implementing
+this protocol can act based upon a number of triggers (see
+(#triggers)).
+Once trigger conditions are fulfilled, the Parental Agent, knowing
+both the Child zone name and its NS hostnames, MUST
 
 1. verify that the Child is not currently securely delegated;
 
@@ -374,20 +376,6 @@ If, however, an error condition occurs, in particular:
 
 the Parental Agent MUST abort the procedure.
 
-This document is focused on describing the process of DNSSEC
-bootstrapping and does not fully address the question on how the
-above process is best triggered.
-In addition to triggering it whenever the Child's NS
-records are updated, the Parental Agent MAY also trigger the
-procedure at any other time deemed appropriate by local policy.
-
-[ Idea: After publishing new Signaling Records for a Child that is
-not yet securely delegated, the Child DNS Operator SHOULD send an
-[@!RFC1996] notification (NOTIFY) of type CDS and/or CDNSKEY to
-the host given by the parent's SOA MNAME, prefixed with `_boot`.
-The Parent SHOULD listen for such notifications and trigger the
-above process upon receiving one. ]
-
 #### Example
 
 To bootstrap the Child zone `example.co.uk` using NS records
@@ -424,6 +412,55 @@ and without regard to what the Child DNS Operator decides to signal
 under the Signaling Domain.
 
 
+{#triggers}
+## Triggers
+
+[ Clarity of this section needs to be improved. ]
+
+Parental Agents SHOULD trigger the procedure described in
+(#bootstrapping) once one of the following conditions is fulfilled:
+
+  - The Parental Agent receives a new or updated NS record set for a
+    Child;
+
+  - The Parental Agent encounters Signaling Records for its Children
+    during a scan (e.g. daily) of known Signaling Domains (derived
+    from the NS records used in its delegations).
+  
+    To perform such a scan, the Parental Agent iterates over some or
+    all of its delegations and strips the first label off each one to
+    construct the set of immediate ancestors of its children.  (For
+    delegations one level below the Parent, such as second-level
+    domain registrations, this will simply be the Parent's name.)
+    The Parental Agent then uses these names to compute the second
+    label of the Signaling Names.  The scan is completed by either
+
+     * performing a targeted NSEC walk starting one level below
+       Signaling Domain, at the label that encodes the Child's
+       ancestor; or
+
+     * by performing a zone transfer of the domain containing the
+       (relevant part of the) Signaling Zone, if the Signaling Zone
+       operator allows it, and iterating over its contents.
+    
+    The Child's name is constructed by prepending the first label of
+    the encountered Signaling Names to the ancestor from which the
+    Signaling Name's second label was computed;
+
+  - The Parental Agent performs an active (e.g. daily) scan by
+    opportunistically querying the Signaling Records for some or all
+    of its delegations;
+
+  - [ This idea needs discussion. ] After publishing new Signaling
+    Records for a Child that is not yet securely delegated, the Child
+    DNS Operator SHOULD send an [@!RFC1996] notification (NOTIFY) of
+    type CDS and/or CDNSKEY to the host given by the parent's SOA
+    MNAME, prefixed with `_boot`.  The Parent SHOULD listen for such
+    notifications and trigger DS bootstrapping upon receiving one.
+
+  - Any other condition as deemed appropriate by local policy.
+
+
 ## Operational Recommendations
 
 Signaling Domains SHOULD be delegated as zones of their own, so
@@ -440,8 +477,12 @@ zone walking.  This is especially useful for bulk processing after a
 Child DNS Operator has enabled the protocol.
 
 To keep the size of the Signaling Zones minimal and zone walking
-efficient, Child DNS operators SHOULD remove Signaling Records which
+efficient, Child DNS Operators SHOULD remove Signaling Records which
 are found to have been acted upon.
+This is particularly important when the Child DNS Operator allows
+Parental Agents to perform scans of the Signaling Zone, either by
+allowing zone transfers or by permitting zone walks via NSEC, so
+that bulk processing remains efficient.
 
 
 # Implementation Status
@@ -620,6 +661,8 @@ at the Parent.
 # Change History (to be removed before final publication)
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
+
+> Add section on Triggers.
 
 > Added musings on NOTIFY-based trigger.
 
