@@ -284,7 +284,7 @@ there MUST NOT be a zone cut at a Signaling Name.
 
 Unlike the CDS/CDNSKEY records at the Child's apex, Signaling
 Records MUST be signed with the corresponding Signaling Zone's
-key(s).  Their contents MUST be indentical to the corresponding
+key(s).  Their contents MUST be identical to the corresponding
 records published at the Child's apex.
 
 #### Example
@@ -352,6 +352,7 @@ record set).
 The Parental Agent then MUST verify that for each signature algorithm
 present, (at least) one of the keys referenced in the tentative DS
 record set signs the Child's DNSKEY record set.
+[ TODO Which other checks are needed to not break anything? ]
 
 If this is the case, the Parental Agent SHOULD publish the DS record
 set in the Parent zone, so as to secure the Child's delegation.
@@ -670,8 +671,6 @@ at the Parent.
 
 > Improved abstract.
 
-> Updated multi-signer use case and move to appendix.
-
 > Require CDS/CDNSKEY records at the Child.
 
 > Reworked Signaling Name scheme.
@@ -683,6 +682,8 @@ at the Parent.
 > Added NSEC recommendation for Bootstrapping Zones.
 
 > Added multi-signer use case.
+
+> Editorial changes.
 
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-00
