@@ -634,29 +634,32 @@ DNSKEY uses.
 
 ### Import
 
-Once the owner of `example.co.uk` informs the existing signing parties
-of the joining Child DNS Operator's nameserver hostnames, the
-existing parties can use an algorithm similar to the one given in
-(#bootstrapping) to query and validate the joining operator's DNSKEY
-set.
+With the Signaling Records in place, an algorithm similar to the one
+given in (#bootstrapping) can be used to query and validate the
+joining operator's DNSKEY set.  The required steps can either be
+taken autonomously by each participating operator (query, validate,
+update local zone copy with imported information), or be subject to
+central coordination using "Multisigner Controller" tooling which
+interfaces with each operator.
 
 The new KSKs can then be added to the delegation's DS record set as
 described in [@!RFC8901], Section 8 (i.e. via an [@!RFC7344] rollover
 using CDS/CDNSKEY records), followed by the inclusion of the new ZSKs
 in the other operators' DNSKEY record sets.
 Similarly, the new operator can import the other operators' DNSKEYs
-into its local copy of the Child zone.
+into its local copy of the Child zone (either autonomously, or via
+central coordination).
 
 [ Note that the DNSKEY record set in the Child zone contains keys
 from all operators, whereas the DNSKEY record set published under the
 Signaling Domain is restricted to keys actively used by the
 publishing operator. ]
 
-After all signing parties have detected convergence on the served
-DNSKEY record sets, they can finish the joining process by amending
-the Child's NS record set to include the new operator's authoritative
-nameservers, and use CSYNC ([@!RFC7477]) to update the NS record set
-at the Parent.
+After convergence on the served DNSKEY record sets has been achieved,
+the joining process is completed by amending the Child's NS record
+set to include the new operator's authoritative nameservers, followed
+by a corresponding update of the NS delegation records at the Parent
+(e.g. using CSYNC [@!RFC7477]).
 
 
 # Change History (to be removed before final publication)
