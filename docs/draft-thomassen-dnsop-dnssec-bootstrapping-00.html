@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>Authenticated Bootstrapping of DNSSEC Delegations</title>
+<title>Automatic Bootstrapping of DNSSEC Delegations using Authenticated Operator Signals</title>
 <meta content="Peter Thomassen" name="author">
 <meta content="Nils Wisiol" name="author">
 <meta content="
@@ -1199,7 +1199,7 @@ li > p:last-of-type {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomassen &amp; Wisiol</td>
-<td class="center">Expires 20 March 2022</td>
+<td class="center">Expires 21 March 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1212,12 +1212,12 @@ li > p:last-of-type {
 <dd class="internet-draft">draft-thomassen-dnsop-dnssec-bootstrapping-00</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-09-16" class="published">16 September 2021</time>
+<time datetime="2021-09-17" class="published">17 September 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-03-20">20 March 2022</time></dd>
+<dd class="expires"><time datetime="2022-03-21">21 March 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1231,7 +1231,7 @@ li > p:last-of-type {
 </dd>
 </dl>
 </div>
-<h1 id="title">Authenticated Bootstrapping of DNSSEC Delegations</h1>
+<h1 id="title">Automatic Bootstrapping of DNSSEC Delegations using Authenticated Operator Signals</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document describes an authenticated in-band method for automatic
@@ -1273,7 +1273,7 @@ be available there.  The authors gratefully accept pull requests. ]<a href="#sec
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 March 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 March 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1301,91 +1301,94 @@ be available there.  The authors gratefully accept pull requests. ]<a href="#sec
         <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
 <a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
         </h2>
-<nav class="toc"><ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.1">
+<nav class="toc"><ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.1.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.1.2.1">
                 <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-terminology" class="xref">Terminology</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.1.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.1.2.2">
                 <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="xref">1.2</a>.  <a href="#name-requirements-notation" class="xref">Requirements Notation</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.2">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-description" class="xref">Description</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.2.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.2.2.1">
                 <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="xref">2.1</a>.  <a href="#name-preconditions" class="xref">Preconditions</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.2.2.1.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.2.2.1.2.1">
                     <p id="section-toc.1-1.2.2.1.2.1.1"><a href="#section-2.1.1" class="xref">2.1.1</a>.  <a href="#name-example" class="xref">Example</a></p>
 </li>
                 </ul>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.2.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.2.2.2">
                 <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="xref">2.2</a>.  <a href="#name-signaling-intent-to-act-as-" class="xref">Signaling Intent to Act as the Child's Signer</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.2.2.3">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.2.2.3">
                 <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="xref">2.3</a>.  <a href="#name-bootstrapping-a-dnssec-dele" class="xref">Bootstrapping a DNSSEC Delegation</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.2.2.3.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.2.2.3.2.1">
                     <p id="section-toc.1-1.2.2.3.2.1.1"><a href="#section-2.3.1" class="xref">2.3.1</a>.  <a href="#name-signaling-records" class="xref">Signaling Records</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.2.2.3.2.2">
+                  <li class="toc ulEmpty compact" id="section-toc.1-1.2.2.3.2.2">
                     <p id="section-toc.1-1.2.2.3.2.2.1"><a href="#section-2.3.2" class="xref">2.3.2</a>.  <a href="#name-steps-taken-by-the-parental" class="xref">Steps Taken by the Parental Agent</a></p>
 </li>
                 </ul>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.2.2.4">
-                <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="xref">2.4</a>.  <a href="#name-operational-recommendations" class="xref">Operational Recommendations</a></p>
+              <li class="toc ulEmpty compact" id="section-toc.1-1.2.2.4">
+                <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="xref">2.4</a>.  <a href="#name-triggers" class="xref">Triggers</a></p>
+</li>
+              <li class="toc ulEmpty compact" id="section-toc.1-1.2.2.5">
+                <p id="section-toc.1-1.2.2.5.1"><a href="#section-2.5" class="xref">2.5</a>.  <a href="#name-operational-recommendations" class="xref">Operational Recommendations</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.3">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-implementation-status" class="xref">Implementation Status</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.3.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.3.2.1">
                 <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-child-dns-operator-side" class="xref">Child DNS Operator-side</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.3.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.3.2.2">
                 <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-parental-agent-side" class="xref">Parental Agent-side</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.4">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.5">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.6">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-acknowledgements" class="xref">Acknowledgements</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.7">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.8">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#section-appendix.a" class="xref">Appendix A</a>.  <a href="#name-possible-extensions" class="xref">Possible Extensions</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.8.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.8.2.1">
                 <p id="section-toc.1-1.8.2.1.1"><a href="#section-a.1" class="xref">A.1</a>.  <a href="#name-multi-signer-setups-onboard" class="xref">Multi-Signer Setups: Onboarding a Signing Party</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.8.2.1.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.8.2.1.2.1">
                     <p id="section-toc.1-1.8.2.1.2.1.1"><a href="#section-a.1.1" class="xref">A.1.1</a>.  <a href="#name-signaling-records-2" class="xref">Signaling Records</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.1.2.2">
+                  <li class="toc ulEmpty compact" id="section-toc.1-1.8.2.1.2.2">
                     <p id="section-toc.1-1.8.2.1.2.2.1"><a href="#section-a.1.2" class="xref">A.1.2</a>.  <a href="#name-import" class="xref">Import</a></p>
 </li>
                 </ul>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.9">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.9">
             <p id="section-toc.1-1.9.1"><a href="#section-appendix.b" class="xref">Appendix B</a>.  <a href="#name-change-history-to-be-remove" class="xref">Change History (to be removed before final publication)</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.10">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.10">
             <p id="section-toc.1-1.10.1"><a href="#section-appendix.c" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
 </li>
         </ul>
@@ -1424,11 +1427,6 @@ information.  This document describes a method to automate
 publication of initial DS records for a hitherto insecure delegation.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">Readers are expected to be familiar with DNSSEC, including <span>[<a href="#RFC4033" class="xref">RFC4033</a>]</span>,
 <span>[<a href="#RFC4034" class="xref">RFC4034</a>]</span>, <span>[<a href="#RFC4035" class="xref">RFC4035</a>]</span>, <span>[<a href="#RFC6781" class="xref">RFC6781</a>]</span>, <span>[<a href="#RFC7344" class="xref">RFC7344</a>]</span>, and <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span>.<a href="#section-1-6" class="pilcrow">¶</a></p>
-<p id="section-1-7">This document describes a method for automated provisioning of the
-delegation trust information and proposes a simple provisioning trigger
-mechanism.  Some users may prefer a different trigger.
-These alternate additional triggers are not discussed in this
-document.<a href="#section-1-7" class="pilcrow">¶</a></p>
 <div id="terminology">
 <section id="section-1.1">
         <h3 id="name-terminology">
@@ -1653,7 +1651,7 @@ bootstrapping.  To exclude the possibility of semantic collision,
 there MUST NOT be a zone cut at a Signaling Name.<a href="#section-2.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.3.1-3">Unlike the CDS/CDNSKEY records at the Child's apex, Signaling
 Records MUST be signed with the corresponding Signaling Zone's
-key(s).  Their contents MUST be indentical to the corresponding
+key(s).  Their contents MUST be identical to the corresponding
 records published at the Child's apex.<a href="#section-2.3.1-3" class="pilcrow">¶</a></p>
 <div id="example-1">
 <section id="section-2.3.1.1">
@@ -1685,9 +1683,11 @@ of the respective Signaling Zone.<a href="#section-2.3.1.1-4" class="pilcrow">¶
           <h4 id="name-steps-taken-by-the-parental">
 <a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-steps-taken-by-the-parental" class="section-name selfRef">Steps Taken by the Parental Agent</a>
           </h4>
-<p id="section-2.3.2-1">When a Parental Agent implementing this protocol receives a new or updated NS
-record set for a Child, the Parental Agent, knowing both the Child
-zone name and its NS hostnames, MUST<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-1">To complete the bootstrapping process, Parental Agent implementing
+this protocol can act based upon a number of triggers (see
+<a href="#triggers" class="xref">Section 2.4</a>).
+Once trigger conditions are fulfilled, the Parental Agent, knowing
+both the Child zone name and its NS hostnames, MUST<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-2.3.2-2">
 <li id="section-2.3.2-2.1">
               <p id="section-2.3.2-2.1.1">verify that the Child is not currently securely delegated;<a href="#section-2.3.2-2.1.1" class="pilcrow">¶</a></p>
@@ -1727,7 +1727,8 @@ by doing both (i.e. amending the set of records copied from the CDS
 record set).<a href="#section-2.3.2-5" class="pilcrow">¶</a></p>
 <p id="section-2.3.2-6">The Parental Agent then MUST verify that for each signature algorithm
 present, (at least) one of the keys referenced in the tentative DS
-record set signs the Child's DNSKEY record set.<a href="#section-2.3.2-6" class="pilcrow">¶</a></p>
+record set signs the Child's DNSKEY record set.
+[ TODO Which other checks are needed to not break anything? ]<a href="#section-2.3.2-6" class="pilcrow">¶</a></p>
 <p id="section-2.3.2-7">If this is the case, the Parental Agent SHOULD publish the DS record
 set in the Parent zone, so as to secure the Child's delegation.<a href="#section-2.3.2-7" class="pilcrow">¶</a></p>
 <p id="section-2.3.2-8">If, however, an error condition occurs, in particular:<a href="#section-2.3.2-8" class="pilcrow">¶</a></p>
@@ -1755,9 +1756,6 @@ record set,<a href="#section-2.3.2-9.5.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-2.3.2-10">the Parental Agent MUST abort the procedure.<a href="#section-2.3.2-10" class="pilcrow">¶</a></p>
-<p id="section-2.3.2-11">In addition to triggering this procedure whenever the Child's NS
-records are updated, the Parental Agent MAY also trigger the
-procedure at any other time deemed appropriate by local policy.<a href="#section-2.3.2-11" class="pilcrow">¶</a></p>
 <div id="example-2">
 <section id="section-2.3.2.1">
             <h5 id="name-example-3">
@@ -1810,25 +1808,88 @@ under the Signaling Domain.<a href="#section-2.3.2.2-2" class="pilcrow">¶</a></
 </div>
 </section>
 </div>
-<div id="operational-recommendations">
+<div id="triggers">
 <section id="section-2.4">
-        <h3 id="name-operational-recommendations">
-<a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-operational-recommendations" class="section-name selfRef">Operational Recommendations</a>
+        <h3 id="name-triggers">
+<a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-triggers" class="section-name selfRef">Triggers</a>
         </h3>
-<p id="section-2.4-1">Signaling Domains SHOULD be delegated as zones of their own, so
+<p id="section-2.4-1">[ Clarity of this section needs to be improved. ]<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.4-2">Parental Agents SHOULD trigger the procedure described in
+<a href="#bootstrapping" class="xref">Section 2.3.2</a> once one of the following conditions is fulfilled:<a href="#section-2.4-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.4-3.1">
+            <p id="section-2.4-3.1.1">The Parental Agent receives a new or updated NS record set for a
+Child;<a href="#section-2.4-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.4-3.2">
+            <p id="section-2.4-3.2.1">The Parental Agent encounters Signaling Records for its Children
+during a scan (e.g. daily) of known Signaling Domains (derived
+from the NS records used in its delegations).<a href="#section-2.4-3.2.1" class="pilcrow">¶</a></p>
+<p id="section-2.4-3.2.2">To perform such a scan, the Parental Agent iterates over some or
+all of its delegations and strips the first label off each one to
+construct the set of immediate ancestors of its children.  (For
+delegations one level below the Parent, such as second-level
+domain registrations, this will simply be the Parent's name.)
+The Parental Agent then uses these names to compute the second
+label of the Signaling Names.  The scan is completed by either<a href="#section-2.4-3.2.2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.4-3.2.3.1">
+                <p id="section-2.4-3.2.3.1.1">performing a targeted NSEC walk starting one level below
+Signaling Domain, at the label that encodes the Child's
+ancestor; or<a href="#section-2.4-3.2.3.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-2.4-3.2.3.2">
+                <p id="section-2.4-3.2.3.2.1">by performing a zone transfer of the domain containing the
+(relevant part of the) Signaling Zone, if the Signaling Zone
+operator allows it, and iterating over its contents.<a href="#section-2.4-3.2.3.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-2.4-3.2.4">The Child's name is constructed by prepending the first label of
+the encountered Signaling Names to the ancestor from which the
+Signaling Name's second label was computed;<a href="#section-2.4-3.2.4" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.4-3.3">
+            <p id="section-2.4-3.3.1">The Parental Agent performs an active (e.g. daily) scan by
+opportunistically querying the Signaling Records for some or all
+of its delegations;<a href="#section-2.4-3.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.4-3.4">
+            <p id="section-2.4-3.4.1">[ This idea needs discussion. ] After publishing new Signaling
+Records for a Child that is not yet securely delegated, the Child
+DNS Operator SHOULD send an <span>[<a href="#RFC1996" class="xref">RFC1996</a>]</span> notification (NOTIFY) of
+type CDS and/or CDNSKEY to the host given by the parent's SOA
+MNAME, prefixed with <code>_boot</code>.  The Parent SHOULD listen for such
+notifications and trigger DS bootstrapping upon receiving one.<a href="#section-2.4-3.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.4-3.5">
+            <p id="section-2.4-3.5.1">Any other condition as deemed appropriate by local policy.<a href="#section-2.4-3.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="operational-recommendations">
+<section id="section-2.5">
+        <h3 id="name-operational-recommendations">
+<a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-operational-recommendations" class="section-name selfRef">Operational Recommendations</a>
+        </h3>
+<p id="section-2.5-1">Signaling Domains SHOULD be delegated as zones of their own, so
 that the Signaling Zone's apex coincides with the Signaling
 Domain (such as <code>_boot.ns1.example.net</code>).
 While it is permissible for the Signaling Domain to be contained
 in a Signaling Zone of fewer labels (such as <code>example.net</code>), a
 zone cut ensures that bootstrapping activities do not require
-modifications of the zone containing the nameserver hostname.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
-<p id="section-2.4-2">In addition, Signaling Zones SHOULD use NSEC to allow consumers
+modifications of the zone containing the nameserver hostname.<a href="#section-2.5-1" class="pilcrow">¶</a></p>
+<p id="section-2.5-2">In addition, Signaling Zones SHOULD use NSEC to allow consumers
 to efficiently discover pending bootstrapping operations by means of
 zone walking.  This is especially useful for bulk processing after a
-Child DNS Operator has enabled the protocol.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
-<p id="section-2.4-3">To keep the size of the Signaling Zones minimal and zone walking
-efficient, Child DNS operators SHOULD remove Signaling Records which
-are found to have been acted upon.<a href="#section-2.4-3" class="pilcrow">¶</a></p>
+Child DNS Operator has enabled the protocol.<a href="#section-2.5-2" class="pilcrow">¶</a></p>
+<p id="section-2.5-3">To keep the size of the Signaling Zones minimal and zone walking
+efficient, Child DNS Operators SHOULD remove Signaling Records which
+are found to have been acted upon.
+This is particularly important when the Child DNS Operator allows
+Parental Agents to perform scans of the Signaling Zone, either by
+allowing zone transfers or by permitting zone walks via NSEC, so
+that bulk processing remains efficient.<a href="#section-2.5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1957,8 +2018,7 @@ Signaling Domain?  (In case of a collision, one can set a new salt.)<a href="#se
       <h2 id="name-acknowledgements">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
       </h2>
-<p id="section-6-1">Thanks to Nils Wisiol for helping in the conceptual development of the
-protocol, and to Brian Dickson, John R. Levine, and Ond&amp;#345;ej Caletka for
+<p id="section-6-1">Thanks to Brian Dickson, John R. Levine, and Ond&amp;#345;ej Caletka for
 reviewing draft proposals and offering comments and suggestions.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for early-stage
 brainstorming.<a href="#section-6-2" class="pilcrow">¶</a></p>
@@ -1969,6 +2029,10 @@ brainstorming.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
       </h2>
 <dl class="references">
+<dt id="RFC1996">[RFC1996]</dt>
+      <dd>
+<span class="refAuthor">Vixie, P.</span>, <span class="refTitle">"A Mechanism for Prompt Notification of Zone Changes (DNS NOTIFY)"</span>, <span class="seriesInfo">RFC 1996</span>, <span class="seriesInfo">DOI 10.17487/RFC1996</span>, <time datetime="1996-08" class="refDate">August 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc1996">https://www.rfc-editor.org/info/rfc1996</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
       <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
@@ -2087,26 +2151,29 @@ DNSKEY uses.<a href="#section-a.1.1-6" class="pilcrow">¶</a></p>
           <h3 id="name-import">
 <a href="#section-a.1.2" class="section-number selfRef">A.1.2. </a><a href="#name-import" class="section-name selfRef">Import</a>
           </h3>
-<p id="section-a.1.2-1">Once the owner of <code>example.co.uk</code> informs the existing signing parties
-of the joining Child DNS Operator's nameserver hostnames, the
-existing parties can use an algorithm similar to the one given in
-<a href="#bootstrapping" class="xref">Section 2.3.2</a> to query and validate the joining operator's DNSKEY
-set.<a href="#section-a.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-a.1.2-1">With the Signaling Records in place, an algorithm similar to the one
+given in <a href="#bootstrapping" class="xref">Section 2.3.2</a> can be used to query and validate the
+joining operator's DNSKEY set.  The required steps can either be
+taken autonomously by each participating operator (query, validate,
+update local zone copy with imported information), or be subject to
+central coordination using "Multisigner Controller" tooling which
+interfaces with each operator.<a href="#section-a.1.2-1" class="pilcrow">¶</a></p>
 <p id="section-a.1.2-2">The new KSKs can then be added to the delegation's DS record set as
 described in <span>[<a href="#RFC8901" class="xref">RFC8901</a>]</span>, Section 8 (i.e. via an <span>[<a href="#RFC7344" class="xref">RFC7344</a>]</span> rollover
 using CDS/CDNSKEY records), followed by the inclusion of the new ZSKs
 in the other operators' DNSKEY record sets.
 Similarly, the new operator can import the other operators' DNSKEYs
-into its local copy of the Child zone.<a href="#section-a.1.2-2" class="pilcrow">¶</a></p>
+into its local copy of the Child zone (either autonomously, or via
+central coordination).<a href="#section-a.1.2-2" class="pilcrow">¶</a></p>
 <p id="section-a.1.2-3">[ Note that the DNSKEY record set in the Child zone contains keys
 from all operators, whereas the DNSKEY record set published under the
 Signaling Domain is restricted to keys actively used by the
 publishing operator. ]<a href="#section-a.1.2-3" class="pilcrow">¶</a></p>
-<p id="section-a.1.2-4">After all signing parties have detected convergence on the served
-DNSKEY record sets, they can finish the joining process by amending
-the Child's NS record set to include the new operator's authoritative
-nameservers, and use CSYNC (<span>[<a href="#RFC7477" class="xref">RFC7477</a>]</span>) to update the NS record set
-at the Parent.<a href="#section-a.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-a.1.2-4">After convergence on the served DNSKEY record sets has been achieved,
+the joining process is completed by amending the Child's NS record
+set to include the new operator's authoritative nameservers, followed
+by a corresponding update of the NS delegation records at the Parent
+(e.g. using CSYNC <span>[<a href="#RFC7477" class="xref">RFC7477</a>]</span>).<a href="#section-a.1.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2123,14 +2190,17 @@ at the Parent.<a href="#section-a.1.2-4" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <blockquote id="section-appendix.b-2">
-        <p id="section-appendix.b-2.1">Improved abstract.<a href="#section-appendix.b-2.1" class="pilcrow">¶</a></p>
-<p id="section-appendix.b-2.2">Updated multi-signer use case and move to appendix.<a href="#section-appendix.b-2.2" class="pilcrow">¶</a></p>
-<p id="section-appendix.b-2.3">Require CDS/CDNSKEY records at the Child.<a href="#section-appendix.b-2.3" class="pilcrow">¶</a></p>
-<p id="section-appendix.b-2.4">Reworked Signaling Name scheme.<a href="#section-appendix.b-2.4" class="pilcrow">¶</a></p>
-<p id="section-appendix.b-2.5">Recommend using cold cache for consumption.<a href="#section-appendix.b-2.5" class="pilcrow">¶</a></p>
-<p id="section-appendix.b-2.6">Updated terminology (replace "Bootstrapping" by "Signaling").<a href="#section-appendix.b-2.6" class="pilcrow">¶</a></p>
-<p id="section-appendix.b-2.7">Added NSEC recommendation for Bootstrapping Zones.<a href="#section-appendix.b-2.7" class="pilcrow">¶</a></p>
-<p id="section-appendix.b-2.8">Added multi-signer use case.<a href="#section-appendix.b-2.8" class="pilcrow">¶</a></p>
+        <p id="section-appendix.b-2.1">Add section on Triggers.<a href="#section-appendix.b-2.1" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-2.2">Added musings on NOTIFY-based trigger.<a href="#section-appendix.b-2.2" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-2.3">Clarified title.<a href="#section-appendix.b-2.3" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-2.4">Improved abstract.<a href="#section-appendix.b-2.4" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-2.5">Require CDS/CDNSKEY records at the Child.<a href="#section-appendix.b-2.5" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-2.6">Reworked Signaling Name scheme.<a href="#section-appendix.b-2.6" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-2.7">Recommend using cold cache for consumption.<a href="#section-appendix.b-2.7" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-2.8">Updated terminology (replace "Bootstrapping" by "Signaling").<a href="#section-appendix.b-2.8" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-2.9">Added NSEC recommendation for Bootstrapping Zones.<a href="#section-appendix.b-2.9" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-2.10">Added multi-signer use case.<a href="#section-appendix.b-2.10" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-2.11">Editorial changes.<a href="#section-appendix.b-2.11" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
 <li class="normal" id="section-appendix.b-3.1">draft-thomassen-dnsop-dnssec-bootstrapping-00<a href="#section-appendix.b-3.1" class="pilcrow">¶</a>
