@@ -1,5 +1,5 @@
 %%%
-Title = "Authenticated Bootstrapping of DNSSEC Delegations"
+Title = "Automatic Bootstrapping of DNSSEC Delegations using Authenticated Operator Signals"
 abbrev = "dnssec-bootstrapping"
 docname = "@DOCNAME@"
 category = "std"
@@ -616,6 +616,8 @@ at the Parent.
 # Change History (to be removed before final publication)
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
+
+> Clarified title.
 
 > Improved abstract.
 
