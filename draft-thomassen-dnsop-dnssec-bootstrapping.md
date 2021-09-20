@@ -324,7 +324,7 @@ both the Child zone name and its NS hostnames, MUST
    Names;
 
 4. check (separately by record type) that all record sets
-   retrieved in Steps 2 (if present) and 3 have equal contents;
+   retrieved in Steps 2 and 3 have equal contents;
 
 [ This level of rigor is needed for various reasons, including that
 it prevents one operator from screwing up the zone in a multi-homed
@@ -362,8 +362,7 @@ If, however, an error condition occurs, in particular:
 
 - Any failure during the retrieval of the CDS/CDNSKEY records located
   at the Child apex from the Child's authoritative nameservers (Step 2),
-  with an empty record set returned from all authoritative nameservers
-  not qualifying as a failure,
+  with an empty record set qualifying as a failure,
 
 - DNS resolution failure during retrieval of CDS/CDNSKEY records from
   any Signaling Name, or failure of DNSSEC validation (Step 3),
