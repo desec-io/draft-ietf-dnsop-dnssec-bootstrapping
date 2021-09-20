@@ -91,6 +91,7 @@ Table of Contents
      2.3.  Bootstrapping a DNSSEC Delegation . . . . . . . . . . . .   7
        2.3.1.  Signaling Records . . . . . . . . . . . . . . . . . .   7
        2.3.2.  Steps Taken by the Parental Agent . . . . . . . . . .   8
+       2.3.3.  Opt-out . . . . . . . . . . . . . . . . . . . . . . .   9
    3.  Triggers  . . . . . . . . . . . . . . . . . . . . . . . . . .  10
    4.  Operational Recommendations . . . . . . . . . . . . . . . . .  11
      4.1.  Child DNS Operator  . . . . . . . . . . . . . . . . . . .  11
@@ -105,7 +106,6 @@ Table of Contents
    Appendix A.  Possible Extensions  . . . . . . . . . . . . . . . .  15
      A.1.  Multi-Signer Setups: Onboarding a Signing Party . . . . .  15
        A.1.1.  Signaling Records . . . . . . . . . . . . . . . . . .  16
-       A.1.2.  Import  . . . . . . . . . . . . . . . . . . . . . . .  16
 
 
 
@@ -114,6 +114,7 @@ Thomassen & Wisiol        Expires 24 March 2022                 [Page 2]
 Internet-Draft            dnssec-bootstrapping            September 2021
 
 
+       A.1.2.  Import  . . . . . . . . . . . . . . . . . . . . . . .  16
    Appendix B.  Change History (to be removed before final
            publication)  . . . . . . . . . . . . . . . . . . . . . .  17
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  17
@@ -161,7 +162,6 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
    Child  The entity on record that has the delegation of the domain
       from the Parent.
-
 
 
 
@@ -488,7 +488,7 @@ example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.n
    The Parental Agent then publishes a DS record set according to the
    information retrieved in the previous steps.
 
-2.3.2.2.  Opt-out
+2.3.3.  Opt-out
 
    As a special case of Step 2 failure, the Child MAY opt out from
    DNSSEC bootstrapping by publishing a CDS/CDNSKEY record with

@@ -388,13 +388,13 @@ example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.n
 The Parental Agent then publishes a DS record set according to the
 information retrieved in the previous steps.
 
-#### Opt-out
+### Opt-out
 
 As a special case of Step 2 failure, the Child MAY opt out from DNSSEC
 bootstrapping by publishing a CDS/CDNSKEY record with algorithm 0 and
 other fields as specified in [@!RFC8078], Section 4, at its apex.
 
-This mechanism is without regard to whether the Child zone's
+This mechanism is workable without regard to whether the Child zone's
 signatures are managed by the Child DNS Operator or by the zone owner,
 and without regard to what the Child DNS Operator decides to signal
 under the Signaling Domain.
