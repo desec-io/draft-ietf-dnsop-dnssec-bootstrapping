@@ -423,12 +423,12 @@ Parental Agents SHOULD trigger the procedure described in
     The Parental Agent then uses these names to compute the second
     label of the Signaling Names.  The scan is completed by either
 
-     * performing a targeted NSEC walk starting one level below
+     * performing a targeted NSEC walk starting one level below the
        Signaling Domain, at the label that encodes the Child's
        ancestor; or
 
-     * by performing a zone transfer of the domain containing the
-       (relevant part of the) Signaling Zone, if the Signaling Zone
+     * by performing a zone transfer of the zone containing the
+       (relevant part of the) Signaling Domain, if the Signaling Zone
        operator allows it, and iterating over its contents.
     
     The Child's name is constructed by prepending the first label of
