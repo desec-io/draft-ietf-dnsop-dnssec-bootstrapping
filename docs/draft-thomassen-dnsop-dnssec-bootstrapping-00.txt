@@ -91,17 +91,17 @@ Table of Contents
      2.3.  Bootstrapping a DNSSEC Delegation . . . . . . . . . . . .   7
        2.3.1.  Signaling Records . . . . . . . . . . . . . . . . . .   7
        2.3.2.  Steps Taken by the Parental Agent . . . . . . . . . .   8
-     2.4.  Triggers  . . . . . . . . . . . . . . . . . . . . . . . .  10
-     2.5.  Operational Recommendations . . . . . . . . . . . . . . .  11
-       2.5.1.  Child DNS Operator  . . . . . . . . . . . . . . . . .  11
-       2.5.2.  Parental Agent  . . . . . . . . . . . . . . . . . . .  11
-   3.  Implementation Status . . . . . . . . . . . . . . . . . . . .  12
-     3.1.  Child DNS Operator-side . . . . . . . . . . . . . . . . .  12
-     3.2.  Parental Agent-side . . . . . . . . . . . . . . . . . . .  12
-   4.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
-   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
-   6.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  13
-   7.  Normative References  . . . . . . . . . . . . . . . . . . . .  14
+   3.  Triggers  . . . . . . . . . . . . . . . . . . . . . . . . . .  10
+   4.  Operational Recommendations . . . . . . . . . . . . . . . . .  11
+     4.1.  Child DNS Operator  . . . . . . . . . . . . . . . . . . .  11
+     4.2.  Parental Agent  . . . . . . . . . . . . . . . . . . . . .  11
+   5.  Implementation Status . . . . . . . . . . . . . . . . . . . .  12
+     5.1.  Child DNS Operator-side . . . . . . . . . . . . . . . . .  12
+     5.2.  Parental Agent-side . . . . . . . . . . . . . . . . . . .  12
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
+   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  13
+   9.  Normative References  . . . . . . . . . . . . . . . . . . . .  14
    Appendix A.  Possible Extensions  . . . . . . . . . . . . . . . .  15
      A.1.  Multi-Signer Setups: Onboarding a Signing Party . . . . .  15
        A.1.1.  Signaling Records . . . . . . . . . . . . . . . . . .  16
@@ -406,7 +406,7 @@ example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.n
 
    To complete the bootstrapping process, Parental Agent implementing
    this protocol can act based upon a number of triggers (see
-   Section 2.4).  Once trigger conditions are fulfilled, the Parental
+   Section 3).  Once trigger conditions are fulfilled, the Parental
    Agent, knowing both the Child zone name and its NS hostnames, MUST
 
    1.  verify that the Child is not currently securely delegated;
@@ -511,7 +511,7 @@ Internet-Draft            dnssec-bootstrapping            September 2021
    owner, and without regard to what the Child DNS Operator decides to
    signal under the Signaling Domain.
 
-2.4.  Triggers
+3.  Triggers
 
    [ Clarity of this section needs to be improved. ]
 
@@ -571,9 +571,9 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
    *  Any other condition as deemed appropriate by local policy.
 
-2.5.  Operational Recommendations
+4.  Operational Recommendations
 
-2.5.1.  Child DNS Operator
+4.1.  Child DNS Operator
 
    Signaling Domains SHOULD be delegated as zones of their own, so that
    the Signaling Zone's apex coincides with the Signaling Domain (such
@@ -596,7 +596,7 @@ Internet-Draft            dnssec-bootstrapping            September 2021
    permitting zone walks via NSEC, so that bulk processing remains
    efficient.
 
-2.5.2.  Parental Agent
+4.2.  Parental Agent
 
    It is RECOMMENDED to perform queries within Signaling Domains
    (Section 2.3.2) with an (initially) cold resolver cache as to
@@ -618,12 +618,12 @@ Thomassen & Wisiol        Expires 24 March 2022                [Page 11]
 Internet-Draft            dnssec-bootstrapping            September 2021
 
 
-3.  Implementation Status
+5.  Implementation Status
 
    *Note to the RFC Editor*: please remove this entire section before
    publication.
 
-3.1.  Child DNS Operator-side
+5.1.  Child DNS Operator-side
 
    *  Knot DNS supports manual creation of non-apex CDS/CDNSKEY/DNSKEY
       records.
@@ -638,7 +638,7 @@ Internet-Draft            dnssec-bootstrapping            September 2021
    *  A tool to automatically generate signaling records for
       bootstrapping purposes is not yet available.
 
-3.2.  Parental Agent-side
+5.2.  Parental Agent-side
 
    *  A tool to retrieve and process signaling records for bootstrapping
       purposes is available at https://github.com/desec-io/dsbootstrap
@@ -646,7 +646,7 @@ Internet-Draft            dnssec-bootstrapping            September 2021
       the algorithm described in this document and outputs the validated
       DS records which then can be added to the parent zone.
 
-4.  Security Considerations
+6.  Security Considerations
 
    Thoughts (to be expanded):
 
@@ -711,13 +711,13 @@ Internet-Draft            dnssec-bootstrapping            September 2021
          salt, e.g. stored in a TXT record located at the Signaling
          Domain?  (In case of a collision, one can set a new salt.)
 
-5.  IANA Considerations
+7.  IANA Considerations
 
    *TODO:* reserve "_boot"?
 
    This document has no IANA actions.
 
-6.  Acknowledgements
+8.  Acknowledgements
 
    Thanks to Brian Dickson, John R.  Levine, and Ond&#345;ej Caletka for
    reviewing draft proposals and offering comments and suggestions.
@@ -733,7 +733,7 @@ Internet-Draft            dnssec-bootstrapping            September 2021
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
 
-7.  Normative References
+9.  Normative References
 
    [RFC1996]  Vixie, P., "A Mechanism for Prompt Notification of Zone
               Changes (DNS NOTIFY)", RFC 1996, DOI 10.17487/RFC1996,

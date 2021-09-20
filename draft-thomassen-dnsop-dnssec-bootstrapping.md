@@ -401,7 +401,7 @@ under the Signaling Domain.
 
 
 {#triggers}
-## Triggers
+# Triggers
 
 [ Clarity of this section needs to be improved. ]
 
@@ -449,9 +449,9 @@ Parental Agents SHOULD trigger the procedure described in
   - Any other condition as deemed appropriate by local policy.
 
 
-## Operational Recommendations
+# Operational Recommendations
 
-### Child DNS Operator
+## Child DNS Operator
 
 Signaling Domains SHOULD be delegated as zones of their own, so
 that the Signaling Zone's apex coincides with the Signaling
@@ -474,7 +474,7 @@ Parental Agents to perform scans of the Signaling Zone, either by
 allowing zone transfers or by permitting zone walks via NSEC, so
 that bulk processing remains efficient.
 
-### Parental Agent
+## Parental Agent
 
 It is RECOMMENDED to perform queries within Signaling Domains
 ((#bootstrapping)) with an (initially) cold resolver cache as to
