@@ -317,9 +317,8 @@ both the Child zone name and its NS hostnames, MUST
 
 1. verify that the Child is not currently securely delegated;
 
-2. query the CDS/CDNSKEY records located at the Child zone apex,
-   directly from each of the authoritative nameservers as given in the
-   Child NS record set;
+2. query the CDS/CDNSKEY records at the Child zone apex directly from
+   each of the authoritative servers as listed in the NS record set;
 
 3. query the CDS/CDNSKEY records located at each of the Signaling
    Names;
