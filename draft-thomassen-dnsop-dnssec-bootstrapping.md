@@ -321,26 +321,10 @@ both the Child zone name and its NS hostnames, MUST
    each of the authoritative servers as listed in the NS record set;
 
 3. query the CDS/CDNSKEY records located at each of the Signaling
-   Names;
+   Names using a trusted validating DNS resolver;
 
 4. check (separately by record type) that all record sets
    retrieved in Steps 2 and 3 have equal contents;
-
-[ This level of rigor is needed for various reasons, including that
-it prevents one operator from screwing up the zone in a multi-homed
-setup (where several operators serve the same zone). ]
-
-For the above queries, the Parental Agent MUST use a trusted validating
-DNS resolver and MUST treat responses with unauthenticated data
-(AD bit not set) as an error condition, unless indicated otherwise.
-It is RECOMMENDED to perform these queries with an (initially) cold
-resolver cache as to retrieve the most current information regardless
-of TTL.
-(When a batch job is used to attempt bootstrapping for a large number
-of delegations, the cache does not need to get cleared in between.)
-[It is expected that Signaling Records have few consumers only, so
-that caching would not normally have a performance benefit. On the
-other hand, perhaps it is better to RECOMMEND low TTLs instead?]
 
 If the above steps succeeded without error, the Parental Agent MUST
 construct a tentative DS record set either by copying the CDS record
@@ -358,22 +342,27 @@ set in the Parent zone, so as to secure the Child's delegation.
 
 If, however, an error condition occurs, in particular:
 
-- The Child is already securely delegated (Step 1),
+- in Step 1: the Child is already securely delegated;
 
-- Any failure during the retrieval of the CDS/CDNSKEY records located
-  at the Child apex from the Child's authoritative nameservers (Step 2),
-  with an empty record set qualifying as a failure,
+- in Step 2: any failure during the retrieval of the CDS/CDNSKEY
+  records located at the Child apex from any of the authoritative
+  nameservers, with an empty record set qualifying as a failure;
 
-- DNS resolution failure during retrieval of CDS/CDNSKEY records from
-  any Signaling Name, or failure of DNSSEC validation (Step 3),
+- in Step 3: DNS resolution failure during retrieval of CDS/CDNSKEY
+  records from any Signaling Name, including failure of DNSSEC
+  validation or unauthenticated data (AD bit not set);
 
-- Inconsistent responses (Step 4),
+- in Step 4: inconsistent responses;
 
-- The tentative DS record set includes a signature algorithm without
+- the tentative DS record set includes a signature algorithm without
   referencing a key of that algorithm which signs the Child's DNSKEY
-  record set,
+  record set;
 
 the Parental Agent MUST abort the procedure.
+
+[ This level of rigor is needed for various reasons, including that
+it prevents one operator from screwing up the zone in a multi-homed
+setup (where several operators serve the same zone). ]
 
 #### Example
 
@@ -462,6 +451,8 @@ Parental Agents SHOULD trigger the procedure described in
 
 ## Operational Recommendations
 
+### Child DNS Operator
+
 Signaling Domains SHOULD be delegated as zones of their own, so
 that the Signaling Zone's apex coincides with the Signaling
 Domain (such as `_boot.ns1.example.net`).
@@ -482,6 +473,18 @@ This is particularly important when the Child DNS Operator allows
 Parental Agents to perform scans of the Signaling Zone, either by
 allowing zone transfers or by permitting zone walks via NSEC, so
 that bulk processing remains efficient.
+
+### Parental Agent
+
+It is RECOMMENDED to perform queries within Signaling Domains
+((#bootstrapping)) with an (initially) cold resolver cache as to
+retrieve the most current information regardless of TTL.
+(When a batch job is used to attempt bootstrapping for a large number
+of delegations, the cache does not need to get cleared in between.)
+
+[It is expected that Signaling Records have few consumers only, so
+that caching would not normally have a performance benefit. On the
+other hand, perhaps it is better to RECOMMEND low TTLs instead?]
 
 
 # Implementation Status
