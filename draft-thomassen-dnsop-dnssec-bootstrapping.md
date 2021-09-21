@@ -439,14 +439,6 @@ Parental Agents SHOULD trigger the procedure described in
     opportunistically querying the Signaling Records for some or all
     of its delegations;
 
-  - [ This idea may not be practical and needs discussion. ]
-    After publishing new Signaling Records for a Child that is not
-    yet securely delegated, the Child DNS Operator MAY send an
-    [@!RFC1996] notification (NOTIFY) of type CDS and/or CDNSKEY to
-    the host given by the parent's SOA MNAME, prefixed with `_boot`.
-    The Parent SHOULD listen for such notifications and trigger DS
-    bootstrapping upon receiving one.
-
   - Any other condition as deemed appropriate by local policy.
 
 
@@ -669,8 +661,6 @@ by a corresponding update of the NS delegation records at the Parent
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
 
 > Add section on Triggers.
-
-> Added musings on NOTIFY-based trigger.
 
 > Clarified title.
 
