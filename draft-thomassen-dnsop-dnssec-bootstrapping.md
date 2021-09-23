@@ -1,5 +1,5 @@
 %%%
-Title = "Automatic Commissioning of New DNSSEC Signers: Solving the Bootstrapping Problem using an Authenticated Signal from the Zone's Operator"
+Title = "Automatic Commissioning of New Signers: Solving the DNSSEC Bootstrapping Problem using Authenticated Signals from the Zone's Operator"
 abbrev = "dnssec-bootstrapping"
 docname = "@DOCNAME@"
 category = "std"
@@ -153,7 +153,8 @@ The key words "**MUST**", "**MUST NOT**", "**REQUIRED**",
 BCP 14 [@!RFC2119] [@!RFC8174] when, and only when, they appear in all
 capitals, as shown here.
 
-# Description {#description}
+{#signaling}
+# Signaling
 
 When setting up initial trust, the child generally wants to enable
 global validation.
@@ -163,8 +164,10 @@ possible by the parent.  This means that the period from the child's
 publication of CDS/CDNSKEY RRset to the parent publishing the
 synchronized DS RRset should be as short as possible.
 
-This goal is achieved by transferring trust from the Child DNS Operator.
-Implementation by Child DNS Operators and Parental Agents is RECOMMENDED.
+This goal is achieved by transferring trust from the Child DNS
+Operator by publishing an authenticated signal that can be discovered
+and processed by the Parent.  Implementation by Child DNS Operators
+and Parental Agents is RECOMMENDED.
 
 ## Preconditions
 
@@ -189,7 +192,7 @@ guarantees than the traditional model. ]
 faciliates simple opt-out by the zone administrator, protects against
 synchronization errors, and -- if CDS is used, whose value depends on
 the Child's name -- allows detecting situations of Child name
-confusion due to hash collisions (see (#signaling)). ]
+confusion due to hash collisions (see (#signalingnames)). ]
 
 ### Example
 
@@ -204,12 +207,12 @@ When performing DNSSEC bootstrapping for the Child zone
 2. publishes CDS/CDNSKEY records at `example.co.uk`.
 
 
-{#signaling}
-## Signaling Intent to Act as the Child's Signer
+{#signalingnames}
+## Signaling Names
 
-To signal that a Child DNS Operator whishes to act as the Child's
-delegated signer, the Child DNS Operator MUST publish one or more
-Signaling Records at the Child's Signaling Name under each
+To publish a piece of information about the Child zone in an
+authenticated fashion, the Child DNS Operator MUST publish one or
+more Signaling Records at the Child's Signaling Name under each
 Signaling Domain.
 
 Signaling Records MUST be accompanied by RRSIG records created with
@@ -243,7 +246,7 @@ environments from creating collisions. ]
 [ Prefixing the first label verbatim minimizes the number of hash
 calculations that need to be performed by the Child DNS Operator and
 the Parental Agent, and also facilitates discovery of unprocessed
-Signaling Records by Parental Agent by means of NSEC walking the
+Signaling Records by the Parental Agent by means of NSEC walking the
 Signaling Domain. (If the first label was part of the hash, the
 Parental Agent would not be able to infer the Child's name.) ]
 
@@ -266,15 +269,15 @@ print(signaling_name)
 ```
 ]
 
-## Bootstrapping a DNSSEC Delegation
+# Bootstrapping a DNSSEC Delegation
 
 {#signalingrecords}
-### Signaling Records
+## Signaling Intent to Act as the Child's Signer
 
 To announce its willingness to act as the Child's delegated signer,
 the Child DNS operator co-publishes the Child's CDS/CDNSKEY records
 at the corresponding Signaling Name under each Signaling Domain as
-defined in (#signaling).
+defined in (#signalingnames).
 
 Previous use of CDS/CDNSKEY records is specified at the apex only
 ([@!RFC7344], Section 4.1).  This protocol extends the use of these
@@ -287,7 +290,7 @@ Records MUST be signed with the corresponding Signaling Zone's
 key(s).  Their contents MUST be identical to the corresponding
 records published at the Child's apex.
 
-#### Example
+### Example
 
 For the purposes of bootstrapping the Child zone `example.co.uk` with
 NS records `ns1.example.net` and `ns2.example.net`, the required
@@ -302,14 +305,14 @@ example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.n
 ```
 where `example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg`
 is derived from the DNS Child Zone's name `example.co.uk` as described
-in (#signaling).
+in (#signalingnames).
 The records are accompanied by RRSIG records created using the key(s)
 of the respective Signaling Zone.
 
 {#bootstrapping}
-### Steps Taken by the Parental Agent
+## Steps Taken by the Parental Agent
 
-To complete the bootstrapping process, Parental Agent implementing
+To complete the bootstrapping process, Parental Agents implementing
 this protocol can act based upon a number of triggers (see
 (#triggers)).
 Once trigger conditions are fulfilled, the Parental Agent, knowing
@@ -364,7 +367,7 @@ the Parental Agent MUST abort the procedure.
 it prevents one operator from screwing up the zone in a multi-homed
 setup (where several operators serve the same zone). ]
 
-#### Example
+### Example
 
 To bootstrap the Child zone `example.co.uk` using NS records
 `ns1.example.net` and `ns2.example.net`, the Parental Agent
@@ -375,7 +378,7 @@ To bootstrap the Child zone `example.co.uk` using NS records
    `ns1.example.net` and `ns2.example.net`;
 
 3. queries the CDS/CDNSKEY records located at the Signaling Names
-   (see (#signaling))
+   (see (#signalingnames))
 
 ```
 example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns1.example.net
@@ -388,7 +391,7 @@ example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.n
 The Parental Agent then publishes a DS record set according to the
 information retrieved in the previous steps.
 
-### Opt-out
+## Opt-out
 
 As a special case of Step 2 failure, the Child MAY opt out from DNSSEC
 bootstrapping by publishing a CDS/CDNSKEY record with algorithm 0 and
@@ -401,7 +404,7 @@ under the Signaling Domain.
 
 
 {#triggers}
-# Triggers
+## Triggers
 
 [ Clarity of this section needs to be improved. ]
 
@@ -456,15 +459,14 @@ modifications of the zone containing the nameserver hostname.
 
 In addition, Signaling Zones SHOULD use NSEC to allow consumers
 to efficiently discover pending bootstrapping operations by means of
-zone walking.  This is especially useful for bulk processing after a
-Child DNS Operator has enabled the protocol.
+zone walking (see (#triggers)).  This is especially useful for bulk
+processing after a Child DNS Operator has enabled the protocol.
 
-To keep the size of the Signaling Zones minimal and zone walking
-efficient, Child DNS Operators SHOULD remove Signaling Records which
-are found to have been acted upon.
-This is particularly important when the Child DNS Operator allows
-Parental Agents to perform scans of the Signaling Zone, either by
-allowing zone transfers or by permitting zone walks via NSEC, so
+To keep the size of the Signaling Zones minimal, Child DNS Operators
+SHOULD remove Signaling Records which are found to have been acted
+upon.  This is particularly important when the Child DNS Operator
+allows Parental Agents to perform scans of the Signaling Zone, either
+by allowing zone transfers or by permitting zone walks via NSEC, so
 that bulk processing remains efficient.
 
 ## Parental Agent
@@ -490,25 +492,25 @@ other hand, perhaps it is better to RECOMMEND low TTLs instead?]
 
 * PowerDNS supports manual creation of non-apex CDS/CDNSKEY/DNSKEY records.
 
-* Proof-of-concept Signaling Domains exist at `_boot.ns1.desec.io`
-  and `_boot.ns2.desec.org`.  Signaling Names can be discovered via
-  NSEC walking.
+* Proof-of-concept Signaling Domains with several thousand Signaling
+  Names exist at `_boot.ns1.desec.io` and `_boot.ns2.desec.org`.
+  Signaling Names can be discovered via NSEC walking.
 
 * A tool to automatically generate signaling records for bootstrapping
-  purposes is not yet available.
+  purposes is under development by the authors.
 
 ## Parental Agent-side
 
-* A tool to retrieve and process signaling records for bootstrapping
-  purposes is available at https://github.com/desec-io/dsbootstrap.
-  The tool implements the algorithm described in this document and
-  outputs the validated DS records which then can be added to the
-  parent zone.
+* A tool to retrieve and process Signaling Records for bootstrapping
+  purposes, either directly or via zone walking, is available at
+  <https://github.com/desec-io/dsbootstrap>.
+  The tool implements outputs the validated DS records which then can
+  be added to the parent zone.
 
 
 # Security Considerations
 
-Thoughts (to be expanded):
+Thoughts:
 
 - We use at least one established chain of trust (via the secure delegations of
   the zones containing the NS hostnames).  As a result,
@@ -517,7 +519,7 @@ Thoughts (to be expanded):
       for several days);
     * an active on-wire attacker cannot tamper with the delegation.
 
-- When validating against CDS/CDNSKEY records at the Child's apex, the security
+- The security
   level of the method is strictly higher than the "accept CDS/CDNSKEY after a
   while"-approach that is already in use at several ccTLD registries ("Accept
   after Delay", [@!RFC8078], Section 3.3).  This is because the method described
@@ -532,10 +534,10 @@ Thoughts (to be expanded):
       from the root is untrusted, you probably don't want to trust that operator
       as a whole;
     * when bootstrapping is done upon receipt of a new NS record set, the
-      window of opportunity is very small (and easily monitored by the Child
-      DNS operator);
+      window of opportunity is very small;
     * mitigation exists by diversifying e.g. the nameserver hostname's TLDs,
-      which is advisable anyways.
+      which is advisable anyways;
+    * correct bootstrapping is easily monitored by the Child DNS operator.
 
 - Prevention of accidental misprovisioning / enforcing explicit provisioning:
     * In case of a hash collision, two distinct child zones may be associated
@@ -564,7 +566,7 @@ brainstorming.
 
 # Possible Extensions
 
-The mechanism described in (#signaling) provides a public,
+The mechanism described in (#signalingnames) provides a public,
 authenticated, in-band, unidirectional channel through which the
 Child DNS Operator can publish information on the zones it serves.
 
@@ -615,9 +617,9 @@ operator when operating the Child zone, at the Signaling Names
 example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns3.example.org
 example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns4.example.org
 ```
-where the first label is calculated as described in (#signaling).  The records
-are accompanied by RRSIG records created using the key(s) of the
-respective Signaling Zone.
+where the first label is calculated as described in
+(#signalingnames).  The records are accompanied by RRSIG records
+created using the key(s) of the respective Signaling Zone.
 
 Note that DNSKEY records are not restricted to apex owner names
 ([@!RFC4035], Section 2.1).  However, only apex DNSKEY records are

@@ -4,39 +4,20 @@
 
 DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
-Intended status: Standards Track                               N. Wisiol
-Expires: 27 March 2022              deSEC, Technische Universität Berlin
-                                                       23 September 2021
+Intended status: Standards Track                            30 June 2021
+Expires: 1 January 2022
 
 
-Automatic Commissioning of New DNSSEC Signers: Solving the Bootstrapping
-     Problem using an Authenticated Signal from the Zone's Operator
+                          DNSSEC Bootstrapping
              draft-thomassen-dnsop-dnssec-bootstrapping-00
 
 Abstract
 
    This document describes an authenticated in-band method for automatic
-   signaling of a Child DNS zone's delegation signer information from
-   the zone's DNS operator(s).  The zone's registrar or registry may
+   signaling of a DNS zone's delegation signer information from the
+   zone's DNS operator.  The zone's registrar or registry may
    subsequently use this signal for automatic DS record provisioning in
-   the parent zone.  The protocol is particularly useful in case of
-   managed DNS providers hosting registrant's domains, where DS
-   provisioning has so far been cumbersome.
-
-   The signaling channel is not specific to the DS bootstrapping use
-   case, but equally suitable for announcing other zone-specific
-   information from the DNS Operator in an authenticated fashion.
-   Further potential applications thus include, for example, key
-   exchange between parties in an [RFC8901] multisigner setup.
-
-   [ Ed note: Text inside square brackets ([]) is additional background
-   information, answers to frequently asked questions, general musings,
-   etc.  They will be removed before publication.  This document is
-   being collaborated on at https://github.com/desec-io/draft-thomassen-
-   dnsop-dnssec-bootstrapping/ (https://github.com/desec-io/draft-
-   thomassen-dnsop-dnssec-bootstrapping/).  The most recent version of
-   the document, open issues, etc. should all be available there.  The
-   authors gratefully accept pull requests. ]
+   the parent zone.
 
 Status of This Memo
 
@@ -48,22 +29,12 @@ Status of This Memo
    working documents as Internet-Drafts.  The list of current Internet-
    Drafts is at https://datatracker.ietf.org/drafts/current/.
 
-
-
-
-
-
-Thomassen & Wisiol        Expires 27 March 2022                 [Page 1]
-
-Internet-Draft            dnssec-bootstrapping            September 2021
-
-
    Internet-Drafts are draft documents valid for a maximum of six months
    and may be updated, replaced, or obsoleted by other documents at any
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 March 2022.
+   This Internet-Draft will expire on 1 January 2022.
 
 Copyright Notice
 
@@ -79,54 +50,43 @@ Copyright Notice
    as described in Section 4.e of the Trust Legal Provisions and are
    provided without warranty as described in the Simplified BSD License.
 
+
+
+
+Thomassen                Expires 1 January 2022                 [Page 1]
+
+Internet-Draft            dnssec-bootstrapping                 June 2021
+
+
 Table of Contents
 
-   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
      1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3
      1.2.  Requirements Notation . . . . . . . . . . . . . . . . . .   4
    2.  Description . . . . . . . . . . . . . . . . . . . . . . . . .   4
-     2.1.  Preconditions . . . . . . . . . . . . . . . . . . . . . .   5
-       2.1.1.  Example . . . . . . . . . . . . . . . . . . . . . . .   5
-     2.2.  Signaling Intent to Act as the Child's Signer . . . . . .   5
-     2.3.  Bootstrapping a DNSSEC Delegation . . . . . . . . . . . .   7
-       2.3.1.  Signaling Records . . . . . . . . . . . . . . . . . .   7
-       2.3.2.  Steps Taken by the Parental Agent . . . . . . . . . .   8
-       2.3.3.  Opt-out . . . . . . . . . . . . . . . . . . . . . . .   9
-   3.  Triggers  . . . . . . . . . . . . . . . . . . . . . . . . . .  10
-   4.  Operational Recommendations . . . . . . . . . . . . . . . . .  11
-     4.1.  Child DNS Operator  . . . . . . . . . . . . . . . . . . .  11
-     4.2.  Parental Agent  . . . . . . . . . . . . . . . . . . . . .  11
-   5.  Implementation Status . . . . . . . . . . . . . . . . . . . .  11
-     5.1.  Child DNS Operator-side . . . . . . . . . . . . . . . . .  11
-     5.2.  Parental Agent-side . . . . . . . . . . . . . . . . . . .  12
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
-   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  13
-   9.  Normative References  . . . . . . . . . . . . . . . . . . . .  13
-   Appendix A.  Possible Extensions  . . . . . . . . . . . . . . . .  14
-     A.1.  Multi-Signer Setups: Onboarding a Signing Party . . . . .  15
-       A.1.1.  Signaling Records . . . . . . . . . . . . . . . . . .  15
-
-
-
-Thomassen & Wisiol        Expires 27 March 2022                 [Page 2]
-
-Internet-Draft            dnssec-bootstrapping            September 2021
-
-
-       A.1.2.  Import  . . . . . . . . . . . . . . . . . . . . . . .  16
-   Appendix B.  Change History (to be removed before final
-           publication)  . . . . . . . . . . . . . . . . . . . . . .  16
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  17
+     2.1.  Preconditions . . . . . . . . . . . . . . . . . . . . . .   4
+       2.1.1.  Example . . . . . . . . . . . . . . . . . . . . . . .   4
+       2.1.2.  Zone Cut Clarification  . . . . . . . . . . . . . . .   5
+     2.2.  Bootstrapping Method  . . . . . . . . . . . . . . . . . .   5
+       2.2.1.  Steps Taken by the Child DNS Operator . . . . . . . .   5
+       2.2.2.  Steps Taken by the Parental Agent . . . . . . . . . .   6
+   3.  Implementation Status . . . . . . . . . . . . . . . . . . . .   7
+   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
+   6.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   9
+   7.  Normative References  . . . . . . . . . . . . . . . . . . . .   9
+   Appendix A.  Change History (to be removed before final
+           publication)  . . . . . . . . . . . . . . . . . . . . . .  10
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  10
 
 1.  Introduction
 
    *TODO remove*: this section is inspired by [RFC7344], Section 1.
 
-   The first time a Child DNS Operator signs a zone, they need to
-   communicate the keying material to the Parent.  Depending on the
-   desires of the Parent, the Child might send their DNSKEY record, a DS
-   record, or both.
+   The first time a DNS Operator signs a zone, they need to communicate
+   the keying material to the Parent.  Depending on the desires of the
+   Parent, the Child might send their DNSKEY record, a DS record, or
+   both.
 
    So far, out-of-band methods are typically used to complete the chain
    of trust.  In-band methods exist, in particular based on the CDS and
@@ -138,22 +98,34 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
    How the keying material is conveyed to the Parent during initial
    DNSSEC bootstrapping depends on the relationship the Child has with
-   the Parent.  The communication has to occur between the Child DNS
-   Operator and, depending on the circumstances, the Registry or the
-   Registrar, possibly via the Registrant (for details, see [RFC7344],
-   Appendix A).  In many cases, this is a manual process -- and not an
-   easy one.  Any manual process is susceptible to mistakes and/or
-   errors.  In addition, due to the annoyance factor of the process,
-   involved parties may avoid the process of getting a DS record set
-   published at the Parent.
+   the Parent.  In many cases this is a manual process -- and not an
+   easy one.  The communication has to occur between the DNS Operator
+   and, depending on the circumstances, the Registry or the Registrar,
+   possibly via the Registrant (for details, see [RFC7344], Appendix A).
+   Any manual process is susceptible to mistakes and/or errors.  In
+   addition, due to the annoyance factor of the process, Operators may
+   avoid the process of getting a DS record set published at the Parent.
+
+
+
+
+Thomassen                Expires 1 January 2022                 [Page 2]
+
+Internet-Draft            dnssec-bootstrapping                 June 2021
+
 
    DNSSEC provides data integrity to information published in DNS; thus,
    DNS publication can be used to automate maintenance of delegation
    information.  This document describes a method to automate
-   publication of initial DS records for a hitherto insecure delegation.
+   publication of inital DS records for a hitherto insecure delegation.
 
    Readers are expected to be familiar with DNSSEC, including [RFC4033],
    [RFC4034], [RFC4035], [RFC6781], [RFC7344], and [RFC8078].
+
+   This document describes a method for automated provisioning of the
+   delegation trust information and proposes a polled/periodic trigger
+   for simplicity.  Some users may prefer a different trigger.  These
+   alternate additional triggers are not discussed in this document.
 
 1.1.  Terminology
 
@@ -163,14 +135,7 @@ Internet-Draft            dnssec-bootstrapping            September 2021
    Child  The entity on record that has the delegation of the domain
       from the Parent.
 
-
-
-Thomassen & Wisiol        Expires 27 March 2022                 [Page 3]
-
-Internet-Draft            dnssec-bootstrapping            September 2021
-
-
-   Parent  The zone that contains the Child's delegation records.
+   Parent  The domain in which the Child is registered.
 
    Child DNS Operator  The entity that maintains and publishes the zone
       information for the Child DNS.
@@ -178,25 +143,32 @@ Internet-Draft            dnssec-bootstrapping            September 2021
    Parental Agent  The entity that the Child has a relationship with to
       change its delegation information.
 
-   Signaling Domain(s)  For any given authoritative nameserver hostname
-      from the Child's NS record set, the hostname prefixed with the
-      label "_boot" is one of the Signaling Domains for the Child Zone.
+   Bootstrapping Domain  Given an authoritative nameserver hostname from
+      the Child's NS record set, that hostname prefixed the label
+      "_boot".
 
-   Signaling Zone  The zone which is authoritative for a given Signaling
-      Domain.
-
-   Signaling Name  A name under a Signaling Domain that can be mapped
-      onto the Child zone's name.
-
-   Signaling Record  A DNS record located at a Signaling Name under a
-      Signaling Domain.  Signaling Records are used by the Child DNS
-      Operator to publish information about the Child.
+   Signaling Name  A Bootstrapping Domain prefixed with a label encoding
+      the Child's name.
 
    CDS/CDNSKEY  This notation refers to CDS and/or CDNSKEY, i.e., one or
       both.
 
    Base32hex Encoding  "Base 32 Encoding with Extended Hex Alphabet" as
       per [RFC4648].
+
+
+
+
+
+
+
+
+
+
+Thomassen                Expires 1 January 2022                 [Page 3]
+
+Internet-Draft            dnssec-bootstrapping                 June 2021
+
 
 1.2.  Requirements Notation
 
@@ -216,427 +188,213 @@ Internet-Draft            dnssec-bootstrapping            September 2021
    parent publishing the synchronized DS RRset should be as short as
    possible.
 
-
-
-
-
-
-Thomassen & Wisiol        Expires 27 March 2022                 [Page 4]
-
-Internet-Draft            dnssec-bootstrapping            September 2021
-
-
    This goal is achieved by transferring trust from the Child DNS
-   Operator.  Implementation by Child DNS Operators and Parental Agents
-   is RECOMMENDED.
+   Operator.
 
 2.1.  Preconditions
 
-   If a Child DNS Operator implements the protocol, the following
-   conditions have to be met:
+   In order to use this technique, the following conditions have to be
+   met:
 
-   1.  Each Signaling Zone MUST be securely delegated, i.e. have a valid
-       DNSSEC chain of trust from the root.
-
-   2.  The Child DNS Operator MUST publish CDS/CDNSKEY records at the
+   1.  The Child DNS Operator SHOULD publish CDS/CDNSKEY records at the
        Child's apex, as described in [RFC7344].
 
-   [ In the course of the bootstrapping protocol, the Parental Agent
-   will fetch the CDS/CDNSKEY records from another source.  The second
-   condition ensures that the Parental Agent can validate these records
-   against the customary CDS/CDNSKEY records from the Child.  The
-   bootstrapping protocol is thus an extension of the existing CDS/
-   CDNSKEY protocol, and therefore provides strictly stronger guarantees
-   than the traditional model. ]
+   2.  Each Bootstrapping Domain MUST be part of a securely delegated
+       zone, i.e. has a valid DNSSEC chain of trust from the root.
 
-   [ Requiring presence of CDS/CDNSKEY records in the Child also
-   faciliates simple opt-out by the zone administrator, protects against
-   synchronization errors, and -- if CDS is used, whose value depends on
-   the Child's name -- allows detecting situations of Child name
-   confusion due to hash collisions (see Section 2.2). ]
+   3.  The Child DNS Operator MUST be able to maintain and publish DNS
+       information in these zone (i.e. under the Bootstrapping Domains).
+
+   For operational or other reasons, a Bootstrapping Domain MAY coincide
+   with a zone cut.
 
 2.1.1.  Example
 
-   When performing DNSSEC bootstrapping for the Child zone
-   "example.co.uk" using NS records "ns1.example.net" and
-   "ns2.example.net", the Child DNS Operator
+   When performing DNSSEC bootstrapping for the Child zone "example.com"
+   using NS records "ns1.example.net" and "ns2.example.net", the Child
+   DNS Operator
 
-   1.  needs to ensure that a valid DNSSEC chain of trust exists for the
-       zone(s) that are authoritative for the Signaling Domains
+   1.  should publish CDS/CDNSKEY records at "example.com";
+
+
+
+
+
+
+Thomassen                Expires 1 January 2022                 [Page 4]
+
+Internet-Draft            dnssec-bootstrapping                 June 2021
+
+
+   2.  needs to ensure that a valid DNSSEC chain of trust exists for the
+       zone(s) that are authoritative for the Bootstrapping Domains
        "_boot.ns1.example.net" and "_boot.ns2.example.net";
 
-   2.  publishes CDS/CDNSKEY records at "example.co.uk".
+   3.  must be able to maintain and publish DNS information in these
+       zones.
 
-2.2.  Signaling Intent to Act as the Child's Signer
+2.1.2.  Zone Cut Clarification
 
-   To signal that a Child DNS Operator whishes to act as the Child's
-   delegated signer, the Child DNS Operator MUST publish one or more
-   Signaling Records at the Child's Signaling Name under each Signaling
-   Domain.
+   A Bootstrapping Domain such as "_boot.ns1.example.net" may be a zone
+   of its own, in which case it needs to be secure and under the control
+   of the Child DNS Operator.  If the Bootstrapping Domain does not
+   coincide with a zone cut, these conditions are instead imposed on the
+   containing zone (such as "example.net").
 
+   The "Bootstrapping Domain" terminology is necessary to describe the
+   bootstrapping mechanism without regard to whether there is a zone cut
+   at these names or not.
 
+2.2.  Bootstrapping Method
 
+2.2.1.  Steps Taken by the Child DNS Operator
 
-Thomassen & Wisiol        Expires 27 March 2022                 [Page 5]
-
-Internet-Draft            dnssec-bootstrapping            September 2021
+   To perform DNSSEC bootstrapping for the Child zone, the Child DNS
+   Operator MUST (re-)publish the Child's CDS/CDNSKEY records at the
+   corresponding Signaling Name under each Bootstrapping Domain (see
+   example below).  These records belong to the autoritative zone of the
+   Bootstrapping Domain, and as such they MUST be signed with that
+   zone's keys, and MUST NOT be signed with the Child zone's keys.
 
+   The Signaling Name contains a label identifying the Child's name.
+   This label MUST be equal to the SHA-256 hash digest of the Child's
+   name in "Base 32 Encoding with Extended Hex Alphabet", as specified
+   in [RFC4648].  Trailing padding characters ("=") MUST be dropped.
 
-   Signaling Records MUST be accompanied by RRSIG records created with
-   the corresponding Signaling Zone's key(s).  The type and contents of
-   these Signaling Records depend on the specific use case as described
-   below.
-
-   The Signaling Name MUST consist of the following two labels:
-
-   1.  the first label of the Child name;
-
-   2.  a label equal to the SHA-256 hash digest of the fully qualified
-       domain name of the Child's immediate ancestor in the DNS tree
-       (one level up), using wire format for the hash input and "Base 32
-       Encoding with Extended Hex Alphabet" as specified in [RFC4648]
-       for the output.  Trailing padding characters ("=") MUST be
-       dropped.
-
-   Note that the "fully qualified domain name of the Child's immediate
-   ancestor in the DNS tree" coincides with the Parent's FQDN only when
-   the delegation is directly (one level) under the Parent's apex.  For
-   deeper delegations, it also contains the labels between the Parent
-   and the Child.
-
-   [ The purpose of the hash function is to avoid the possibility of
-   exceeding the maximum length of a DNS name, and to normalize the
-   number of labels in a Signaling Name.  The encoding choice is like in
-   NSEC3, except that SHA-256 is used instead of SHA-1.  This is to
-   prevent other tenants in shared hosting environments from creating
-   collisions. ]
-
-   [ Prefixing the first label verbatim minimizes the number of hash
-   calculations that need to be performed by the Child DNS Operator and
-   the Parental Agent, and also facilitates discovery of unprocessed
-   Signaling Records by Parental Agent by means of NSEC walking the
-   Signaling Domain.  (If the first label was part of the hash, the
-   Parental Agent would not be able to infer the Child's name.) ]
-
-   [ *Example code* (Python, with "dnspython" package):
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Thomassen & Wisiol        Expires 27 March 2022                 [Page 6]
-
-Internet-Draft            dnssec-bootstrapping            September 2021
-
-
-from base64 import b32encode
-from hashlib import sha256
-
-import dns.name
-from dns.rdtypes.ANY.NSEC3 import b32_normal_to_hex
-
-child = 'example.co.uk.'
-prefix, suffix = child.split('.', 1)
-suffix_wire_format = dns.name.from_text(suffix).to_wire()
-suffix_digest = sha256(suffix_wire_format).digest()
-suffix_digest = b32encode(suffix_digest).translate(b32_normal_to_hex).rstrip(b'=')
-signaling_name = prefix + '.' + suffix_digest.lower().decode()
-print(signaling_name)
-# >>> 'example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg'
-
-   ]
-
-2.3.  Bootstrapping a DNSSEC Delegation
-
-2.3.1.  Signaling Records
-
-   To announce its willingness to act as the Child's delegated signer,
-   the Child DNS operator co-publishes the Child's CDS/CDNSKEY records
-   at the corresponding Signaling Name under each Signaling Domain as
-   defined in Section 2.2.
-
-   Previous use of CDS/CDNSKEY records is specified at the apex only
+   Previous uses of CDS/CDNSKEY records are specified at the apex only
    ([RFC7344], Section 4.1).  This protocol extends the use of these
-   record types at non-apex owner names for the purpose of DNSSEC
-   bootstrapping.  To exclude the possibility of semantic collision,
-   there MUST NOT be a zone cut at a Signaling Name.
+   record types on non-apex owner names for the purpose of DNSSEC
+   bootstrapping.  To avoid the possibility of semantic collision, there
+   MUST NOT be a zone cut at a Signaling Name.
 
-   Unlike the CDS/CDNSKEY records at the Child's apex, Signaling Records
-   MUST be signed with the corresponding Signaling Zone's key(s).  Their
-   contents MUST be identical to the corresponding records published at
-   the Child's apex.
+   *TODO Remove Note 1:* The purpose of the hash function is to avoid
+   the possibility of exceeding the maximum length of a DNS name.  This
+   could occur if the Child name was used as is.
 
-2.3.1.1.  Example
-
-   For the purposes of bootstrapping the Child zone "example.co.uk" with
-   NS records "ns1.example.net" and "ns2.example.net", the required
-   Signaling Domains are "_boot.ns1.example.net" and
-   "_boot.ns2.example.net".
-
-   In the zones containing these domains, the Child DNS Operator
-   publishes the Child's CDS/CDNSKEY records at the names
+   *TODO Remove Note 2:* The encoding choice is like in NSEC3, except
+   that SHA-256 is used instead of SHA-1.  This is to prevent other
+   tenants in shared hosting environments from creating collisions.
 
 
 
-
-
-Thomassen & Wisiol        Expires 27 March 2022                 [Page 7]
+Thomassen                Expires 1 January 2022                 [Page 5]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping                 June 2021
 
 
-example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns1.example.net
-example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.net
+2.2.1.1.  Example
 
-   where "example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg"
-   is derived from the DNS Child Zone's name "example.co.uk" as
-   described in Section 2.2.  The records are accompanied by RRSIG
-   records created using the key(s) of the respective Signaling Zone.
+   To bootstrap the Child zone "example.com" using NS records
+   "ns1.example.net" and "ns2.example.net", the Bootstrapping Domains
+   are "_boot.ns1.example.net" and "_boot.ns2.example.net".  The Child
+   DNS Operator thus (re-)publishes the Child's CDS/CDNSKEY records
+   under the names
 
-2.3.2.  Steps Taken by the Parental Agent
+kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns1.example.net
+kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
 
-   To complete the bootstrapping process, Parental Agent implementing
-   this protocol can act based upon a number of triggers (see
-   Section 3).  Once trigger conditions are fulfilled, the Parental
-   Agent, knowing both the Child zone name and its NS hostnames, MUST
+   where "kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g" is the
+   unpadded Base32hex Encoding of "example.com".  The records are
+   accompanied by RRSIG records created using the key(s) of the zone
+   which is authoritative for the respective Bootstrapping Domain.
 
-   1.  verify that the Child is not currently securely delegated;
+   *TODO remove:* Should hash input include trailing dot?  (Command was:
+   "echo -n example.com | openssl dgst -binary -sha256 | base32hex | tr
+   -d =")
 
-   2.  query the CDS/CDNSKEY records at the Child zone apex directly
-       from each of the authoritative servers as listed in the NS record
-       set;
+2.2.2.  Steps Taken by the Parental Agent
 
-   3.  query the CDS/CDNSKEY records located at each of the Signaling
-       Names using a trusted validating DNS resolver;
+   When the Parental Agent receives a new NS record set (or additionally
+   at any other time considered appropriate), the Parental Agent,
+   knowing both the Child zone name and its NS hostnames,
 
-   4.  check (separately by record type) that all record sets retrieved
-       in Steps 2 and 3 have equal contents;
+   1.  MUST query the CDS/CDNSKEY records located at each of the
+       Signaling Names (using standard DNS resolution);
 
-   If the above steps succeeded without error, the Parental Agent MUST
-   construct a tentative DS record set either by copying the CDS record
-   contents or by computing DS records from the CDNSKEY record set, or
-   by doing both (i.e. amending the set of records copied from the CDS
-   record set).
+   2.  MUST perform DNSSEC validation of all responses retrieved in Step
+       1;
 
-   The Parental Agent then MUST verify that for each signature algorithm
-   present, (at least) one of the keys referenced in the tentative DS
-   record set signs the Child's DNSKEY record set. [ TODO Which other
-   checks are needed to not break anything? ]
+   3.  SHOULD query the CDS/CDNSKEY records located at the Child zone
+       apex, directly from each of the authoritative nameservers as
+       given in the Child NS record set;
 
-   If this is the case, the Parental Agent SHOULD publish the DS record
-   set in the Parent zone, so as to secure the Child's delegation.
+   4.  MUST checks that all CDS/CDNSKEY record sets retrieved in Steps 1
+       and 3 have equal record contents;
 
-   If, however, an error condition occurs, in particular:
+   5.  SHOULD derive a DS record set from the retrieved CDS/CDNSKEY
+       record sets and publish it in the Parent zone, as to secure the
+       Child's delegation.
 
-   *  in Step 1: the Child is already securely delegated;
+   If an error condition occurs during Steps 1--4, in particular:
 
-   *  in Step 2: any failure during the retrieval of the CDS/CDNSKEY
-      records located at the Child apex from any of the authoritative
-      nameservers, with an empty record set qualifying as a failure;
-
+   *  DNS resolution failure during retrieval of CDS/CDNSKEY records
+      from any Signaling Name (Step 1), or failure of DNSSEC validation
+      (Step 2),
 
 
-Thomassen & Wisiol        Expires 27 March 2022                 [Page 8]
+
+Thomassen                Expires 1 January 2022                 [Page 6]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping                 June 2021
 
 
-   *  in Step 3: DNS resolution failure during retrieval of CDS/CDNSKEY
-      records from any Signaling Name, including failure of DNSSEC
-      validation or unauthenticated data (AD bit not set);
+   *  Failure to retrieve CDS/CDNSKEY records located at the Child apex
+      from all of the Child's authoritative nameservers (Step 3),
 
-   *  in Step 4: inconsistent responses;
+   *  Inconsistent responses (Step 4),
 
-   *  the tentative DS record set includes a signature algorithm without
-      referencing a key of that algorithm which signs the Child's DNSKEY
-      record set;
+   the Parental Agent MUST NOT proceed to Step 5.
 
-   the Parental Agent MUST abort the procedure.
+2.2.2.1.  Example
 
-   [ This level of rigor is needed for various reasons, including that
-   it prevents one operator from screwing up the zone in a multi-homed
-   setup (where several operators serve the same zone). ]
-
-2.3.2.1.  Example
-
-   To bootstrap the Child zone "example.co.uk" using NS records
+   To bootstrap the Child zone "example.com" using NS records
    "ns1.example.net" and "ns2.example.net", the Parental Agent
 
-   1.  checks that the Child zone is not yet securely delegated;
+   1.  queries CDS/CDNSKEY records, using standard DNS resolution, for
+       the names
 
-   2.  queries CDS/CDNSKEY records for "example.co.uk" directly from
+kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns1.example.net
+kdsqdtnelusqanhnhg8o0d72ekf6gbtbjsmj1aojq895b1me353g._boot.ns2.example.net
+
+   2.  performs DNSSEC validation of the responses retrieved in Step 1;
+
+   3.  queries CDS/CDNSKEY records for "example.com" directly from
        "ns1.example.net" and "ns2.example.net";
 
-   3.  queries the CDS/CDNSKEY records located at the Signaling Names
-       (see Section 2.2)
+   4.  checks that CDS record sets retrieved in Step 1 agree across
+       responses and also with the CDS record sets retrieved in Step 3;
+       ditto for CDNSKEY;
 
-example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns1.example.net
-example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.net
+   5.  publishes a DS record set according to the information retrieved
+       in the previous steps.
 
-   4.  checks that the CDS/CDNSKEY record sets retrieved in Steps 2 and
-       3 agree across responses.
+2.2.2.2.  Opt-out
 
-   The Parental Agent then publishes a DS record set according to the
-   information retrieved in the previous steps.
-
-2.3.3.  Opt-out
-
-   As a special case of Step 2 failure, the Child MAY opt out from
+   As a special case of Step 4 failure, the Child MAY opt out from
    DNSSEC bootstrapping by publishing a CDS/CDNSKEY record with
    algorithm 0 and other fields as specified in [RFC8078], Section 4, at
-   its apex.
+   its apex.  (This opt-out mechanism is without regard to whether the
+   Child DNS Operator signs the zones and publishes records at the
+   Signaling Names.)
 
-
-
-
-
-
-
-Thomassen & Wisiol        Expires 27 March 2022                 [Page 9]
-
-Internet-Draft            dnssec-bootstrapping            September 2021
-
-
-   This mechanism is workable without regard to whether the Child zone's
-   signatures are managed by the Child DNS Operator or by the zone
-   owner, and without regard to what the Child DNS Operator decides to
-   signal under the Signaling Domain.
-
-3.  Triggers
-
-   [ Clarity of this section needs to be improved. ]
-
-   Parental Agents SHOULD trigger the procedure described in
-   Section 2.3.2 once one of the following conditions is fulfilled:
-
-   *  The Parental Agent receives a new or updated NS record set for a
-      Child;
-
-   *  The Parental Agent encounters Signaling Records for its Children
-      during a scan (e.g. daily) of known Signaling Domains (derived
-      from the NS records used in its delegations).
-
-      To perform such a scan, the Parental Agent iterates over some or
-      all of its delegations and strips the first label off each one to
-      construct the set of immediate ancestors of its children.  (For
-      delegations one level below the Parent, such as second-level
-      domain registrations, this will simply be the Parent's name.)  The
-      Parental Agent then uses these names to compute the second label
-      of the Signaling Names.  The scan is completed by either
-
-      -  performing a targeted NSEC walk starting one level below the
-         Signaling Domain, at the label that encodes the Child's
-         ancestor; or
-
-      -  by performing a zone transfer of the zone containing the
-         (relevant part of the) Signaling Domain, if the Signaling Zone
-         operator allows it, and iterating over its contents.
-
-      The Child's name is constructed by prepending the first label of
-      the encountered Signaling Names to the ancestor from which the
-      Signaling Name's second label was computed;
-
-   *  The Parental Agent performs an active (e.g. daily) scan by
-      opportunistically querying the Signaling Records for some or all
-      of its delegations;
-
-   *  Any other condition as deemed appropriate by local policy.
-
-
-
-
-
-
-
-Thomassen & Wisiol        Expires 27 March 2022                [Page 10]
-
-Internet-Draft            dnssec-bootstrapping            September 2021
-
-
-4.  Operational Recommendations
-
-4.1.  Child DNS Operator
-
-   Signaling Domains SHOULD be delegated as zones of their own, so that
-   the Signaling Zone's apex coincides with the Signaling Domain (such
-   as "_boot.ns1.example.net").  While it is permissible for the
-   Signaling Domain to be contained in a Signaling Zone of fewer labels
-   (such as "example.net"), a zone cut ensures that bootstrapping
-   activities do not require modifications of the zone containing the
-   nameserver hostname.
-
-   In addition, Signaling Zones SHOULD use NSEC to allow consumers to
-   efficiently discover pending bootstrapping operations by means of
-   zone walking.  This is especially useful for bulk processing after a
-   Child DNS Operator has enabled the protocol.
-
-   To keep the size of the Signaling Zones minimal and zone walking
-   efficient, Child DNS Operators SHOULD remove Signaling Records which
-   are found to have been acted upon.  This is particularly important
-   when the Child DNS Operator allows Parental Agents to perform scans
-   of the Signaling Zone, either by allowing zone transfers or by
-   permitting zone walks via NSEC, so that bulk processing remains
-   efficient.
-
-4.2.  Parental Agent
-
-   It is RECOMMENDED to perform queries within Signaling Domains
-   (Section 2.3.2) with an (initially) cold resolver cache as to
-   retrieve the most current information regardless of TTL.  (When a
-   batch job is used to attempt bootstrapping for a large number of
-   delegations, the cache does not need to get cleared in between.)
-
-   [It is expected that Signaling Records have few consumers only, so
-   that caching would not normally have a performance benefit.  On the
-   other hand, perhaps it is better to RECOMMEND low TTLs instead?]
-
-5.  Implementation Status
+3.  Implementation Status
 
    *Note to the RFC Editor*: please remove this entire section before
    publication.
 
-5.1.  Child DNS Operator-side
+   *  PowerDNS supports manual creation of CDS/CDNSKEY records on non-
+      apex names.
 
-   *  Knot DNS supports manual creation of non-apex CDS/CDNSKEY/DNSKEY
-      records.
-
-
+   *  TODO Proof of concept
 
 
 
-Thomassen & Wisiol        Expires 27 March 2022                [Page 11]
+Thomassen                Expires 1 January 2022                 [Page 7]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping                 June 2021
 
 
-   *  PowerDNS supports manual creation of non-apex CDS/CDNSKEY/DNSKEY
-      records.
-
-   *  Proof-of-concept Signaling Domains exist at "_boot.ns1.desec.io"
-      and "_boot.ns2.desec.org".  Signaling Names can be discovered via
-      NSEC walking.
-
-   *  A tool to automatically generate signaling records for
-      bootstrapping purposes is not yet available.
-
-5.2.  Parental Agent-side
-
-   *  A tool to retrieve and process signaling records for bootstrapping
-      purposes is available at https://github.com/desec-io/dsbootstrap
-      (https://github.com/desec-io/dsbootstrap).  The tool implements
-      the algorithm described in this document and outputs the validated
-      DS records which then can be added to the parent zone.
-
-6.  Security Considerations
+4.  Security Considerations
 
    Thoughts (to be expanded):
 
@@ -653,10 +411,13 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
    *  When validating against CDS/CDNSKEY records at the Child's apex,
       the security level of the method is strictly higher than the
-      "accept CDS/CDNSKEY after a while"-approach that is already in use
+      "accept CDS/CDNSKEY after a while"-approch that is already in use
       at several ccTLD registries ("Accept after Delay", [RFC8078],
       Section 3.3).  This is because the method described here adds
-      stronger guarantees, but removes nothing.
+      stronger guarantees, but removes nothing.  Perhaps this means that
+      co-publication of CDS/CDNSKEY at the Child apex should be
+      mandatory.  (This in turn may interact somehow with the Child's
+      opt-out option.)
 
    *  Actors in the chain(s) of trust of the zone(s) used for
       bootstrapping (the DNS Operator themselves, plus entities further
@@ -664,15 +425,6 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
       -  that's also possible in the case of CDS/CDNSKEY (see previous
          point);
-
-
-
-
-
-Thomassen & Wisiol        Expires 27 March 2022                [Page 12]
-
-Internet-Draft            dnssec-bootstrapping            September 2021
-
 
       -  if the Child DNS Operator doesn't control the zones in which
          its NS hostnames live (including their nameservers' A records)
@@ -686,32 +438,29 @@ Internet-Draft            dnssec-bootstrapping            September 2021
       -  mitigation exists by diversifying e.g. the nameserver
          hostname's TLDs, which is advisable anyways.
 
-   *  Prevention of accidental misprovisioning / enforcing explicit
-      provisioning:
-
-      -  In case of a hash collision, two distinct child zones may be
-         associated with the same signaling name so that their keys may
-         get mixed up.  While not currently feasible, malicious
-         customers in shared hosting environments may attempt to produce
-         such a collision.  Is it worth mitigating this by introducing a
-         salt, e.g. stored in a TXT record located at the Signaling
-         Domain?  (In case of a collision, one can set a new salt.)
-
-7.  IANA Considerations
+5.  IANA Considerations
 
    *TODO:* reserve "_boot"?
 
+
+
+
+Thomassen                Expires 1 January 2022                 [Page 8]
+
+Internet-Draft            dnssec-bootstrapping                 June 2021
+
+
    This document has no IANA actions.
 
-8.  Acknowledgements
+6.  Acknowledgements
 
-   Thanks to Brian Dickson, John R.  Levine, and Ond&#345;ej Caletka for
-   reviewing draft proposals and offering comments and suggestions.
+   Thanks to TODO for reviewing draft proposals and offering comments
+   and suggestions.
 
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
 
-9.  Normative References
+7.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -722,13 +471,6 @@ Internet-Draft            dnssec-bootstrapping            September 2021
               Rose, "DNS Security Introduction and Requirements",
               RFC 4033, DOI 10.17487/RFC4033, March 2005,
               <https://www.rfc-editor.org/info/rfc4033>.
-
-
-
-Thomassen & Wisiol        Expires 27 March 2022                [Page 13]
-
-Internet-Draft            dnssec-bootstrapping            September 2021
-
 
    [RFC4034]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Resource Records for the DNS Security Extensions",
@@ -754,9 +496,15 @@ Internet-Draft            dnssec-bootstrapping            September 2021
               DOI 10.17487/RFC7344, September 2014,
               <https://www.rfc-editor.org/info/rfc7344>.
 
-   [RFC7477]  Hardaker, W., "Child-to-Parent Synchronization in DNS",
-              RFC 7477, DOI 10.17487/RFC7477, March 2015,
-              <https://www.rfc-editor.org/info/rfc7477>.
+
+
+
+
+
+Thomassen                Expires 1 January 2022                 [Page 9]
+
+Internet-Draft            dnssec-bootstrapping                 June 2021
+
 
    [RFC8078]  Gudmundsson, O. and P. Wouters, "Managing DS Records from
               the Parent via CDS/CDNSKEY", RFC 8078,
@@ -767,156 +515,13 @@ Internet-Draft            dnssec-bootstrapping            September 2021
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
-   [RFC8901]  Huque, S., Aras, P., Dickinson, J., Vcelak, J., and D.
-              Blacka, "Multi-Signer DNSSEC Models", RFC 8901,
-              DOI 10.17487/RFC8901, September 2020,
-              <https://www.rfc-editor.org/info/rfc8901>.
-
-Appendix A.  Possible Extensions
-
-   The mechanism described in Section 2.2 provides a public,
-   authenticated, in-band, unidirectional channel through which the
-   Child DNS Operator can publish information on the zones it serves.
-
-
-
-
-Thomassen & Wisiol        Expires 27 March 2022                [Page 14]
-
-Internet-Draft            dnssec-bootstrapping            September 2021
-
-
-   By provisioning other types of Signaling Records, the Child DNS
-   Operator can therefore convey signals that pertain to use cases other
-   than bootstrapping a DNSSEC delegation.
-
-A.1.  Multi-Signer Setups: Onboarding a Signing Party
-
-   [RFC8901] describes multi-signer models in which several Child DNS
-   Operators serve the same Child zone.  In one of these scenarios
-   (Model 2, [RFC8901], Section 2.1.2), each Child DNS Operator holds a
-   unique KSK set and ZSK set to sign the zone.
-
-   To ensure smooth resolution of Child zone queries, this scheme
-   demands that participating Child DNS Operators import the ZSK sets of
-   the other providers into their DNSKEY RRset.  Further, each
-   operator's KSK(s) need to be included in the DS record set at the
-   delegation point in the Parent zone.  When a new Child DNS Operator
-   is joining the scheme, these synchronization processes have to occur
-   before the new operator's nameserver hostnames are included in the
-   Child's NS record set.
-
-   So far, it has been assumed that the KSK and ZSK extraction and
-   provisioning would happen through some proprietary API at each DNS
-   operator ([RFC8901], Section 9).  We now describe how a Child DNS
-   Operator can instead use Signaling Records to make its own set of
-   DNSKEY records available for querying by other signing parties, so
-   that they can retrieve, validate, and process them.
-
-A.1.1.  Signaling Records
-
-   Given a Child zone "example.co.uk" that is already securely delegated
-   with authoritative nameservers "ns1.example.net" and
-   "ns2.example.net", we consider how a new Child DNS Operator using
-   nameservers "ns3.example.org" and "ns4.example.org" can distribute
-   its DNSKEY record set to the existing signing parties, in order to
-   join the multi-signer group.
-
-   The Signaling Domains corresponding to the new Child DNS Operator's
-   nameservers are "_boot.ns3.example.org" and "_boot.ns4.example.org".
-
-   In the zones containing these domains, the new Child DNS Operator
-   publishes a DNSKEY record set containing the keys used by the
-   operator when operating the Child zone, at the Signaling Names
-
-example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns3.example.org
-example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns4.example.org
-
-
-
-
-
-
-Thomassen & Wisiol        Expires 27 March 2022                [Page 15]
-
-Internet-Draft            dnssec-bootstrapping            September 2021
-
-
-   where the first label is calculated as described in Section 2.2.  The
-   records are accompanied by RRSIG records created using the key(s) of
-   the respective Signaling Zone.
-
-   Note that DNSKEY records are not restricted to apex owner names
-   ([RFC4035], Section 2.1).  However, only apex DNSKEY records are used
-   for DNSSEC validation ([RFC4035], Section 5).  As Signaling Names do
-   not occur on zone cuts (see Section 2.3.1), the use of DNSKEY records
-   described here does not interfere with existing DNSKEY uses.
-
-A.1.2.  Import
-
-   With the Signaling Records in place, an algorithm similar to the one
-   given in Section 2.3.2 can be used to query and validate the joining
-   operator's DNSKEY set.  The required steps can either be taken
-   autonomously by each participating operator (query, validate, update
-   local zone copy with imported information), or be subject to central
-   coordination using "Multisigner Controller" tooling which interfaces
-   with each operator.
-
-   The new KSKs can then be added to the delegation's DS record set as
-   described in [RFC8901], Section 8 (i.e. via an [RFC7344] rollover
-   using CDS/CDNSKEY records), followed by the inclusion of the new ZSKs
-   in the other operators' DNSKEY record sets.  Similarly, the new
-   operator can import the other operators' DNSKEYs into its local copy
-   of the Child zone (either autonomously, or via central coordination).
-
-   [ Note that the DNSKEY record set in the Child zone contains keys
-   from all operators, whereas the DNSKEY record set published under the
-   Signaling Domain is restricted to keys actively used by the
-   publishing operator. ]
-
-   After convergence on the served DNSKEY record sets has been achieved,
-   the joining process is completed by amending the Child's NS record
-   set to include the new operator's authoritative nameservers, followed
-   by a corresponding update of the NS delegation records at the Parent
-   (e.g. using CSYNC [RFC7477]).
-
-Appendix B.  Change History (to be removed before final publication)
-
-   *  draft-thomassen-dnsop-dnssec-bootstrapping-01
-
-   |  Add section on Triggers.
-   |  
-   |  Clarified title.
-   |  
-   |  Improved abstract.
-   |  
-
-
-
-Thomassen & Wisiol        Expires 27 March 2022                [Page 16]
-
-Internet-Draft            dnssec-bootstrapping            September 2021
-
-
-   |  Require CDS/CDNSKEY records at the Child.
-   |  
-   |  Reworked Signaling Name scheme.
-   |  
-   |  Recommend using cold cache for consumption.
-   |  
-   |  Updated terminology (replace "Bootstrapping" by "Signaling").
-   |  
-   |  Added NSEC recommendation for Bootstrapping Zones.
-   |  
-   |  Added multi-signer use case.
-   |  
-   |  Editorial changes.
+Appendix A.  Change History (to be removed before final publication)
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-00
 
    |  Initial public draft.
 
-Authors' Addresses
+Author's Address
 
    Peter Thomassen
    deSEC, Secure Systems Engineering
@@ -926,12 +531,6 @@ Authors' Addresses
    Email: peter@desec.io
 
 
-   Nils Wisiol
-   deSEC, Technische Universität Berlin
-   Berlin
-   Germany
-
-   Email: nils@desec.io
 
 
 
@@ -949,4 +548,13 @@ Authors' Addresses
 
 
 
-Thomassen & Wisiol        Expires 27 March 2022                [Page 17]
+
+
+
+
+
+
+
+
+
+Thomassen                Expires 1 January 2022                [Page 10]

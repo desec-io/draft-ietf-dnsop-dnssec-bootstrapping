@@ -1,1 +1,0 @@
-docs/draft-thomassen-dnsop-dnssec-bootstrapping-00.txt
