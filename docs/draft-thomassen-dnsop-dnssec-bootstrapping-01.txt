@@ -702,8 +702,9 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
 8.  Acknowledgements
 
-   Thanks to Brian Dickson, John R.  Levine, and Ond&#345;ej Caletka for
-   reviewing draft proposals and offering comments and suggestions.
+   Thanks to Brian Dickson, Ond&#345;ej Caletka, John R.  Levine,
+   Christian Elmerot, and Oli Schacher for reviewing draft proposals and
+   offering comments and suggestions.
 
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
@@ -719,7 +720,6 @@ Internet-Draft            dnssec-bootstrapping            September 2021
               Rose, "DNS Security Introduction and Requirements",
               RFC 4033, DOI 10.17487/RFC4033, March 2005,
               <https://www.rfc-editor.org/info/rfc4033>.
-
 
 
 

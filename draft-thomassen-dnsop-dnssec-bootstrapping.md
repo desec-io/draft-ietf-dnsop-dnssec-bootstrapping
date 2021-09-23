@@ -555,11 +555,12 @@ This document has no IANA actions.
 
 # Acknowledgements
 
-Thanks to Brian Dickson, John R. Levine, and Ondřej Caletka for
-reviewing draft proposals and offering comments and suggestions.
+Thanks to Brian Dickson, Ondřej Caletka, John R. Levine, Christian
+Elmerot, and Oli Schacher for reviewing draft proposals and offering
+comments and suggestions.
 
-Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for early-stage
-brainstorming.
+Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
+early-stage brainstorming.
 
 {backmatter}
 
