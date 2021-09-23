@@ -1,5 +1,5 @@
 %%%
-Title = "Automatic Bootstrapping of DNSSEC Delegations using Authenticated Operator Signals"
+Title = "Automatic Commissioning of New DNSSEC Signers: Solving the Bootstrapping Problem using an Authenticated Signal from the Zone's Operator"
 abbrev = "dnssec-bootstrapping"
 docname = "@DOCNAME@"
 category = "std"
