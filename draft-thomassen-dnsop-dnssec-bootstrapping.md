@@ -444,6 +444,32 @@ Parental Agents SHOULD trigger the procedure described in
 
   - Any other condition as deemed appropriate by local policy.
 
+One of the inputs of the bootstrapping algorithm in (#bootstrapping)
+is the NS record set of the Child's delegation.
+It is therefore necessary to establish knowledge of the delegation's
+NS record set before firing the trigger.
+
+In some cases, the trigger context contains reliable information
+about the Child's delegation, such as when bootstrapping is triggered
+by the registrant changing their NS record set, or during a daily
+scan of existing delegations.
+In such cases, the delegation's NS records can be used directly.
+
+In cases where the trigger context does not provide sufficient
+knowledge of the NS record set, the Parental Agent MUST fetch the
+delegation's NS record set and ensure that the proper NS record is
+fed to the bootstrapping algorithm ((#bootstrapping)).
+
+In particular, when discovering Signaling Names by means of an NSEC
+walk or zone transfer, the Parental Agent MUST NOT assume that the
+nameserver under whose domain the Signaling Names were discovered is
+actually authoritative for the Child corresponding to the Signaling
+Name encountered.
+Before firing the trigger for a particular candidate Child, the
+Parental Agent therefore MUST verify that the nameserver under whose
+domain the scan occurred is contained of the Child delegation's NS
+record set.
+
 
 # Operational Recommendations
 
@@ -660,6 +686,10 @@ by a corresponding update of the NS delegation records at the Parent
 
 
 # Change History (to be removed before final publication)
+
+* draft-thomassen-dnsop-dnssec-bootstrapping-02
+
+> Triggers need to fetch NS records (if not implicit from context).
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
 
