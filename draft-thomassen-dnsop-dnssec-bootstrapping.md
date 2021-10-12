@@ -190,9 +190,8 @@ guarantees than the traditional model. ]
 
 [ Requiring presence of CDS/CDNSKEY records in the Child also
 faciliates simple opt-out by the zone administrator, protects against
-synchronization errors, and -- if CDS is used, whose value depends on
-the Child's name -- allows detecting situations of Child name
-confusion due to hash collisions (see (#signalingnames)). ]
+synchronization errors, and allows failing-close in case of a hash
+collision (see (#signalingnames)). ]
 
 ### Example
 
@@ -240,8 +239,8 @@ Parent and the Child.
 exceeding the maximum length of a DNS name, and to normalize the
 number of labels in a Signaling Name.
 The encoding choice is like in NSEC3, except that SHA-256 is used
-instead of SHA-1.  This is to prevent other tenants in shared hosting
-environments from creating collisions. ]
+instead of SHA-1.  This is to make it harder for other tenants in
+shared hosting environments to create hash collisions. ]
 
 [ Prefixing the first label verbatim minimizes the number of hash
 calculations that need to be performed by the Child DNS Operator and
@@ -545,11 +544,20 @@ Thoughts:
       for several days);
     * an active on-wire attacker cannot tamper with the delegation.
 
-- The security
-  level of the method is strictly higher than the "accept CDS/CDNSKEY after a
-  while"-approach that is already in use at several ccTLD registries ("Accept
-  after Delay", [@!RFC8078], Section 3.3).  This is because the method described
-  here adds stronger guarantees, but removes nothing.
+- Security in view of [@!RFC8078]:
+    * The security l of the method is strictly higher than the "accept
+      CDS/CDNSKEY after a while"-approach that is already in use at several
+      ccTLD registries ("Accept after Delay", [@!RFC8078], Section 3.3).
+      This is because the method described here adds stronger guarantees,
+      but removes nothing.
+    * In case of a hash collision, two distinct child zones may be associated
+      with the same signaling name.  However, key mix-up is prevented by the
+      requirement to check signaling records against the "original copy" at
+      the Child's apex.  A collision thus produces a mismatch and impede
+      bootstrapping, but it won't allow an attacker to inject unauthorized
+      key material.  The situation is thus equivalent to the traditional
+      bootstrapping model (e.g. RFC 8078).  Other mitigations such as salt
+      are thus not considered necessary.
 
 - Actors in the chain(s) of trust of the zone(s) used for bootstrapping (the DNS
   Operator themselves, plus entities further up in the chain) can undermine the
@@ -564,14 +572,6 @@ Thoughts:
     * mitigation exists by diversifying e.g. the nameserver hostname's TLDs,
       which is advisable anyways;
     * correct bootstrapping is easily monitored by the Child DNS operator.
-
-- Prevention of accidental misprovisioning / enforcing explicit provisioning:
-    * In case of a hash collision, two distinct child zones may be associated
-      with the same signaling name so that their keys may get mixed up.  While
-      not currently feasible, malicious customers in shared hosting environments
-      may attempt to produce such a collision.  Is it worth mitigating this by
-      introducing a salt, e.g. stored in a TXT record located at the
-      Signaling Domain?  (In case of a collision, one can set a new salt.)
 
 # IANA Considerations
 
@@ -692,6 +692,8 @@ by a corresponding update of the NS delegation records at the Parent
 > Triggers need to fetch NS records (if not implicit from context).
 
 > Improved title.
+
+> Recognized that hash collisions are dealt with by Child apex check.
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
 

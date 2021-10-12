@@ -252,9 +252,8 @@ Internet-Draft            dnssec-bootstrapping              October 2021
 
    [ Requiring presence of CDS/CDNSKEY records in the Child also
    faciliates simple opt-out by the zone administrator, protects against
-   synchronization errors, and -- if CDS is used, whose value depends on
-   the Child's name -- allows detecting situations of Child name
-   confusion due to hash collisions (see Section 2.2). ]
+   synchronization errors, and allows failing-close in case of a hash
+   collision (see Section 2.2). ]
 
 2.1.1.  Example
 
@@ -274,6 +273,7 @@ Internet-Draft            dnssec-bootstrapping              October 2021
    authenticated fashion, the Child DNS Operator MUST publish one or
    more Signaling Records at the Child's Signaling Name under each
    Signaling Domain.
+
 
 
 
@@ -307,9 +307,9 @@ Internet-Draft            dnssec-bootstrapping              October 2021
    [ The purpose of the hash function is to avoid the possibility of
    exceeding the maximum length of a DNS name, and to normalize the
    number of labels in a Signaling Name.  The encoding choice is like in
-   NSEC3, except that SHA-256 is used instead of SHA-1.  This is to
-   prevent other tenants in shared hosting environments from creating
-   collisions. ]
+   NSEC3, except that SHA-256 is used instead of SHA-1.  This is to make
+   it harder for other tenants in shared hosting environments to create
+   hash collisions. ]
 
    [ Prefixing the first label verbatim minimizes the number of hash
    calculations that need to be performed by the Child DNS Operator and
@@ -681,11 +681,23 @@ Internet-Draft            dnssec-bootstrapping              October 2021
 
       -  an active on-wire attacker cannot tamper with the delegation.
 
-   *  The security level of the method is strictly higher than the
-      "accept CDS/CDNSKEY after a while"-approach that is already in use
-      at several ccTLD registries ("Accept after Delay", [RFC8078],
-      Section 3.3).  This is because the method described here adds
-      stronger guarantees, but removes nothing.
+   *  Security in view of [RFC8078]:
+
+      -  The security l of the method is strictly higher than the
+         "accept CDS/CDNSKEY after a while"-approach that is already in
+         use at several ccTLD registries ("Accept after Delay",
+         [RFC8078], Section 3.3).  This is because the method described
+         here adds stronger guarantees, but removes nothing.
+
+      -  In case of a hash collision, two distinct child zones may be
+         associated with the same signaling name.  However, key mix-up
+         is prevented by the requirement to check signaling records
+         against the "original copy" at the Child's apex.  A collision
+         thus produces a mismatch and impede bootstrapping, but it won't
+         allow an attacker to inject unauthorized key material.  The
+         situation is thus equivalent to the traditional bootstrapping
+         model (e.g.  RFC 8078).  Other mitigations such as salt are
+         thus not considered necessary.
 
    *  Actors in the chain(s) of trust of the zone(s) used for
       bootstrapping (the DNS Operator themselves, plus entities further
@@ -707,18 +719,6 @@ Internet-Draft            dnssec-bootstrapping              October 2021
 
       -  correct bootstrapping is easily monitored by the Child DNS
          operator.
-
-   *  Prevention of accidental misprovisioning / enforcing explicit
-      provisioning:
-
-      -  In case of a hash collision, two distinct child zones may be
-         associated with the same signaling name so that their keys may
-         get mixed up.  While not currently feasible, malicious
-         customers in shared hosting environments may attempt to produce
-         such a collision.  Is it worth mitigating this by introducing a
-         salt, e.g. stored in a TXT record located at the Signaling
-         Domain?  (In case of a collision, one can set a new salt.)
-
 
 
 
@@ -923,6 +923,9 @@ Appendix B.  Change History (to be removed before final publication)
    |  Triggers need to fetch NS records (if not implicit from context).
    |  
    |  Improved title.
+   |  
+   |  Recognized that hash collisions are dealt with by Child apex
+   |  check.
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-01
 
@@ -943,9 +946,6 @@ Appendix B.  Change History (to be removed before final publication)
    |  Added NSEC recommendation for Bootstrapping Zones.
    |  
    |  Added multi-signer use case.
-   |  
-   |  Editorial changes.
-
 
 
 
@@ -953,6 +953,9 @@ Thomassen & Wisiol        Expires 15 April 2022                [Page 17]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
+
+   |  
+   |  Editorial changes.
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-00
 
@@ -974,9 +977,6 @@ Authors' Addresses
    Germany
 
    Email: nils@desec.io
-
-
-
 
 
 
