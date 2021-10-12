@@ -1,5 +1,5 @@
 %%%
-Title = "Automatic Commissioning of New Signers: Solving the DNSSEC Bootstrapping Problem using Authenticated Signals from the Zone's Operator"
+Title = "Automatic DS Commissioning: Solving the DNSSEC Bootstrapping Problem using Authenticated Signals from the Zone's Operator"
 abbrev = "dnssec-bootstrapping"
 docname = "@DOCNAME@"
 category = "std"
@@ -690,6 +690,8 @@ by a corresponding update of the NS delegation records at the Parent
 * draft-thomassen-dnsop-dnssec-bootstrapping-02
 
 > Triggers need to fetch NS records (if not implicit from context).
+
+> Improved title.
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
 

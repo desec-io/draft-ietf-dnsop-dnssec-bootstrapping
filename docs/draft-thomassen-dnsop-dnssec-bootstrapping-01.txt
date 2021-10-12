@@ -5,12 +5,12 @@
 DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
 Intended status: Standards Track                               N. Wisiol
-Expires: 1 April 2022               deSEC, Technische Universität Berlin
-                                                       28 September 2021
+Expires: 15 April 2022              deSEC, Technische Universität Berlin
+                                                         12 October 2021
 
 
-Automatic Commissioning of New Signers: Solving the DNSSEC Bootstrapping
-      Problem using Authenticated Signals from the Zone's Operator
+  Automatic DS Commissioning: Solving the DNSSEC Bootstrapping Problem
+          using Authenticated Signals from the Zone's Operator
              draft-thomassen-dnsop-dnssec-bootstrapping-01
 
 Abstract
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                  [Page 1]
+Thomassen & Wisiol        Expires 15 April 2022                 [Page 1]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
    Internet-Drafts are draft documents valid for a maximum of six months
@@ -63,7 +63,7 @@ Internet-Draft            dnssec-bootstrapping            September 2021
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 April 2022.
+   This Internet-Draft will expire on 15 April 2022.
 
 Copyright Notice
 
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                  [Page 2]
+Thomassen & Wisiol        Expires 15 April 2022                 [Page 2]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
      A.1.  Multi-Signer Setups: Onboarding a Signing Party . . . . .  15
@@ -165,9 +165,9 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                  [Page 3]
+Thomassen & Wisiol        Expires 15 April 2022                 [Page 3]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
    Child  The entity on record that has the delegation of the domain
@@ -221,9 +221,9 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                  [Page 4]
+Thomassen & Wisiol        Expires 15 April 2022                 [Page 4]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
    This goal is achieved by transferring trust from the Child DNS
@@ -277,9 +277,9 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                  [Page 5]
+Thomassen & Wisiol        Expires 15 April 2022                 [Page 5]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
    Signaling Records MUST be accompanied by RRSIG records created with
@@ -333,9 +333,9 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                  [Page 6]
+Thomassen & Wisiol        Expires 15 April 2022                 [Page 6]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
 from base64 import b32encode
@@ -389,9 +389,9 @@ print(signaling_name)
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                  [Page 7]
+Thomassen & Wisiol        Expires 15 April 2022                 [Page 7]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
 example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns1.example.net
@@ -445,9 +445,9 @@ example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.n
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                  [Page 8]
+Thomassen & Wisiol        Expires 15 April 2022                 [Page 8]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
    *  in Step 3: DNS resolution failure during retrieval of CDS/CDNSKEY
@@ -501,9 +501,9 @@ example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.n
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                  [Page 9]
+Thomassen & Wisiol        Expires 15 April 2022                 [Page 9]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
    This mechanism is workable without regard to whether the Child zone's
@@ -557,9 +557,9 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                 [Page 10]
+Thomassen & Wisiol        Expires 15 April 2022                [Page 10]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
    One of the inputs of the bootstrapping algorithm in Section 3.2 is
@@ -613,9 +613,9 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                 [Page 11]
+Thomassen & Wisiol        Expires 15 April 2022                [Page 11]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
 4.2.  Parental Agent
@@ -669,9 +669,9 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                 [Page 12]
+Thomassen & Wisiol        Expires 15 April 2022                [Page 12]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
       -  communication is authenticated;
@@ -725,9 +725,9 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                 [Page 13]
+Thomassen & Wisiol        Expires 15 April 2022                [Page 13]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
 7.  IANA Considerations
@@ -781,9 +781,9 @@ Internet-Draft            dnssec-bootstrapping            September 2021
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                 [Page 14]
+Thomassen & Wisiol        Expires 15 April 2022                [Page 14]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
    [RFC7344]  Kumari, W., Gudmundsson, O., and G. Barwood, "Automating
@@ -837,9 +837,9 @@ A.1.  Multi-Signer Setups: Onboarding a Signing Party
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                 [Page 15]
+Thomassen & Wisiol        Expires 15 April 2022                [Page 15]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
    So far, it has been assumed that the KSK and ZSK extraction and
@@ -893,9 +893,9 @@ A.1.2.  Import
 
 
 
-Thomassen & Wisiol        Expires 1 April 2022                 [Page 16]
+Thomassen & Wisiol        Expires 15 April 2022                [Page 16]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
 
    The new KSKs can then be added to the delegation's DS record set as
@@ -921,6 +921,8 @@ Appendix B.  Change History (to be removed before final publication)
    *  draft-thomassen-dnsop-dnssec-bootstrapping-02
 
    |  Triggers need to fetch NS records (if not implicit from context).
+   |  
+   |  Improved title.
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-01
 
@@ -944,15 +946,15 @@ Appendix B.  Change History (to be removed before final publication)
    |  
    |  Editorial changes.
 
-   *  draft-thomassen-dnsop-dnssec-bootstrapping-00
 
 
 
-
-Thomassen & Wisiol        Expires 1 April 2022                 [Page 17]
+Thomassen & Wisiol        Expires 15 April 2022                [Page 17]
 
-Internet-Draft            dnssec-bootstrapping            September 2021
+Internet-Draft            dnssec-bootstrapping              October 2021
 
+
+   *  draft-thomassen-dnsop-dnssec-bootstrapping-00
 
    |  Initial public draft.
 
@@ -1003,6 +1005,4 @@ Authors' Addresses
 
 
 
-
-
-Thomassen & Wisiol        Expires 1 April 2022                 [Page 18]
+Thomassen & Wisiol        Expires 15 April 2022                [Page 18]
