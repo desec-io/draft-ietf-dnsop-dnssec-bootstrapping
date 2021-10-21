@@ -255,14 +255,14 @@ from base64 import b32encode
 from hashlib import sha256
 
 import dns.name
+from dns.name import Name
 from dns.rdtypes.ANY.NSEC3 import b32_normal_to_hex
 
-child = 'example.co.uk.'
-prefix, suffix = child.split('.', 1)
-suffix_wire_format = dns.name.from_text(suffix).to_wire()
+child = dns.name.from_text('example.co.uk.')
+suffix_wire_format = child.parent().to_wire()
 suffix_digest = sha256(suffix_wire_format).digest()
 suffix_digest = b32encode(suffix_digest).translate(b32_normal_to_hex).rstrip(b'=')
-signaling_name = prefix + '.' + suffix_digest.lower().decode()
+signaling_name = Name([child[0], suffix_digest.lower()])
 print(signaling_name)
 # >>> 'example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg'
 ```
