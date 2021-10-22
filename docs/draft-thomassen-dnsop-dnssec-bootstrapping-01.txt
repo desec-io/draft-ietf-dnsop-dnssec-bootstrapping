@@ -5,8 +5,8 @@
 DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
 Intended status: Standards Track                               N. Wisiol
-Expires: 15 April 2022              deSEC, Technische Universität Berlin
-                                                         12 October 2021
+Expires: 25 April 2022              deSEC, Technische Universität Berlin
+                                                         22 October 2021
 
 
   Automatic DS Commissioning: Solving the DNSSEC Bootstrapping Problem
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                 [Page 1]
+Thomassen & Wisiol        Expires 25 April 2022                 [Page 1]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
@@ -63,7 +63,7 @@ Internet-Draft            dnssec-bootstrapping              October 2021
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 April 2022.
+   This Internet-Draft will expire on 25 April 2022.
 
 Copyright Notice
 
@@ -105,21 +105,18 @@ Table of Contents
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
    8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  14
    9.  Normative References  . . . . . . . . . . . . . . . . . . . .  14
-   Appendix A.  Possible Extensions  . . . . . . . . . . . . . . . .  15
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                 [Page 2]
+
+Thomassen & Wisiol        Expires 25 April 2022                 [Page 2]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
 
-     A.1.  Multi-Signer Setups: Onboarding a Signing Party . . . . .  15
-       A.1.1.  Signaling Records . . . . . . . . . . . . . . . . . .  16
-       A.1.2.  Import  . . . . . . . . . . . . . . . . . . . . . . .  16
-   Appendix B.  Change History (to be removed before final
-           publication)  . . . . . . . . . . . . . . . . . . . . . .  17
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  18
+   Appendix A.  Change History (to be removed before final
+           publication)  . . . . . . . . . . . . . . . . . . . . . .  15
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  16
 
 1.  Introduction
 
@@ -162,16 +159,16 @@ Internet-Draft            dnssec-bootstrapping              October 2021
    The terminology we use is defined in this section.  The highlighted
    roles are as follows:
 
+   Child  The entity on record that has the delegation of the domain
+      from the Parent.
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                 [Page 3]
+
+Thomassen & Wisiol        Expires 25 April 2022                 [Page 3]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
-
-   Child  The entity on record that has the delegation of the domain
-      from the Parent.
 
    Parent  The zone that contains the Child's delegation records.
 
@@ -221,7 +218,10 @@ Internet-Draft            dnssec-bootstrapping              October 2021
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                 [Page 4]
+
+
+
+Thomassen & Wisiol        Expires 25 April 2022                 [Page 4]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
@@ -277,7 +277,7 @@ Internet-Draft            dnssec-bootstrapping              October 2021
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                 [Page 5]
+Thomassen & Wisiol        Expires 25 April 2022                 [Page 5]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
@@ -333,7 +333,7 @@ Internet-Draft            dnssec-bootstrapping              October 2021
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                 [Page 6]
+Thomassen & Wisiol        Expires 25 April 2022                 [Page 6]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
@@ -342,14 +342,14 @@ from base64 import b32encode
 from hashlib import sha256
 
 import dns.name
+from dns.name import Name
 from dns.rdtypes.ANY.NSEC3 import b32_normal_to_hex
 
-child = 'example.co.uk.'
-prefix, suffix = child.split('.', 1)
-suffix_wire_format = dns.name.from_text(suffix).to_wire()
+child = dns.name.from_text('example.co.uk.')
+suffix_wire_format = child.parent().to_wire()
 suffix_digest = sha256(suffix_wire_format).digest()
 suffix_digest = b32encode(suffix_digest).translate(b32_normal_to_hex).rstrip(b'=')
-signaling_name = prefix + '.' + suffix_digest.lower().decode()
+signaling_name = Name([child[0], suffix_digest.lower()])
 print(signaling_name)
 # >>> 'example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg'
 
@@ -389,7 +389,7 @@ print(signaling_name)
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                 [Page 7]
+Thomassen & Wisiol        Expires 25 April 2022                 [Page 7]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
@@ -445,7 +445,7 @@ example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.n
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                 [Page 8]
+Thomassen & Wisiol        Expires 25 April 2022                 [Page 8]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
@@ -501,7 +501,7 @@ example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.n
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                 [Page 9]
+Thomassen & Wisiol        Expires 25 April 2022                 [Page 9]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
@@ -557,7 +557,7 @@ Internet-Draft            dnssec-bootstrapping              October 2021
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                [Page 10]
+Thomassen & Wisiol        Expires 25 April 2022                [Page 10]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
@@ -613,7 +613,7 @@ Internet-Draft            dnssec-bootstrapping              October 2021
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                [Page 11]
+Thomassen & Wisiol        Expires 25 April 2022                [Page 11]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
@@ -669,7 +669,7 @@ Internet-Draft            dnssec-bootstrapping              October 2021
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                [Page 12]
+Thomassen & Wisiol        Expires 25 April 2022                [Page 12]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
@@ -725,7 +725,7 @@ Internet-Draft            dnssec-bootstrapping              October 2021
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                [Page 13]
+Thomassen & Wisiol        Expires 25 April 2022                [Page 13]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
@@ -781,7 +781,7 @@ Internet-Draft            dnssec-bootstrapping              October 2021
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                [Page 14]
+Thomassen & Wisiol        Expires 25 April 2022                [Page 14]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
@@ -790,10 +790,6 @@ Internet-Draft            dnssec-bootstrapping              October 2021
               DNSSEC Delegation Trust Maintenance", RFC 7344,
               DOI 10.17487/RFC7344, September 2014,
               <https://www.rfc-editor.org/info/rfc7344>.
-
-   [RFC7477]  Hardaker, W., "Child-to-Parent Synchronization in DNS",
-              RFC 7477, DOI 10.17487/RFC7477, March 2015,
-              <https://www.rfc-editor.org/info/rfc7477>.
 
    [RFC8078]  Gudmundsson, O. and P. Wouters, "Managing DS Records from
               the Parent via CDS/CDNSKEY", RFC 8078,
@@ -809,117 +805,12 @@ Internet-Draft            dnssec-bootstrapping              October 2021
               DOI 10.17487/RFC8901, September 2020,
               <https://www.rfc-editor.org/info/rfc8901>.
 
-Appendix A.  Possible Extensions
-
-   The mechanism described in Section 2.2 provides a public,
-   authenticated, in-band, unidirectional channel through which the
-   Child DNS Operator can publish information on the zones it serves.
-
-   By provisioning other types of Signaling Records, the Child DNS
-   Operator can therefore convey signals that pertain to use cases other
-   than bootstrapping a DNSSEC delegation.
-
-A.1.  Multi-Signer Setups: Onboarding a Signing Party
-
-   [RFC8901] describes multi-signer models in which several Child DNS
-   Operators serve the same Child zone.  In one of these scenarios
-   (Model 2, [RFC8901], Section 2.1.2), each Child DNS Operator holds a
-   unique KSK set and ZSK set to sign the zone.
-
-   To ensure smooth resolution of Child zone queries, this scheme
-   demands that participating Child DNS Operators import the ZSK sets of
-   the other providers into their DNSKEY RRset.  Further, each
-   operator's KSK(s) need to be included in the DS record set at the
-   delegation point in the Parent zone.  When a new Child DNS Operator
-   is joining the scheme, these synchronization processes have to occur
-   before the new operator's nameserver hostnames are included in the
-   Child's NS record set.
-
-
-
-Thomassen & Wisiol        Expires 15 April 2022                [Page 15]
-
-Internet-Draft            dnssec-bootstrapping              October 2021
-
-
-   So far, it has been assumed that the KSK and ZSK extraction and
-   provisioning would happen through some proprietary API at each DNS
-   operator ([RFC8901], Section 9).  We now describe how a Child DNS
-   Operator can instead use Signaling Records to make its own set of
-   DNSKEY records available for querying by other signing parties, so
-   that they can retrieve, validate, and process them.
-
-A.1.1.  Signaling Records
-
-   Given a Child zone "example.co.uk" that is already securely delegated
-   with authoritative nameservers "ns1.example.net" and
-   "ns2.example.net", we consider how a new Child DNS Operator using
-   nameservers "ns3.example.org" and "ns4.example.org" can distribute
-   its DNSKEY record set to the existing signing parties, in order to
-   join the multi-signer group.
-
-   The Signaling Domains corresponding to the new Child DNS Operator's
-   nameservers are "_boot.ns3.example.org" and "_boot.ns4.example.org".
-
-   In the zones containing these domains, the new Child DNS Operator
-   publishes a DNSKEY record set containing the keys used by the
-   operator when operating the Child zone, at the Signaling Names
-
-example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns3.example.org
-example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns4.example.org
-
-   where the first label is calculated as described in Section 2.2.  The
-   records are accompanied by RRSIG records created using the key(s) of
-   the respective Signaling Zone.
-
-   Note that DNSKEY records are not restricted to apex owner names
-   ([RFC4035], Section 2.1).  However, only apex DNSKEY records are used
-   for DNSSEC validation ([RFC4035], Section 5).  As Signaling Names do
-   not occur on zone cuts (see Section 3.1), the use of DNSKEY records
-   described here does not interfere with existing DNSKEY uses.
-
-A.1.2.  Import
-
-   With the Signaling Records in place, an algorithm similar to the one
-   given in Section 3.2 can be used to query and validate the joining
-   operator's DNSKEY set.  The required steps can either be taken
-   autonomously by each participating operator (query, validate, update
-   local zone copy with imported information), or be subject to central
-   coordination using "Multisigner Controller" tooling which interfaces
-   with each operator.
-
-
-
-
-
-
-Thomassen & Wisiol        Expires 15 April 2022                [Page 16]
-
-Internet-Draft            dnssec-bootstrapping              October 2021
-
-
-   The new KSKs can then be added to the delegation's DS record set as
-   described in [RFC8901], Section 8 (i.e. via an [RFC7344] rollover
-   using CDS/CDNSKEY records), followed by the inclusion of the new ZSKs
-   in the other operators' DNSKEY record sets.  Similarly, the new
-   operator can import the other operators' DNSKEYs into its local copy
-   of the Child zone (either autonomously, or via central coordination).
-
-   [ Note that the DNSKEY record set in the Child zone contains keys
-   from all operators, whereas the DNSKEY record set published under the
-   Signaling Domain is restricted to keys actively used by the
-   publishing operator. ]
-
-   After convergence on the served DNSKEY record sets has been achieved,
-   the joining process is completed by amending the Child's NS record
-   set to include the new operator's authoritative nameservers, followed
-   by a corresponding update of the NS delegation records at the Parent
-   (e.g. using CSYNC [RFC7477]).
-
-Appendix B.  Change History (to be removed before final publication)
+Appendix A.  Change History (to be removed before final publication)
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-02
 
+   |  Removed multi-signer use case (focus on RFC 8078 authentication).
+   |  
    |  Triggers need to fetch NS records (if not implicit from context).
    |  
    |  Improved title.
@@ -943,17 +834,17 @@ Appendix B.  Change History (to be removed before final publication)
    |  
    |  Updated terminology (replace "Bootstrapping" by "Signaling").
    |  
-   |  Added NSEC recommendation for Bootstrapping Zones.
-   |  
-   |  Added multi-signer use case.
 
 
 
-Thomassen & Wisiol        Expires 15 April 2022                [Page 17]
+Thomassen & Wisiol        Expires 25 April 2022                [Page 15]
 
 Internet-Draft            dnssec-bootstrapping              October 2021
 
 
+   |  Added NSEC recommendation for Bootstrapping Zones.
+   |  
+   |  Added multi-signer use case.
    |  
    |  Editorial changes.
 
@@ -1002,7 +893,4 @@ Authors' Addresses
 
 
 
-
-
-
-Thomassen & Wisiol        Expires 15 April 2022                [Page 18]
+Thomassen & Wisiol        Expires 25 April 2022                [Page 16]
