@@ -88,7 +88,7 @@ the first place.
 
 To alleviate these problems, automated provisioning of DS records has
 been specified in ([@!RFC8078]).
-It is based on the parental agent (registry or registrar) fetching
+It is based on the Parental Agent (registry or registrar) fetching
 DNSSEC key parameters in the form of CDS and CDNSKEY records
 ([@!RFC7344]) from the Child zone's apex, and validating them
 somehow.
@@ -98,7 +98,7 @@ However, when bootstrapping a DNSSEC delegation, the Child zone has
 no existing DNSSEC validation path, and other means to ensure the
 CDS/CDNSKEY records' legitimacy must be found.
 
-For lack of comprehensive DNS-innate solution, either out-of-band
+For lack of a comprehensive DNS-innate solution, either out-of-band
 methods have been used so far to complete the chain of trust, or
 cryptographic validation has been entirely dispensed with, in
 exchange for weaker types of cross-checks such as "Accept after
@@ -287,7 +287,7 @@ The records are accompanied by RRSIG records created using the key(s)
 of the respective Signaling Zone.
 
 {#bootstrapping}
-## Steps Taken by the Parental Agent
+## Validating CDS/CDNSKEY Records
 
 [ TODO Should this be phrased as an update to [@!RFC8078], Section 3? ]
 
@@ -463,9 +463,9 @@ other hand, perhaps it is better to RECOMMEND low TTLs instead?]
 
 ## Child DNS Operator-side
 
-* Knot DNS supports manual creation of non-apex CDS/CDNSKEY/DNSKEY records.
+* Knot DNS supports manual creation of non-apex CDS/CDNSKEY records.
 
-* PowerDNS supports manual creation of non-apex CDS/CDNSKEY/DNSKEY records.
+* PowerDNS supports manual creation of non-apex CDS/CDNSKEY records.
 
 * Proof-of-concept Signaling Domains with several thousand Signaling
   Names exist at `_boot.ns1.desec.io` and `_boot.ns2.desec.org`.
@@ -483,7 +483,7 @@ other hand, perhaps it is better to RECOMMEND low TTLs instead?]
   The tool outputs the validated DS records which then can be added
   to the Parent zone.
 
-* Some registries/registrars are planning exerimental implementations
+* Some registries/registrars are planning experimental implementations
   of the protocol.
 
 
@@ -491,14 +491,14 @@ other hand, perhaps it is better to RECOMMEND low TTLs instead?]
 
 The protocol adds authentication to the CDS/CDNSKEY-based
 bootstrapping concept of [@!RFC8078], while removing nothing.
-The security level is therefore strictly higher than existing
+Its security level is therefore strictly higher than that of existing
 approaches described in that document (e.g. "Accept after Delay").
 Apart from this general improvement, the same Security Considerations
 apply as in [@!RFC8078].
 
-In case of a hash collision in the second label of the Signal Names,
-two distinct Child zones may be associated with the same Signaling
-Name.
+In case of a hash collision in the second label of the Signaling
+Names, two distinct Child zones may be associated with the same
+Signaling Name.
 However, CDS/CDNSKEY mix-up is prevented by the requirement to check
 signaling records against the "original copy" at the Child's apex.
 A collision thus produces a mismatch and will impede bootstrapping,
@@ -507,12 +507,13 @@ The situation is thus equivalent to the traditional bootstrapping
 model, in that it requires fall-back to another provisioning method.
 Other mitigations such as salt are thus not considered necessary.
 
-The level of rigor in (#bootstrapping) is needed to minimize the risk
-of publishing a rogue DS RRset.
-In particular, the various checks ensure that an operator in a
-multi-homed setup cannot enable DNSSEC unless all other operators
-agree.
-[ TODO Should this be phrased as a general update to [@!RFC8078]? ]
+The level of rigor in (#bootstrapping) is needed to prevent
+publication of a half-backed DS RRset (authorized only under a subset
+of NS hostnames).
+This ensures that an operator in a multi-homed setup cannot enable
+DNSSEC unless all other operators agree.
+[ TODO In principle, this applies to any CDS update. Should we phrase
+it as a general update to [@!RFC8078]? ]
 
 [ Thoughts on the Chain of Trust:
 
@@ -555,6 +556,11 @@ early-stage brainstorming.
 
 # Change History (to be removed before publication)
 
+* draft-thomassen-dnsop-dnssec-bootstrapping-03
+
+> Editorial changes.
+
+
 * draft-thomassen-dnsop-dnssec-bootstrapping-02
 
 > Reframed as an authentication mechanism for RFC 8078.
@@ -566,6 +572,7 @@ early-stage brainstorming.
 > Improved title.
 
 > Recognized that hash collisions are dealt with by Child apex check.
+
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-01
 
