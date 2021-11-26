@@ -209,37 +209,8 @@ Signaling Records MUST be accompanied by RRSIG records created with
 the corresponding Signaling Zone's key(s).  The type and contents
 of these Signaling Records are detailed in (#signalingrecords).
 
-The Signaling Name MUST consist of the following two labels:
-
-1. the first label of the Child name;
-
-2. a label equal to the SHA-256 hash digest of the fully qualified
-   domain name of the Child's immediate ancestor in the DNS tree (one
-   level up), using wire format for the hash input and "Base 32
-   Encoding with Extended Hex Alphabet" as specified in [@!RFC4648]
-   for the output.  Trailing padding characters ("=") MUST be dropped.
-
-Note that the "fully qualified domain name of the Child's immediate
-ancestor in the DNS tree" coincides with the Parent's FQDN only when
-the delegation is directly (one level) below the Parent's apex.
-For deeper delegations, it also contains the labels between the
-Parent and the Child.
-
-For example code, see (#example-code).
-
-[ The purpose of the hash function is to avoid the possibility of
-exceeding the maximum length of a DNS name, and to normalize the
-number of labels in a Signaling Name.
-The encoding choice is like in NSEC3, except that SHA-256 is used
-instead of SHA-1.  This is to make it harder for other tenants in
-shared hosting environments to create hash collisions. ]
-
-[ Prefixing the first label verbatim minimizes the number of hash
-calculations that need to be performed by the Child DNS Operator and
-the Parental Agent, and also facilitates discovery of unprocessed
-Signaling Records by the Parental Agent by means of NSEC walking the
-Signaling Domain. (If the first label was part of the hash, the
-Parental Agent would not be able to infer the Child's name.) ]
+The Signaling Name is identical to the Child name, with the final
+root label removed.
 
 # Bootstrapping a DNSSEC Delegation
 
@@ -275,14 +246,11 @@ Signaling Domains are `_boot.ns1.example.net` and
 
 In the zones containing these domains, the Child DNS Operator
 authenticates the CDS/CDNSKEY records found at the Child's apex by
-co-publishing them at the names
+co-publishing them at the names:
 ```
-example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns1.example.net
-example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.net
+example.co.uk._boot.ns1.example.net
+example.co.uk._boot.ns2.example.net
 ```
-where `example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg`
-is derived from the Child zone's name `example.co.uk` as described in
-(#signalingnames).
 The records are accompanied by RRSIG records created using the key(s)
 of the respective Signaling Zone.
 
@@ -343,8 +311,8 @@ Parental Agent (assuming that the Child delegation's NS records are
 3. queries the CDS/CDNSKEY records located at (see (#signalingnames))
 
 ```
-example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns1.example.net
-example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg._boot.ns2.example.net
+example.co.uk._boot.ns1.example.net
+example.co.uk._boot.ns2.example.net
 ```
 
 4. checks that the CDS/CDNSKEY record sets retrieved in Steps 2
@@ -496,17 +464,6 @@ approaches described in that document (e.g. "Accept after Delay").
 Apart from this general improvement, the same Security Considerations
 apply as in [@!RFC8078].
 
-In case of a hash collision in the second label of the Signaling
-Names, two distinct Child zones may be associated with the same
-Signaling Name.
-However, CDS/CDNSKEY mix-up is prevented by the requirement to check
-signaling records against the "original copy" at the Child's apex.
-A collision thus produces a mismatch and will impede bootstrapping,
-but it won't allow an attacker to inject unauthorized key material.
-The situation is thus equivalent to the traditional bootstrapping
-model, in that it requires fall-back to another provisioning method.
-Other mitigations such as salt are thus not considered necessary.
-
 The level of rigor in (#bootstrapping) is needed to prevent
 publication of a half-backed DS RRset (authorized only under a subset
 of NS hostnames).
@@ -558,6 +515,8 @@ early-stage brainstorming.
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-03
 
+> Removed hashing of Child name components in Signaling Names.
+
 > Editorial changes.
 
 
@@ -600,27 +559,3 @@ early-stage brainstorming.
 * draft-thomassen-dnsop-dnssec-bootstrapping-00
 
 > Initial public draft.
-
-
-{#example-code}
-# Example Code for Computing Signaling Names
-
-Python, with `dnspython` package:
-```
-from base64 import b32encode
-from hashlib import sha256
-
-import dns.name
-from dns.rdtypes.ANY.NSEC3 import b32_normal_to_hex
-
-def compute_signaling_name(child_name):
-    child = dns.name.from_text(child_name)
-    suffix_wire_format = child.parent().to_wire()
-    suffix_digest = sha256(suffix_wire_format).digest()
-    suffix_digest = b32encode(suffix_digest).translate(b32_normal_to_hex).rstrip(b'=')
-    return dns.name.Name([child[0], suffix_digest.lower()])
-
-signaling_name = compute_signaling_name('example.co.uk.')
-print(signaling_name)
-# >>> 'example.bge2bvlnqt4ei2oq3v9nr8a0lh9nkf6b4lh6c3j51k5kd67helmg'
-```
