@@ -5,8 +5,8 @@
 DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
 Intended status: Standards Track                               N. Wisiol
-Expires: 30 May 2022                deSEC, Technische Universität Berlin
-                                                        26 November 2021
+Expires: 2 June 2022                deSEC, Technische Universität Berlin
+                                                        29 November 2021
 
 
   Automatic DNSSEC Bootstrapping using Authenticated Signals from the
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Thomassen & Wisiol         Expires 30 May 2022                  [Page 1]
+Thomassen & Wisiol         Expires 2 June 2022                  [Page 1]
 
 Internet-Draft            dnssec-bootstrapping             November 2021
 
@@ -63,7 +63,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 May 2022.
+   This Internet-Draft will expire on 2 June 2022.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomassen & Wisiol         Expires 30 May 2022                  [Page 2]
+Thomassen & Wisiol         Expires 2 June 2022                  [Page 2]
 
 Internet-Draft            dnssec-bootstrapping             November 2021
 
@@ -165,7 +165,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
 
 
 
-Thomassen & Wisiol         Expires 30 May 2022                  [Page 3]
+Thomassen & Wisiol         Expires 2 June 2022                  [Page 3]
 
 Internet-Draft            dnssec-bootstrapping             November 2021
 
@@ -188,7 +188,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
       entity.)
 
    Signaling Domain  A hostname from the Child's NS record set, prefixed
-      with the label "_boot".  There are as many Signaling Domains as
+      with the label "_dsauth".  There are as many Signaling Domains as
       there are distinct NS targets.
 
    Signaling Zone  The zone which is authoritative for a given Signaling
@@ -221,7 +221,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
 
 
 
-Thomassen & Wisiol         Expires 30 May 2022                  [Page 4]
+Thomassen & Wisiol         Expires 2 June 2022                  [Page 4]
 
 Internet-Draft            dnssec-bootstrapping             November 2021
 
@@ -243,7 +243,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
    with NS records "ns1.example.net" and "ns2.example.net", the Child
    DNS Operator needs to ensure that a valid DNSSEC chain of trust
    exists for the zone(s) that are authoritative for the Signaling
-   Domains "_boot.ns1.example.net" and "_boot.ns2.example.net".
+   Domains "_dsauth.ns1.example.net" and "_dsauth.ns2.example.net".
 
 2.2.  Signaling Names
 
@@ -277,7 +277,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
 
 
 
-Thomassen & Wisiol         Expires 30 May 2022                  [Page 5]
+Thomassen & Wisiol         Expires 2 June 2022                  [Page 5]
 
 Internet-Draft            dnssec-bootstrapping             November 2021
 
@@ -297,15 +297,15 @@ Internet-Draft            dnssec-bootstrapping             November 2021
 
    For the purposes of bootstrapping the Child zone "example.co.uk" with
    NS records "ns1.example.net" and "ns2.example.net", the required
-   Signaling Domains are "_boot.ns1.example.net" and
-   "_boot.ns2.example.net".
+   Signaling Domains are "_dsauth.ns1.example.net" and
+   "_dsauth.ns2.example.net".
 
    In the zones containing these domains, the Child DNS Operator
    authenticates the CDS/CDNSKEY records found at the Child's apex by
    co-publishing them at the names:
 
-   example.co.uk._boot.ns1.example.net
-   example.co.uk._boot.ns2.example.net
+   example.co.uk._dsauth.ns1.example.net
+   example.co.uk._dsauth.ns2.example.net
 
    The records are accompanied by RRSIG records created using the key(s)
    of the respective Signaling Zone.
@@ -333,7 +333,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
 
 
 
-Thomassen & Wisiol         Expires 30 May 2022                  [Page 6]
+Thomassen & Wisiol         Expires 2 June 2022                  [Page 6]
 
 Internet-Draft            dnssec-bootstrapping             November 2021
 
@@ -373,8 +373,8 @@ Internet-Draft            dnssec-bootstrapping             November 2021
 
    3.  queries the CDS/CDNSKEY records located at (see Section 2.2)
 
-   example.co.uk._boot.ns1.example.net
-   example.co.uk._boot.ns2.example.net
+   example.co.uk._dsauth.ns1.example.net
+   example.co.uk._dsauth.ns2.example.net
 
    4.  checks that the CDS/CDNSKEY record sets retrieved in Steps 2 and
        3 agree across responses.
@@ -389,7 +389,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
 
 
 
-Thomassen & Wisiol         Expires 30 May 2022                  [Page 7]
+Thomassen & Wisiol         Expires 2 June 2022                  [Page 7]
 
 Internet-Draft            dnssec-bootstrapping             November 2021
 
@@ -445,7 +445,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
 
 
 
-Thomassen & Wisiol         Expires 30 May 2022                  [Page 8]
+Thomassen & Wisiol         Expires 2 June 2022                  [Page 8]
 
 Internet-Draft            dnssec-bootstrapping             November 2021
 
@@ -470,7 +470,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
 
    Signaling Domains SHOULD be delegated as zones of their own, so that
    the Signaling Zone's apex coincides with the Signaling Domain (such
-   as "_boot.ns1.example.net").  While it is permissible for the
+   as "_dsauth.ns1.example.net").  While it is permissible for the
    Signaling Domain to be contained in a Signaling Zone of fewer labels
    (such as "example.net"), a zone cut ensures that bootstrapping
    activities do not require modifications of the zone containing the
@@ -501,7 +501,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
 
 
 
-Thomassen & Wisiol         Expires 30 May 2022                  [Page 9]
+Thomassen & Wisiol         Expires 2 June 2022                  [Page 9]
 
 Internet-Draft            dnssec-bootstrapping             November 2021
 
@@ -518,7 +518,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
    *  PowerDNS supports manual creation of non-apex CDS/CDNSKEY records.
 
    *  Proof-of-concept Signaling Domains with several thousand Signaling
-      Names exist at "_boot.ns1.desec.io" and "_boot.ns2.desec.org".
+      Names exist at "_dsauth.ns1.desec.io" and "_dsauth.ns2.desec.org".
       Signaling Names can be discovered via NSEC walking.  Some other
       operators are planning an experimental implementation.
 
@@ -557,7 +557,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
 
 
 
-Thomassen & Wisiol         Expires 30 May 2022                 [Page 10]
+Thomassen & Wisiol         Expires 2 June 2022                 [Page 10]
 
 Internet-Draft            dnssec-bootstrapping             November 2021
 
@@ -586,7 +586,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
 
 7.  IANA Considerations
 
-   *TODO:* reserve "_boot"?
+   *TODO:* reserve "_dsauth"?
 
    This document has no IANA actions.
 
@@ -613,7 +613,7 @@ Internet-Draft            dnssec-bootstrapping             November 2021
 
 
 
-Thomassen & Wisiol         Expires 30 May 2022                 [Page 11]
+Thomassen & Wisiol         Expires 2 June 2022                 [Page 11]
 
 Internet-Draft            dnssec-bootstrapping             November 2021
 
@@ -655,6 +655,8 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-03
 
+   |  Changed "_boot" label to "_dsauth".
+   |  
    |  Removed hashing of Child name components in Signaling Names.
    |  
    |  Editorial changes.
@@ -664,16 +666,16 @@ Appendix A.  Change History (to be removed before publication)
    |  Reframed as an authentication mechanism for RFC 8078.
    |  
    |  Removed multi-signer use case (focus on RFC 8078 authentication).
-   |  
-   |  Triggers need to fetch NS records (if not implicit from context).
 
 
 
-Thomassen & Wisiol         Expires 30 May 2022                 [Page 12]
+Thomassen & Wisiol         Expires 2 June 2022                 [Page 12]
 
 Internet-Draft            dnssec-bootstrapping             November 2021
 
 
+   |  
+   |  Triggers need to fetch NS records (if not implicit from context).
    |  
    |  Improved title.
    |  
@@ -716,6 +718,18 @@ Authors' Addresses
    Email: peter@desec.io
 
 
+
+
+
+
+
+
+
+Thomassen & Wisiol         Expires 2 June 2022                 [Page 13]
+
+Internet-Draft            dnssec-bootstrapping             November 2021
+
+
    Nils Wisiol
    deSEC, Technische Universität Berlin
    Berlin
@@ -725,4 +739,46 @@ Authors' Addresses
 
 
 
-Thomassen & Wisiol         Expires 30 May 2022                 [Page 13]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thomassen & Wisiol         Expires 2 June 2022                 [Page 14]
