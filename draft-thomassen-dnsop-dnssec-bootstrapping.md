@@ -414,6 +414,11 @@ DNS names (such as their length and their label count).
 
 ## Child DNS Operator
 
+To keep the size of the Signaling Zones minimal and bulk processing
+efficient (such as via NSEC walks or zone transfers), Child DNS
+Operators SHOULD remove Signaling Records which are found to have
+been acted upon.
+
 Signaling Domains SHOULD be delegated as zones of their own, so
 that the Signaling Zone's apex coincides with the Signaling
 Domain (such as `_dsauth.ns1.example.net`).
@@ -426,11 +431,6 @@ In addition, Signaling Zones SHOULD use NSEC to allow efficient
 discovery of pending bootstrapping operations by means of zone
 walking (see (#triggers)).  This is especially useful for bulk
 processing after a Child DNS Operator has enabled the protocol.
-
-To keep the size of the Signaling Zones minimal and bulk processing
-efficient (such as via NSEC walks or zone transfers), Child DNS
-Operators SHOULD remove Signaling Records which are found to have
-been acted upon.
 
 ## Parental Agent
 
@@ -534,6 +534,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-03
+
+> Clarified importance of record cleanup by moving paragraph up.
 
 > Pointed out limitations.
 
