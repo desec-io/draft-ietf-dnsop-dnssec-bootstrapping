@@ -116,7 +116,12 @@ The mechanism allows managed DNS Operators to securely announce
 DNSSEC key parameters for zones under their management.
 The Parent can then use this signal to cryptographically validate the
 CDS/CDNSKEY records found at an insecure Child zone's apex, and upon
-success immediately secure the delegation.
+success secure the delegation.
+
+While applicable to the vast majority of domains, the protocol does
+not support certain edge cases, such as excessively long Child zone
+names, or DNSSEC bootstrapping for in-bailiwick domains (see
+(#limitations)).
 
 Readers are expected to be familiar with DNSSEC, including [@!RFC4033],
 [@!RFC4034], [@!RFC4035], [@!RFC6781], [@!RFC7344], and [@!RFC8078].
@@ -273,7 +278,8 @@ hostnames, MUST execute the following steps:
    record set;
 
 3. query the CDS/CDNSKEY records located at the Signaling Name under
-   each Signaling Domain using a trusted validating DNS resolver;
+   each Signaling Domain using a trusted DNS resolver and enforce
+   DNSSEC validation;
 
 4. check (separately by record type) that all record sets retrieved
    in Steps 2 and 3 have equal contents;
@@ -391,6 +397,17 @@ Before firing the trigger for a particular candidate Child, the
 Parental Agent MUST ascertain that the Child's delegation actually
 contains the nameserver hostname under whose Signaling Domain the
 scan occurred.
+
+{#limitations}
+## Limitations
+
+As a consequence of Step 3 in (#bootstrapping), DS bootstrapping does
+not work for in-bailiwick delegations, as no pre-existing chain of
+trust to the Child domain is available during bootstrapping.
+
+The protocol is further restricted by the fact that the fully
+qualified Signaling Names fit within the general limits that apply to
+DNS names (such as their length and their label count).
 
 
 # Operational Recommendations
@@ -517,6 +534,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-03
+
+> Pointed out limitations.
 
 > Replace [@!RFC8078] Section 3 with our (#bootstrapping).
 
