@@ -54,6 +54,9 @@ The parent can then provision DS records for the delegation without
 resorting to out-of-band validation or weaker types of cross-checks
 such as "Accept after Delay" ([@!RFC8078]).
 
+This document updates [@!RFC8078] and replaces its Section 3 with
+(#bootstrapping) of this document.
+
 [ Ed note: Text inside square brackets ([]) is additional background
 information, answers to frequently asked questions, general musings,
 etc.  They will be removed before publication.
@@ -255,13 +258,13 @@ The records are accompanied by RRSIG records created using the key(s)
 of the respective Signaling Zone.
 
 {#bootstrapping}
-## Validating CDS/CDNSKEY Records
+## Validating CDS/CDNSKEY Records for DNSSEC Bootstrapping
 
-[ TODO Should this be phrased as an update to [@!RFC8078], Section 3? ]
+This section replaces Section 3 of [@!RFC8078].
 
-To validate a Child's CDS/CDNSKEY RRset, the Parental Agent, knowing
-both the Child zone name and its NS hostnames, MUST execute the
-following steps:
+To validate a Child's CDS/CDNSKEY RRset for DNSSEC bootstrapping, the
+Parental Agent, knowing both the Child zone name and its NS
+hostnames, MUST execute the following steps:
 
 1. verify that the Child is not currently securely delegated;
 
@@ -514,6 +517,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-thomassen-dnsop-dnssec-bootstrapping-03
+
+> Replace [@!RFC8078] Section 3 with our (#bootstrapping).
 
 > Changed `_boot` label to `_dsauth`.
 

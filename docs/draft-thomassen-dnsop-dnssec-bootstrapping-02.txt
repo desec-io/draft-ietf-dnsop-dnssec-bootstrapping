@@ -29,6 +29,9 @@ Abstract
    resorting to out-of-band validation or weaker types of cross-checks
    such as "Accept after Delay" ([RFC8078]).
 
+   This document updates [RFC8078] and replaces its Section 3 with
+   Section 3.2 of this document.
+
    [ Ed note: Text inside square brackets ([]) is additional background
    information, answers to frequently asked questions, general musings,
    etc.  They will be removed before publication.  This document is
@@ -47,9 +50,6 @@ Status of This Memo
    Task Force (IETF).  Note that other groups may also distribute
    working documents as Internet-Drafts.  The list of current Internet-
    Drafts is at https://datatracker.ietf.org/drafts/current/.
-
-
-
 
 
 
@@ -90,7 +90,8 @@ Table of Contents
    3.  Bootstrapping a DNSSEC Delegation . . . . . . . . . . . . . .   5
      3.1.  Signaling Consent to Act as the Child's Signer  . . . . .   5
        3.1.1.  Example . . . . . . . . . . . . . . . . . . . . . . .   6
-     3.2.  Validating CDS/CDNSKEY Records  . . . . . . . . . . . . .   6
+     3.2.  Validating CDS/CDNSKEY Records for DNSSEC
+           Bootstrapping . . . . . . . . . . . . . . . . . . . . . .   6
        3.2.1.  Example . . . . . . . . . . . . . . . . . . . . . . .   7
      3.3.  Triggers  . . . . . . . . . . . . . . . . . . . . . . . .   7
    4.  Operational Recommendations . . . . . . . . . . . . . . . . .   9
@@ -105,7 +106,6 @@ Table of Contents
    9.  Normative References  . . . . . . . . . . . . . . . . . . . .  11
    Appendix A.  Change History (to be removed before publication)  .  12
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
-
 
 
 
@@ -310,13 +310,13 @@ Internet-Draft            dnssec-bootstrapping             November 2021
    The records are accompanied by RRSIG records created using the key(s)
    of the respective Signaling Zone.
 
-3.2.  Validating CDS/CDNSKEY Records
+3.2.  Validating CDS/CDNSKEY Records for DNSSEC Bootstrapping
 
-   [ TODO Should this be phrased as an update to [RFC8078], Section 3? ]
+   This section replaces Section 3 of [RFC8078].
 
-   To validate a Child's CDS/CDNSKEY RRset, the Parental Agent, knowing
-   both the Child zone name and its NS hostnames, MUST execute the
-   following steps:
+   To validate a Child's CDS/CDNSKEY RRset for DNSSEC bootstrapping, the
+   Parental Agent, knowing both the Child zone name and its NS
+   hostnames, MUST execute the following steps:
 
    1.  verify that the Child is not currently securely delegated;
 
@@ -655,6 +655,8 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-03
 
+   |  Replace [RFC8078] Section 3 with our Section 3.2.
+   |  
    |  Changed "_boot" label to "_dsauth".
    |  
    |  Removed hashing of Child name components in Signaling Names.
@@ -664,8 +666,6 @@ Appendix A.  Change History (to be removed before publication)
    *  draft-thomassen-dnsop-dnssec-bootstrapping-02
 
    |  Reframed as an authentication mechanism for RFC 8078.
-   |  
-   |  Removed multi-signer use case (focus on RFC 8078 authentication).
 
 
 
@@ -674,6 +674,8 @@ Thomassen & Wisiol         Expires 2 June 2022                 [Page 12]
 Internet-Draft            dnssec-bootstrapping             November 2021
 
 
+   |  
+   |  Removed multi-signer use case (focus on RFC 8078 authentication).
    |  
    |  Triggers need to fetch NS records (if not implicit from context).
    |  
@@ -716,8 +718,6 @@ Authors' Addresses
    Germany
 
    Email: peter@desec.io
-
-
 
 
 
