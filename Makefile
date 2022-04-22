@@ -1,5 +1,5 @@
-VERSION = 03
-DOCNAME = draft-thomassen-dnsop-dnssec-bootstrapping
+VERSION = 00
+DOCNAME = draft-ietf-dnsop-dnssec-bootstrapping
 today := $(shell TZ=UTC date +%Y-%m-%dT00:00:00Z)
 
 all: $(DOCNAME)-$(VERSION).txt $(DOCNAME)-$(VERSION).html
