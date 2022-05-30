@@ -504,17 +504,25 @@ However,
 
 ]
 
+
 # IANA Considerations
 
-**TODO:** reserve `_dsauth`?
+Per [@!RFC8552], IANA is requested to add the following entries to the
+"Underscored and Globally Scoped DNS Node Names" registry:
 
-This document has no IANA actions.
+    +---------+------------+-----------------------------------------+
+    | RR Type | _NODE NAME | Reference                               |
+    +---------+------------+-----------------------------------------+
+    | CDS     | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
+    | CDNSKEY | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
+    +---------+------------+-----------------------------------------+
+
 
 # Acknowledgements
 
 Thanks to Brian Dickson, Ondřej Caletka, John R. Levine, Christian
-Elmerot, and Oli Schacher for reviewing draft proposals and offering
-comments and suggestions.
+Elmerot, Oli Schacher, and Donald Eastlake for reviewing draft proposals
+and offering comments and suggestions.
 
 Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.
@@ -525,6 +533,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-01
+
+> Added IANA request.
 
 > Introduced Signaling Type prefix (`_dsboot`), renamed Signaling Name
   infix from `_dsauth` to `_signal`.

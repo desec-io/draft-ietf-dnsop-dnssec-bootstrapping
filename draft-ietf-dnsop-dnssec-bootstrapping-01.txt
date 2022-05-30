@@ -604,9 +604,9 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 7.  IANA Considerations
 
-   *TODO:* reserve _dsauth?
+   Per [RFC8552], IANA is requested to add the following entries to the
+   "Underscored and Globally Scoped DNS Node Names" registry:
 
-   This document has no IANA actions.
 
 
 
@@ -618,11 +618,18 @@ Thomassen & Wisiol       Expires 5 December 2022               [Page 11]
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
+   +---------+------------+-----------------------------------------+
+   | RR Type | _NODE NAME | Reference                               |
+   +---------+------------+-----------------------------------------+
+   | CDS     | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
+   | CDNSKEY | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
+   +---------+------------+-----------------------------------------+
+
 8.  Acknowledgements
 
    Thanks to Brian Dickson, Ond&#345;ej Caletka, John R.  Levine,
-   Christian Elmerot, and Oli Schacher for reviewing draft proposals and
-   offering comments and suggestions.
+   Christian Elmerot, Oli Schacher, and Donald Eastlake for reviewing
+   draft proposals and offering comments and suggestions.
 
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
@@ -659,13 +666,6 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
               DOI 10.17487/RFC7344, September 2014,
               <https://www.rfc-editor.org/info/rfc7344>.
 
-   [RFC8078]  Gudmundsson, O. and P. Wouters, "Managing DS Records from
-              the Parent via CDS/CDNSKEY", RFC 8078,
-              DOI 10.17487/RFC8078, March 2017,
-              <https://www.rfc-editor.org/info/rfc8078>.
-
-
-
 
 
 
@@ -674,14 +674,26 @@ Thomassen & Wisiol       Expires 5 December 2022               [Page 12]
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
+   [RFC8078]  Gudmundsson, O. and P. Wouters, "Managing DS Records from
+              the Parent via CDS/CDNSKEY", RFC 8078,
+              DOI 10.17487/RFC8078, March 2017,
+              <https://www.rfc-editor.org/info/rfc8078>.
+
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+   [RFC8552]  Crocker, D., "Scoped Interpretation of DNS Resource
+              Records through "Underscored" Naming of Attribute Leaves",
+              BCP 222, RFC 8552, DOI 10.17487/RFC8552, March 2019,
+              <https://www.rfc-editor.org/info/rfc8552>.
 
 Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-01
 
+   |  Added IANA request.
+   |  
    |  Introduced Signaling Type prefix (_dsboot), renamed Signaling Name
    |  infix from _dsauth to _signal.
 
@@ -710,6 +722,14 @@ Appendix A.  Change History (to be removed before publication)
    |  Removed multi-signer use case (focus on RFC 8078 authentication).
    |  
    |  Triggers need to fetch NS records (if not implicit from context).
+
+
+
+Thomassen & Wisiol       Expires 5 December 2022               [Page 13]
+
+Internet-Draft            dnssec-bootstrapping                 June 2022
+
+
    |  
    |  Improved title.
    |  
@@ -722,14 +742,6 @@ Appendix A.  Change History (to be removed before publication)
    |  
    |  Clarified title.
    |  
-
-
-
-Thomassen & Wisiol       Expires 5 December 2022               [Page 13]
-
-Internet-Draft            dnssec-bootstrapping                 June 2022
-
-
    |  Improved abstract.
    |  
    |  Require CDS/CDNSKEY records at the Child.
@@ -764,18 +776,6 @@ Authors' Addresses
    Berlin
    Germany
    Email: nils@desec.io
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

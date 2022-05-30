@@ -1932,8 +1932,17 @@ Operator.<a href="#section-6-5.5" class="pilcrow">¶</a>
       <h2 id="name-iana-considerations">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-7-1"><strong>TODO:</strong> reserve <code>_dsauth</code>?<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">This document has no IANA actions.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-1">Per <span>[<a href="#RFC8552" class="xref">RFC8552</a>]</span>, IANA is requested to add the following entries to the
+"Underscored and Globally Scoped DNS Node Names" registry:<a href="#section-7-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7-2">
+<pre>+---------+------------+-----------------------------------------+
+| RR Type | _NODE NAME | Reference                               |
++---------+------------+-----------------------------------------+
+| CDS     | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
+| CDNSKEY | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
++---------+------------+-----------------------------------------+
+</pre><a href="#section-7-2" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 <div id="acknowledgements">
@@ -1942,8 +1951,8 @@ Operator.<a href="#section-6-5.5" class="pilcrow">¶</a>
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
       </h2>
 <p id="section-8-1">Thanks to Brian Dickson, Ond&amp;#345;ej Caletka, John R. Levine, Christian
-Elmerot, and Oli Schacher for reviewing draft proposals and offering
-comments and suggestions.<a href="#section-8-1" class="pilcrow">¶</a></p>
+Elmerot, Oli Schacher, and Donald Eastlake for reviewing draft proposals
+and offering comments and suggestions.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <p id="section-8-2">Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.<a href="#section-8-2" class="pilcrow">¶</a></p>
 </section>
@@ -1982,8 +1991,12 @@ early-stage brainstorming.<a href="#section-8-2" class="pilcrow">¶</a></p>
 <span class="refAuthor">Gudmundsson, O.</span> and <span class="refAuthor">P. Wouters</span>, <span class="refTitle">"Managing DS Records from the Parent via CDS/CDNSKEY"</span>, <span class="seriesInfo">RFC 8078</span>, <span class="seriesInfo">DOI 10.17487/RFC8078</span>, <time datetime="2017-03" class="refDate">March 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8078">https://www.rfc-editor.org/info/rfc8078</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-    <dd>
+      <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8552">[RFC8552]</dt>
+    <dd>
+<span class="refAuthor">Crocker, D.</span>, <span class="refTitle">"Scoped Interpretation of DNS Resource Records through "Underscored" Naming of Attribute Leaves"</span>, <span class="seriesInfo">BCP 222</span>, <span class="seriesInfo">RFC 8552</span>, <span class="seriesInfo">DOI 10.17487/RFC8552</span>, <time datetime="2019-03" class="refDate">March 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8552">https://www.rfc-editor.org/info/rfc8552</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1997,8 +2010,9 @@ early-stage brainstorming.<a href="#section-8-2" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <blockquote id="appendix-A-2">
-        <p id="appendix-A-2.1">Introduced Signaling Type prefix (<code>_dsboot</code>), renamed Signaling Name
-  infix from <code>_dsauth</code> to <code>_signal</code>.<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
+        <p id="appendix-A-2.1">Added IANA request.<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.2">Introduced Signaling Type prefix (<code>_dsboot</code>), renamed Signaling Name
+  infix from <code>_dsauth</code> to <code>_signal</code>.<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
 <li class="normal" id="appendix-A-3.1">draft-ietf-dnsop-dnssec-bootstrapping-00<a href="#appendix-A-3.1" class="pilcrow">¶</a>
