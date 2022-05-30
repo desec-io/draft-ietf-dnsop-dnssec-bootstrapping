@@ -4,9 +4,9 @@
 
 DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
-Intended status: Standards Track                               N. Wisiol
-Expires: 5 December 2022            deSEC, Technische Universität Berlin
-                                                             3 June 2022
+Updates: 7344, 8078 (if approved)                              N. Wisiol
+Intended status: Standards Track    deSEC, Technische Universität Berlin
+Expires: 5 December 2022                                     3 June 2022
 
 
   Automatic DNSSEC Bootstrapping using Authenticated Signals from the

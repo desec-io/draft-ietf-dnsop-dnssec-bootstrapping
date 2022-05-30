@@ -4,6 +4,7 @@ abbrev = "dnssec-bootstrapping"
 docname = "@DOCNAME@"
 category = "std"
 ipr = "trust200902"
+updates = [7344, 8078]
 area = "Internet"
 workgroup = "DNSOP Working Group"
 date = @TODAY@
