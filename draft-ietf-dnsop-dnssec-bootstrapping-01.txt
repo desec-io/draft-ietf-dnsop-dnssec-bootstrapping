@@ -208,11 +208,12 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
       entity.)
 
    Signaling Domain  A hostname from the Child's NS record set, prefixed
-      with the label _dsauth.  There are as many Signaling Domains as
+      with the label _signal.  There are as many Signaling Domains as
       there are distinct NS targets.
 
    Signaling Name  The labels that are prefixed to a Signaling Domain in
-      order to identify a Child zone's name (see Section 2.2).
+      order to identify a Signaling Type and a Child zone's name (see
+      Section 2.2).
 
    Signaling Record  A DNS record located at a Signaling Name under a
       Signaling Domain.  Signaling Records are used by the Child DNS
@@ -220,11 +221,13 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-
 Thomassen & Wisiol       Expires 5 December 2022                [Page 4]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
+
+   Signaling Type  A signal type identifier, such as _dsboot for DNSSEC
+      bootstrapping.
 
    Signaling Zone  The zone which is authoritative for a given Signaling
       Domain.
@@ -255,25 +258,22 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
    with NS records ns1.example.net and ns2.example.net, the Child DNS
    Operator needs to ensure that a valid DNSSEC chain of trust exists
    for the zone(s) that are authoritative for the Signaling Domains
-   _dsauth.ns1.example.net and _dsauth.ns2.example.net.
+   _signal.ns1.example.net and _signal.ns2.example.net.
 
 2.2.  Signaling Names
 
    To publish a piece of information about the Child zone in an
    authenticated fashion, the Child DNS Operator MUST publish one or
-   more Signaling Records at the Child's Signaling Name under each
-   Signaling Domain.
+   more Signaling Records at a Signaling Name under each Signaling
+   Domain.
 
    Signaling Records MUST be accompanied by RRSIG records created with
    the corresponding Signaling Zone's key(s).  The type and contents of
    these Signaling Records are detailed in Section 3.1.
 
-   The Signaling Name is identical to the Child name, with the final
-   root label removed.
-
-
-
-
+   The Signaling Name identifies the Child and the Signaling Type.  It
+   is identical to the Child name (with the final root label removed),
+   prefixed with a label containing the Signaling Type.
 
 
 
@@ -310,15 +310,15 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
    For the purposes of bootstrapping the Child zone example.co.uk with
    NS records ns1.example.net and ns2.example.net, the required
-   Signaling Domains are _dsauth.ns1.example.net and
-   _dsauth.ns2.example.net.
+   Signaling Domains are _signal.ns1.example.net and
+   _signal.ns2.example.net.
 
    In the zones containing these domains, the Child DNS Operator
    authenticates the CDS/CDNSKEY records found at the Child's apex by
    co-publishing them at the names:
 
-   example.co.uk._dsauth.ns1.example.net
-   example.co.uk._dsauth.ns2.example.net
+   _dsboot.example.co.uk._signal.ns1.example.net
+   _dsboot.example.co.uk._signal.ns2.example.net
 
    The records are accompanied by RRSIG records created using the key(s)
    of the respective Signaling Zone.
@@ -397,8 +397,8 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
    3.  queries and validates the CDS/CDNSKEY records located at (see
        Section 2.2)
 
-   example.co.uk._dsauth.ns1.example.net
-   example.co.uk._dsauth.ns2.example.net
+   _dsboot.example.co.uk._signal.ns1.example.net
+   _dsboot.example.co.uk._signal.ns2.example.net
 
    4.  checks that the CDS/CDNSKEY record sets retrieved in Steps 2 and
        3 agree across responses.
@@ -427,7 +427,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
       -  performing a targeted NSEC walk (starting with the Parent
          domain prepended to the Signaling Domain, such as
-         co.uk._dsauth.ns1.example.net), or by
+         co.uk._signal.ns1.example.net), or by
 
       -  performing a zone transfer of the zone containing (the relevant
          portion of) the Signaling Domain, if the Signaling Zone
@@ -491,7 +491,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
    Signaling Domains SHOULD be delegated as zones of their own, so that
    the Signaling Zone's apex coincides with the Signaling Domain (such
-   as _dsauth.ns1.example.net).  While it is permissible for the
+   as _signal.ns1.example.net).  While it is permissible for the
    Signaling Domain to be contained in a Signaling Zone of fewer labels
    (such as example.net), a zone cut ensures that bootstrapping
    activities do not require modifications of the zone containing the
@@ -535,7 +535,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
    *  PowerDNS supports manual creation of non-apex CDS/CDNSKEY records.
 
    *  Proof-of-concept Signaling Domains with several thousand Signaling
-      Names exist at _dsauth.ns1.desec.io and _dsauth.ns2.desec.org.
+      Names exist at _signal.ns1.desec.io and _signal.ns2.desec.org.
 
    *  Another DNS operator has implemented the protocol (synthesizing
       Signaling Records for a significant number of domains).
@@ -682,6 +682,9 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-01
 
+   |  Introduced Signaling Type prefix (_dsboot), renamed Signaling Name
+   |  infix from _dsauth to _signal.
+
    *  draft-ietf-dnsop-dnssec-bootstrapping-00
 
    |  Editorial changes.
@@ -719,9 +722,6 @@ Appendix A.  Change History (to be removed before publication)
    |  
    |  Clarified title.
    |  
-   |  Improved abstract.
-   |  
-   |  Require CDS/CDNSKEY records at the Child.
 
 
 
@@ -730,6 +730,9 @@ Thomassen & Wisiol       Expires 5 December 2022               [Page 13]
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
+   |  Improved abstract.
+   |  
+   |  Require CDS/CDNSKEY records at the Child.
    |  
    |  Reworked Signaling Name scheme.
    |  
@@ -761,9 +764,6 @@ Authors' Addresses
    Berlin
    Germany
    Email: nils@desec.io
-
-
-
 
 
 

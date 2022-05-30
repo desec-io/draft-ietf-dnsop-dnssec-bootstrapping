@@ -152,18 +152,22 @@ Parental Agent
 
 Signaling Domain
 : A hostname from the Child's NS record set, prefixed with the label
-  `_dsauth`.
+  `_signal`.
   There are as many Signaling Domains as there are distinct NS
   targets.
 
 Signaling Name
 : The labels that are prefixed to a Signaling Domain in order to
-  identify a Child zone's name (see (#signalingnames)).
+  identify a Signaling Type and a Child zone's name (see
+  (#signalingnames)).
 
 Signaling Record
 : A DNS record located at a Signaling Name under a Signaling Domain.
   Signaling Records are used by the Child DNS Operator to publish
   information about the Child.
+
+Signaling Type
+: A signal type identifier, such as `_dsboot` for DNSSEC bootstrapping.
 
 Signaling Zone
 : The zone which is authoritative for a given Signaling Domain.
@@ -199,7 +203,7 @@ For example, when performing DNSSEC bootstrapping for a Child zone
 with NS records `ns1.example.net` and `ns2.example.net`, the Child
 DNS Operator needs to ensure that a valid DNSSEC chain of trust
 exists for the zone(s) that are authoritative for the Signaling
-Domains `_dsauth.ns1.example.net` and `_dsauth.ns2.example.net`.
+Domains `_signal.ns1.example.net` and `_signal.ns2.example.net`.
 
 
 {#signalingnames}
@@ -207,15 +211,15 @@ Domains `_dsauth.ns1.example.net` and `_dsauth.ns2.example.net`.
 
 To publish a piece of information about the Child zone in an
 authenticated fashion, the Child DNS Operator MUST publish one or
-more Signaling Records at the Child's Signaling Name under each
-Signaling Domain.
+more Signaling Records at a Signaling Name under each Signaling Domain.
 
 Signaling Records MUST be accompanied by RRSIG records created with
 the corresponding Signaling Zone's key(s).  The type and contents
 of these Signaling Records are detailed in (#signalingrecords).
 
-The Signaling Name is identical to the Child name, with the final
-root label removed.
+The Signaling Name identifies the Child and the Signaling Type.
+It is identical to the Child name (with the final root label removed),
+prefixed with a label containing the Signaling Type.
 
 # Bootstrapping a DNSSEC Delegation
 
@@ -246,15 +250,15 @@ records published at the Child's apex.
 
 For the purposes of bootstrapping the Child zone `example.co.uk` with
 NS records `ns1.example.net` and `ns2.example.net`, the required
-Signaling Domains are `_dsauth.ns1.example.net` and
-`_dsauth.ns2.example.net`.
+Signaling Domains are `_signal.ns1.example.net` and
+`_signal.ns2.example.net`.
 
 In the zones containing these domains, the Child DNS Operator
 authenticates the CDS/CDNSKEY records found at the Child's apex by
 co-publishing them at the names:
 ```
-example.co.uk._dsauth.ns1.example.net
-example.co.uk._dsauth.ns2.example.net
+_dsboot.example.co.uk._signal.ns1.example.net
+_dsboot.example.co.uk._signal.ns2.example.net
 ```
 The records are accompanied by RRSIG records created using the key(s)
 of the respective Signaling Zone.
@@ -319,8 +323,8 @@ Parental Agent (assuming that the Child delegation's NS records are
    (#signalingnames))
 
 ```
-example.co.uk._dsauth.ns1.example.net
-example.co.uk._dsauth.ns2.example.net
+_dsboot.example.co.uk._signal.ns1.example.net
+_dsboot.example.co.uk._signal.ns2.example.net
 ```
 
 4. checks that the CDS/CDNSKEY record sets retrieved in Steps 2
@@ -351,7 +355,7 @@ Parental Agents SHOULD trigger the procedure described in
 
      * performing a targeted NSEC walk (starting with the Parent
        domain prepended to the Signaling Domain, such as
-       `co.uk._dsauth.ns1.example.net`), or by
+       `co.uk._signal.ns1.example.net`), or by
 
      * performing a zone transfer of the zone containing (the
        relevant portion of) the Signaling Domain, if the Signaling
@@ -407,7 +411,7 @@ been acted upon.
 
 Signaling Domains SHOULD be delegated as zones of their own, so
 that the Signaling Zone's apex coincides with the Signaling
-Domain (such as `_dsauth.ns1.example.net`).
+Domain (such as `_signal.ns1.example.net`).
 While it is permissible for the Signaling Domain to be contained
 in a Signaling Zone of fewer labels (such as `example.net`), a
 zone cut ensures that bootstrapping activities do not require
@@ -442,7 +446,7 @@ Perhaps it is thus better to RECOMMEND low TTLs instead?]
 * PowerDNS supports manual creation of non-apex CDS/CDNSKEY records.
 
 * Proof-of-concept Signaling Domains with several thousand Signaling
-  Names exist at `_dsauth.ns1.desec.io` and `_dsauth.ns2.desec.org`.
+  Names exist at `_signal.ns1.desec.io` and `_signal.ns2.desec.org`.
 
 * Another DNS operator has implemented the protocol (synthesizing
   Signaling Records for a significant number of domains).
@@ -521,6 +525,9 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-01
+
+> Introduced Signaling Type prefix (`_dsboot`), renamed Signaling Name
+  infix from `_dsauth` to `_signal`.
 
 
 * draft-ietf-dnsop-dnssec-bootstrapping-00
