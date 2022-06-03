@@ -468,26 +468,19 @@ cannot enable DNSSEC unless all other operators agree.
 [ TODO In principle, this applies to any CDS update. Should we phrase
 it as a general update to [@!RFC8078]? ]
 
-[ Thoughts on the Chain of Trust:
-
-Actors in the chain(s) of trust of the Signaling Zone(s) (the DNS
-Operator themselves, plus entities further up in the chain) can
-undermine the protocol.
-However,
-
-  * that's possible with CDS/CDNSKEY, too (new method is not weaker);
-  * if the Child DNS Operator doesn't trust the zones in which its NS
-    hostnames live (including their nameservers' A records) because
-    their path from the root is untrusted, you probably don't want to
-    trust that operator as a whole;
-  * when bootstrapping is done upon receipt of a new NS record set,
-    the window of opportunity is very small;
-  * mitigation exists by diversifying e.g. the nameserver hostname's
-    TLDs, which is advisable anyways;
-  * correct bootstrapping is easily monitored by the Child DNS
-    Operator.
-
-]
+Because the parents of a Signaling Domain (such as the corresponding TLD
+registry) are in control of its chain of trust, they are also able to
+undermine the signal's authenticity.
+To mitigate this risk, it is RECOMMENDED to increase the effort required
+to collude for taking control of all Signaling Domains, by diversifying
+the path from the root to each nameserver.
+This is best achieved by using different and independently operated TLDs
+for each one.
+(TLD-independent NS hostnames are advisable anyways in DNS operations,
+in order to prevent the TLD from becoming a single point of failure.)
+Furthermore, as the Child DNS Operator has authoritative knowledge of
+the Child's CDS/CDNSKEY records, it can readily detect fraudulent
+provisioning of DS records.
 
 
 # IANA Considerations
@@ -518,6 +511,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-01
+
+> Turn loose Security Considerations points into coherent text.
 
 > Do no longer suggest NSEC-walking Signaling Domains.
   (It does not work well due to the Signaling Type prefix. What's more,
