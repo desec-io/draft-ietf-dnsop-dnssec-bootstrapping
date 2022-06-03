@@ -1406,14 +1406,14 @@ trusted channel.
 While the communication conceptually has to occur between the Parent
 registry and the DNSSEC key holder, what exactly that means and how
 the communication is coordinated traditionally depends on the
-relationship the Child has with the Parent:<a href="#section-1-1" class="pilcrow">¶</a></p>
+relationship the Child has with the Parent.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">A typical situation is that the key is held by the Child DNS
 Operator; the communication thus often involes this entity.
 In addition, depending on the circumstances, it may also involve the
 Registrar, possibly via the Registrant (for details, see <span>[<a href="#RFC7344" class="xref">RFC7344</a>]</span>,
 Appendix A).<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">As observed in <span>[<a href="#RFC7344" class="xref">RFC7344</a>]</span>, these dependencies result often result in
-a manual process that is susceptible to mistakes and/or errors.
+<p id="section-1-3">As observed in <span>[<a href="#RFC7344" class="xref">RFC7344</a>]</span>, these dependencies often result in a manual
+process that is susceptible to mistakes and/or errors.
 In addition, due to the annoyance factor of the process, involved
 parties may avoid the process of getting a DS record set published in
 the first place.<a href="#section-1-3" class="pilcrow">¶</a></p>
@@ -1531,11 +1531,11 @@ capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
       <h2 id="name-signaling">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-signaling" class="section-name selfRef">Signaling</a>
       </h2>
-<p id="section-2-1">When setting up initial trust, the Child zone's CDS/CDNSKEY RRsets
-need to be authenticated.
-This is achieved using an authentication signal from the Child DNS
-Operator that the Parent can discover and validate, thus transferring
-trust from the Child DNS Operator to the Child zone.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-1">This section describes the general mechanism by which a Child DNS
+Operator can publish an authenticated signal about a Child zone.
+Parental Agents (or any other party) can then discover and process the
+signal.
+Authenticity is ensured through standard DNSSEC validation.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <div id="chain-of-trust">
 <section id="section-2.1">
         <h3 id="name-chain-of-trust">
@@ -1544,7 +1544,7 @@ trust from the Child DNS Operator to the Child zone.<a href="#section-2-1" class
 <p id="section-2.1-1">If a Child DNS Operator implements the protocol, each Signaling Zone
 MUST be signed and securely delegated, i.e. have a valid DNSSEC chain
 of trust.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.1-2">For example, when performing DNSSEC bootstrapping for a Child zone
+<p id="section-2.1-2">For example, when publishing a signal that relates to a Child zone
 with NS records <code>ns1.example.net</code> and <code>ns2.example.net</code>, the Child
 DNS Operator needs to ensure that a valid DNSSEC chain of trust
 exists for the zone(s) that are authoritative for the Signaling
@@ -1560,8 +1560,9 @@ Domains <code>_signal.ns1.example.net</code> and <code>_signal.ns2.example.net</
 authenticated fashion, the Child DNS Operator MUST publish one or
 more Signaling Records at a Signaling Name under each Signaling Domain.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.2-2">Signaling Records MUST be accompanied by RRSIG records created with
-the corresponding Signaling Zone's key(s).  The type and contents
-of these Signaling Records are detailed in <a href="#signalingrecords" class="xref">Section 3.1</a>.<a href="#section-2.2-2" class="pilcrow">¶</a></p>
+the corresponding Signaling Zone's key(s).
+The type and contents of these Signaling Records depend on the type of
+signal.<a href="#section-2.2-2" class="pilcrow">¶</a></p>
 <p id="section-2.2-3">The Signaling Name identifies the Child and the Signaling Type.
 It is identical to the Child name (with the final root label removed),
 prefixed with a label containing the Signaling Type.<a href="#section-2.2-3" class="pilcrow">¶</a></p>
@@ -1574,9 +1575,15 @@ prefixed with a label containing the Signaling Type.<a href="#section-2.2-3" cla
       <h2 id="name-bootstrapping-a-dnssec-dele">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-bootstrapping-a-dnssec-dele" class="section-name selfRef">Bootstrapping a DNSSEC Delegation</a>
       </h2>
-<p id="section-3-1">Child DNS Operators and Parental Agents who wish to use CDS/CDNSKEY
-records for DNSSEC bootstrapping SHOULD support the protocol
-described in this section.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">When Child zone's CDS/CDNSKEY RRsets are used for setting up initial
+trust, they need to be authenticated.
+This is achieved by co-publishing the Child's CDS/CDNSKEY records as an
+authenticated signal from the Child DNS Operator.
+The Parent can discover and validate this signal, thus transferring
+trust from the Child DNS Operator to the Child zone.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">Child DNS Operators and Parental Agents who wish to use CDS/CDNSKEY
+records for DNSSEC bootstrapping SHOULD support the authentication
+protocol described in this section.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <div id="signalingrecords">
 <section id="section-3.1">
         <h3 id="name-signaling-consent-to-act-as">
@@ -1586,15 +1593,15 @@ described in this section.<a href="#section-3-1" class="pilcrow">¶</a></p>
 authenticate the Child's CDS/CDNSKEY RRsets, the Child DNS Operator
 MUST co-publish them at the corresponding Signaling Name under each
 Signaling Domain as defined in <a href="#signalingnames" class="xref">Section 2.2</a>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">Existing use of CDS/CDNSKEY records is specified at the Child apex
+<p id="section-3.1-2">Unlike the CDS/CDNSKEY records at the Child's apex, Signaling
+Records MUST be signed with the corresponding Signaling Zone's
+key(s).  Their contents MUST be identical to the corresponding
+records published at the Child's apex.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">Existing use of CDS/CDNSKEY records is specified at the Child apex
 only (<span>[<a href="#RFC7344" class="xref">RFC7344</a>]</span>, Section 4.1).  This protocol extends the use of
 these record types to non-apex owner names for the purpose of DNSSEC
 bootstrapping.  To exclude the possibility of semantic collision,
-there MUST NOT be a zone cut at a Signaling Name.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1-3">Unlike the CDS/CDNSKEY records at the Child's apex, Signaling
-Records MUST be signed with the corresponding Signaling Zone's
-key(s).  Their contents MUST be identical to the corresponding
-records published at the Child's apex.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+there MUST NOT be a zone cut at a Signaling Name.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <div id="example">
 <section id="section-3.1.1">
           <h4 id="name-example">
@@ -1633,8 +1640,8 @@ hostnames, MUST execute the following steps:<a href="#section-3.2-2" class="pilc
 </li>
           <li id="section-3.2-3.2">
             <p id="section-3.2-3.2.1">query the CDS/CDNSKEY records at the Child zone apex directly from
-each of the authoritative servers listed in the delegation's NS
-record set;<a href="#section-3.2-3.2.1" class="pilcrow">¶</a></p>
+each of the authoritative servers as determined by the delegation's
+NS record set;<a href="#section-3.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-3.2-3.3">
             <p id="section-3.2-3.3.1">query the CDS/CDNSKEY records located at the Signaling Name under
@@ -1714,62 +1721,58 @@ a DS record set as indicated by the validated CDS/CDNSKEY records.<a href="#sect
         <h3 id="name-triggers">
 <a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-triggers" class="section-name selfRef">Triggers</a>
         </h3>
-<p id="section-3.3-1">[ Clarity of this section needs to be improved. ]<a href="#section-3.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.3-2">Parental Agents SHOULD trigger the procedure described in
-<a href="#bootstrapping" class="xref">Section 3.2</a> once one of the following conditions is fulfilled:<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.3-1">Parental Agents SHOULD trigger the procedure described in
+<a href="#bootstrapping" class="xref">Section 3.2</a> once one of the following conditions is fulfilled:<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.3-3.1">
-            <p id="section-3.3-3.1.1">The Parental Agent receives a new or updated NS record set for a
-Child;<a href="#section-3.3-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.3-2.1">
+            <p id="section-3.3-2.1.1">The Parental Agent receives a new or updated NS record set for a
+Child;<a href="#section-3.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.3-3.2">
-            <p id="section-3.3-3.2.1">The Parental Agent encounters Signaling Records during a
+          <li class="normal" id="section-3.3-2.2">
+            <p id="section-3.3-2.2.1">The Parental Agent encounters Signaling Records during a
 proactive, opportunistic scan (e.g. daily queries for the
-Signaling Records of some or all of its delegations);<a href="#section-3.3-3.2.1" class="pilcrow">¶</a></p>
+Signaling Records of some or all of its delegations);<a href="#section-3.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.3-3.3">
-            <p id="section-3.3-3.3.1">The Parental Agent encounters Signaling Records for its Children
-during a scan (e.g. daily) of known Signaling Domains (derived
-from the NS records found in the Parent zone).
-The scan is completed by either<a href="#section-3.3-3.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.3-2.3">
+            <p id="section-3.3-2.3.1">The Parental Agent encounters Signaling Records during a targeted
+scan of a Signaling Domain for Signaling Names that relate to the
+Parent's children (e.g. based on NS hostnames known to be in use at
+a given Child DNS Operator).
+The scan can be done, for example, by<a href="#section-3.3-2.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.3-3.3.2.1">
-                <p id="section-3.3-3.3.2.1.1">performing a targeted NSEC walk (starting with the Parent
-domain prepended to the Signaling Domain, such as
-<code>co.uk._signal.ns1.example.net</code>), or by<a href="#section-3.3-3.3.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.3-2.3.2.1">
+                <p id="section-3.3-2.3.2.1.1">performing an NSEC walk (starting with the Parent domain
+prepended to the Signaling Domain, such as
+<code>co.uk._signal.ns1.example.net</code>), or by<a href="#section-3.3-2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-3.3-3.3.2.2">
-                <p id="section-3.3-3.3.2.2.1">performing a zone transfer of the zone containing (the
+              <li class="normal" id="section-3.3-2.3.2.2">
+                <p id="section-3.3-2.3.2.2.1">performing a zone transfer of the zone containing (the
 relevant portion of) the Signaling Domain, if the Signaling
-Zone operator allows it, and iterating over its contents.<a href="#section-3.3-3.3.2.2.1" class="pilcrow">¶</a></p>
+Zone operator allows it, and iterating over its contents.<a href="#section-3.3-2.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-3.3-3.4">
-            <p id="section-3.3-3.4.1">Any other condition as deemed appropriate by local policy.<a href="#section-3.3-3.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.3-2.4">
+            <p id="section-3.3-2.4.1">Any other condition as deemed appropriate by local policy.<a href="#section-3.3-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.3-4">One of the inputs of the bootstrapping algorithm in <a href="#bootstrapping" class="xref">Section 3.2</a>
-is the NS record set of the Child's delegation.
-It is therefore necessary to establish knowledge of the delegation's
-NS record set before firing the trigger.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
-<p id="section-3.3-5">In some cases, the trigger context contains reliable information
-about the Child's delegation, such as when bootstrapping is triggered
-by the registrant changing their NS record set, or during a daily
-scan of existing delegations.
-In such cases, the delegation's NS RRset can be used as is.<a href="#section-3.3-5" class="pilcrow">¶</a></p>
-<p id="section-3.3-6">In cases where the trigger context does not provide sufficient
-knowledge of the NS record set, the Parental Agent MUST fetch the
-delegation's NS record set and ensure that the proper NS record set
-is fed to the bootstrapping algorithm (<a href="#bootstrapping" class="xref">Section 3.2</a>).<a href="#section-3.3-6" class="pilcrow">¶</a></p>
-<p id="section-3.3-7">In particular, when discovering Signaling Names by means of an NSEC
-walk or zone transfer, the Parental Agent MUST NOT assume that the
-nameserver(s) under whose Signaling Domain(s) a Signaling Name is
-discovered is in fact authoritative for the corresponding Child.
-Before firing the trigger for a particular candidate Child, the
-Parental Agent MUST ascertain that the Child's delegation actually
-contains the nameserver hostname under whose Signaling Domain the
-scan occurred.<a href="#section-3.3-7" class="pilcrow">¶</a></p>
+<p id="section-3.3-3">Most types of discovery (such as daily scans of delegations) are based
+directly on the delegation's NS record set.
+In this case, these NS names can be used as is by the bootstrapping
+algorithm (<a href="#bootstrapping" class="xref">Section 3.2</a>) for querying Signaling Records.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.3-4">Some discovery methods, however, do not imply reliable knowledge of the
+Child's NS record set.
+For example, when discovering Signaling Names by performing an NSEC
+walk or zone transfer of a Signaling Zone, the Parental Agent MUST NOT
+assume that the nameserver(s) under whose Signaling Domain(s) a
+Signaling Name appears is in fact authoritative for the corresponding
+Child.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
+<p id="section-3.3-5">In this case (and in other cases alike where some list of
+"bootstrappable domains" is retrieved elsewhere), the Parental Agent
+MUST ascertain that the Child's delegation actually contains the
+nameserver hostname seen during discovery, and ensure that Signaling
+Record queries are only made against the proper set of nameservers as
+listed in the Child's delegation from the Parent.<a href="#section-3.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="limitations">
@@ -1824,9 +1827,9 @@ processing after a Child DNS Operator has enabled the protocol.<a href="#section
 retrieve the most current information regardless of TTL.
 (When a batch job is used to attempt bootstrapping for a large number
 of delegations, the cache does not need to get cleared in between.)<a href="#section-4.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.2-2">[It is expected that Signaling Records have few consumers only, so
+<p id="section-4.2-2">[ TODO It is expected that Signaling Records have few consumers only, so
 that caching would not normally have a performance benefit.
-Perhaps it is thus better to RECOMMEND low TTLs instead?]<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+Perhaps it is thus better to RECOMMEND low TTLs instead? ]<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2013,9 +2016,10 @@ early-stage brainstorming.<a href="#section-8-2" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <blockquote id="appendix-A-2">
-        <p id="appendix-A-2.1">Added IANA request.<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
-<p id="appendix-A-2.2">Introduced Signaling Type prefix (<code>_dsboot</code>), renamed Signaling Name
-  infix from <code>_dsauth</code> to <code>_signal</code>.<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
+        <p id="appendix-A-2.1">Editorial changes.<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.2">Added IANA request.<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.3">Introduced Signaling Type prefix (<code>_dsboot</code>), renamed Signaling Name
+  infix from <code>_dsauth</code> to <code>_signal</code>.<a href="#appendix-A-2.3" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
 <li class="normal" id="appendix-A-3.1">draft-ietf-dnsop-dnssec-bootstrapping-00<a href="#appendix-A-3.1" class="pilcrow">¶</a>
