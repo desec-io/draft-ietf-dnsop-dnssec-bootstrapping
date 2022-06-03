@@ -356,20 +356,6 @@ Parental Agents SHOULD trigger the procedure described in
     proactive, opportunistic scan (e.g. daily queries for the
     Signaling Records of some or all of its delegations);
 
-  - The Parental Agent encounters Signaling Records during a targeted
-    scan of a Signaling Domain for Signaling Names that relate to the
-    Parent's children (e.g. based on NS hostnames known to be in use at
-    a given Child DNS Operator).
-    The scan can be done, for example, by
-
-     * performing an NSEC walk (starting with the Parent domain
-       prepended to the Signaling Domain, such as
-       `co.uk._signal.ns1.example.net`), or by
-
-     * performing a zone transfer of the zone containing (the
-       relevant portion of) the Signaling Domain, if the Signaling
-       Zone operator allows it, and iterating over its contents.
-
   - Any other condition as deemed appropriate by local policy.
 
 Most types of discovery (such as daily scans of delegations) are based
@@ -410,9 +396,8 @@ DNS names (such as their length and label count).
 ## Child DNS Operator
 
 To keep the size of the Signaling Zones minimal and bulk processing
-efficient (such as via NSEC walks or zone transfers), Child DNS
-Operators SHOULD remove Signaling Records which are found to have
-been acted upon.
+efficient (such as via zone transfers), Child DNS Operators SHOULD
+remove Signaling Records which are found to have been acted upon.
 
 Signaling Domains SHOULD be delegated as zones of their own, so
 that the Signaling Zone's apex coincides with the Signaling
@@ -421,11 +406,6 @@ While it is permissible for the Signaling Domain to be contained
 in a Signaling Zone of fewer labels (such as `example.net`), a
 zone cut ensures that bootstrapping activities do not require
 modifications of the zone containing the nameserver hostname.
-
-In addition, Signaling Zones SHOULD use NSEC to allow efficient
-discovery of pending bootstrapping operations by means of zone
-walking (see (#triggers)).  This is especially useful for bulk
-processing after a Child DNS Operator has enabled the protocol.
 
 ## Parental Agent
 
@@ -538,6 +518,11 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-01
+
+> Do no longer suggest NSEC-walking Signaling Domains.
+  (It does not work well due to the Signaling Type prefix. What's more,
+  it's unclear who would do this: Parents know there delegations and can
+  do a targeted scan; others are not interested.)
 
 > Editorial changes.
 
