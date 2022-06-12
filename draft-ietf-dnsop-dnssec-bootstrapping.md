@@ -120,8 +120,8 @@ success secure the delegation.
 
 While applicable to the vast majority of domains, the protocol does
 not support certain edge cases, such as excessively long Child zone
-names, or DNSSEC bootstrapping for in-bailiwick domains (see
-(#limitations)).
+names, or DNSSEC bootstrapping for domains with in-bailick nameservers
+only (see (#limitations)).
 
 Readers are expected to be familiar with DNSSEC, including [@!RFC4033],
 [@!RFC4034], [@!RFC4035], [@!RFC6781], [@!RFC7344], and [@!RFC8078].
@@ -201,10 +201,10 @@ MUST be signed and securely delegated, i.e. have a valid DNSSEC chain
 of trust.
 
 For example, when publishing a signal that relates to a Child zone
-with NS records `ns1.example.net` and `ns2.example.net`, the Child
+with NS records `ns1.example.net` and `ns2.example.org`, the Child
 DNS Operator needs to ensure that a valid DNSSEC chain of trust
 exists for the zone(s) that are authoritative for the Signaling
-Domains `_signal.ns1.example.net` and `_signal.ns2.example.net`.
+Domains `_signal.ns1.example.net` and `_signal.ns2.example.org`.
 
 
 {#signalingnames}
@@ -243,7 +243,11 @@ protocol described in this section.
 To confirm its willingness to act as the Child's delegated signer and
 authenticate the Child's CDS/CDNSKEY RRsets, the Child DNS Operator
 MUST co-publish them at the corresponding Signaling Name under each
-Signaling Domain as defined in (#signalingnames).
+out-of-bailiwick Signaling Domain ((#signalingnames)).
+For simplicity, the Child DNS Operator MAY also co-publish the Child's
+CDS/CDNSKEY RRsets under Signaling Domains that are in bailiwick,
+although those Signaling Domains are not used for validation
+((#bootstrapping)).
 
 Unlike the CDS/CDNSKEY records at the Child's apex, Signaling
 Records MUST be signed with the corresponding Signaling Zone's
@@ -258,20 +262,23 @@ there MUST NOT be a zone cut at a Signaling Name.
 
 ### Example
 
-For the purposes of bootstrapping the Child zone `example.co.uk` with
-NS records `ns1.example.net` and `ns2.example.net`, the required
-Signaling Domains are `_signal.ns1.example.net` and
-`_signal.ns2.example.net`.
+For the purposes of bootstrapping the Child zone `example.co.uk` with NS
+records `ns1.example.net`, `ns2.example.org`, and `ns3.example.co.uk`,
+the required Signaling Domains are `_signal.ns1.example.net` and
+`_signal.ns2.example.org`.
 
 In the zones containing these domains, the Child DNS Operator
 authenticates the CDS/CDNSKEY records found at the Child's apex by
 co-publishing them at the names:
 ```
 _dsboot.example.co.uk._signal.ns1.example.net
-_dsboot.example.co.uk._signal.ns2.example.net
+_dsboot.example.co.uk._signal.ns2.example.org
 ```
 The records are accompanied by RRSIG records created using the key(s)
 of the respective Signaling Zone.
+
+Publication of Signaling Records under the in-bailiwick domain
+`_signal.ns3.example.co.uk` is not required.
 
 {#bootstrapping}
 ## Validating CDS/CDNSKEY Records for DNSSEC Bootstrapping
@@ -282,15 +289,16 @@ To validate a Child's CDS/CDNSKEY RRset for DNSSEC bootstrapping, the
 Parental Agent, knowing both the Child zone name and its NS
 hostnames, MUST execute the following steps:
 
-1. verify that the Child is not currently securely delegated;
+1. verify that the Child is not currently securely delegated and that at
+   least one of its nameservers is out of bailiwick;
 
 2. query the CDS/CDNSKEY records at the Child zone apex directly from
    each of the authoritative servers as determined by the delegation's
    NS record set;
 
 3. query the CDS/CDNSKEY records located at the Signaling Name under
-   each Signaling Domain using a trusted DNS resolver and enforce
-   DNSSEC validation;
+   each out-of-bailiwick Signaling Domain using a trusted DNS resolver
+   and enforce DNSSEC validation;
 
 4. check (separately by record type) that all record sets retrieved
    in Steps 2 and 3 have equal contents;
@@ -302,7 +310,8 @@ publication of the DS record set under the precautions described in
 
 If, however, an error condition occurs, in particular:
 
-- in Step 1: the Child is already securely delegated;
+- in Step 1: the Child is already securely delegated or has in-bailiwick
+  nameservers only;
 
 - in Step 2: any failure during the retrieval of the CDS/CDNSKEY
   records located at the Child apex from any of the authoritative
@@ -322,19 +331,20 @@ the Parental Agent MUST abort the procedure.
 
 To verify the CDS/CDNSKEY records for the Child `example.co.uk`, the
 Parental Agent (assuming that the Child delegation's NS records are
-`ns1.example.net` and `ns2.example.net`)
+`ns1.example.net`, `ns2.example.org`, and `ns3.example.co.uk`)
 
 1. checks that the Child domain is not yet securely delegated;
 
 2. queries CDS/CDNSKEY records for `example.co.uk` directly from
-   `ns1.example.net` and `ns2.example.net`;
+   `ns1.example.net`, `ns2.example.org`, and `ns3.example.co.uk`;
 
 3. queries and validates the CDS/CDNSKEY records located at (see
-   (#signalingnames))
+   (#signalingnames); `ns3.example.co.uk` is ignored because it is in
+   bailiwick)
 
 ```
 _dsboot.example.co.uk._signal.ns1.example.net
-_dsboot.example.co.uk._signal.ns2.example.net
+_dsboot.example.co.uk._signal.ns2.example.org
 ```
 
 4. checks that the CDS/CDNSKEY record sets retrieved in Steps 2
@@ -342,6 +352,12 @@ _dsboot.example.co.uk._signal.ns2.example.net
 
 If all these steps succeed, the Parental Agent can proceed to publish
 a DS record set as indicated by the validated CDS/CDNSKEY records.
+
+The Parental Agent does not use in-bailiwick Signaling Names during
+validation because they cannot have a pre-established chain of trust at
+bootstrapping time, so are not useful for bootstrapping.
+Consequently, if all NS hostnames are in bailiwick, validation cannot be
+completed, and DS records are not published.
 
 {#triggers}
 ## Triggers
@@ -383,7 +399,7 @@ listed in the Child's delegation from the Parent.
 ## Limitations
 
 As a consequence of Step 3 in (#bootstrapping), DS bootstrapping does
-not work for in-bailiwick delegations, as no pre-existing chain of
+not work for fully in-bailiwick delegations, as no pre-existing chain of
 trust to the Child domain is available during bootstrapping.
 
 The protocol is further restricted by the fact that the fully
@@ -496,8 +512,8 @@ Per [@!RFC8552], IANA is requested to add the following entries to the
 # Acknowledgements
 
 Thanks to Brian Dickson, Ondřej Caletka, John R. Levine, Christian
-Elmerot, Oli Schacher, and Donald Eastlake for reviewing draft proposals
-and offering comments and suggestions.
+Elmerot, Oli Schacher, Donald Eastlake, and Libor Peltan for reviewing
+draft proposals and offering comments and suggestions.
 
 Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.
@@ -508,6 +524,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-01
+
+> Allow bootstrapping when some (not all) NS hostnames are in bailiwick.
 
 > Clarified Operational Recommendations according to operator feedback.
 

@@ -1445,8 +1445,8 @@ CDS/CDNSKEY records found at an insecure Child zone's apex, and upon
 success secure the delegation.<a href="#section-1-6" class="pilcrow">¶</a></p>
 <p id="section-1-7">While applicable to the vast majority of domains, the protocol does
 not support certain edge cases, such as excessively long Child zone
-names, or DNSSEC bootstrapping for in-bailiwick domains (see
-<a href="#limitations" class="xref">Section 3.4</a>).<a href="#section-1-7" class="pilcrow">¶</a></p>
+names, or DNSSEC bootstrapping for domains with in-bailick nameservers
+only (see <a href="#limitations" class="xref">Section 3.4</a>).<a href="#section-1-7" class="pilcrow">¶</a></p>
 <p id="section-1-8">Readers are expected to be familiar with DNSSEC, including <span>[<a href="#RFC4033" class="xref">RFC4033</a>]</span>,
 <span>[<a href="#RFC4034" class="xref">RFC4034</a>]</span>, <span>[<a href="#RFC4035" class="xref">RFC4035</a>]</span>, <span>[<a href="#RFC6781" class="xref">RFC6781</a>]</span>, <span>[<a href="#RFC7344" class="xref">RFC7344</a>]</span>, and <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span>.<a href="#section-1-8" class="pilcrow">¶</a></p>
 <div id="terminology">
@@ -1545,10 +1545,10 @@ Authenticity is ensured through standard DNSSEC validation.<a href="#section-2-1
 MUST be signed and securely delegated, i.e. have a valid DNSSEC chain
 of trust.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.1-2">For example, when publishing a signal that relates to a Child zone
-with NS records <code>ns1.example.net</code> and <code>ns2.example.net</code>, the Child
+with NS records <code>ns1.example.net</code> and <code>ns2.example.org</code>, the Child
 DNS Operator needs to ensure that a valid DNSSEC chain of trust
 exists for the zone(s) that are authoritative for the Signaling
-Domains <code>_signal.ns1.example.net</code> and <code>_signal.ns2.example.net</code>.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+Domains <code>_signal.ns1.example.net</code> and <code>_signal.ns2.example.org</code>.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="signalingnames">
@@ -1592,7 +1592,11 @@ protocol described in this section.<a href="#section-3-2" class="pilcrow">¶</a>
 <p id="section-3.1-1">To confirm its willingness to act as the Child's delegated signer and
 authenticate the Child's CDS/CDNSKEY RRsets, the Child DNS Operator
 MUST co-publish them at the corresponding Signaling Name under each
-Signaling Domain as defined in <a href="#signalingnames" class="xref">Section 2.2</a>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+out-of-bailiwick Signaling Domain (<a href="#signalingnames" class="xref">Section 2.2</a>).
+For simplicity, the Child DNS Operator MAY also co-publish the Child's
+CDS/CDNSKEY RRsets under Signaling Domains that are in bailiwick,
+although those Signaling Domains are not used for validation
+(<a href="#bootstrapping" class="xref">Section 3.2</a>).<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1-2">Unlike the CDS/CDNSKEY records at the Child's apex, Signaling
 Records MUST be signed with the corresponding Signaling Zone's
 key(s).  Their contents MUST be identical to the corresponding
@@ -1607,20 +1611,22 @@ there MUST NOT be a zone cut at a Signaling Name.<a href="#section-3.1-3" class=
           <h4 id="name-example">
 <a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-example" class="section-name selfRef">Example</a>
           </h4>
-<p id="section-3.1.1-1">For the purposes of bootstrapping the Child zone <code>example.co.uk</code> with
-NS records <code>ns1.example.net</code> and <code>ns2.example.net</code>, the required
-Signaling Domains are <code>_signal.ns1.example.net</code> and
-<code>_signal.ns2.example.net</code>.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-1">For the purposes of bootstrapping the Child zone <code>example.co.uk</code> with NS
+records <code>ns1.example.net</code>, <code>ns2.example.org</code>, and <code>ns3.example.co.uk</code>,
+the required Signaling Domains are <code>_signal.ns1.example.net</code> and
+<code>_signal.ns2.example.org</code>.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1.1-2">In the zones containing these domains, the Child DNS Operator
 authenticates the CDS/CDNSKEY records found at the Child's apex by
 co-publishing them at the names:<a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.1.1-3">
 <pre>_dsboot.example.co.uk._signal.ns1.example.net
-_dsboot.example.co.uk._signal.ns2.example.net
+_dsboot.example.co.uk._signal.ns2.example.org
 </pre><a href="#section-3.1.1-3" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.1-4">The records are accompanied by RRSIG records created using the key(s)
 of the respective Signaling Zone.<a href="#section-3.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-5">Publication of Signaling Records under the in-bailiwick domain
+<code>_signal.ns3.example.co.uk</code> is not required.<a href="#section-3.1.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1636,7 +1642,8 @@ Parental Agent, knowing both the Child zone name and its NS
 hostnames, MUST execute the following steps:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-3.2-3">
 <li id="section-3.2-3.1">
-            <p id="section-3.2-3.1.1">verify that the Child is not currently securely delegated;<a href="#section-3.2-3.1.1" class="pilcrow">¶</a></p>
+            <p id="section-3.2-3.1.1">verify that the Child is not currently securely delegated and that at
+least one of its nameservers is out of bailiwick;<a href="#section-3.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-3.2-3.2">
             <p id="section-3.2-3.2.1">query the CDS/CDNSKEY records at the Child zone apex directly from
@@ -1645,8 +1652,8 @@ NS record set;<a href="#section-3.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-3.2-3.3">
             <p id="section-3.2-3.3.1">query the CDS/CDNSKEY records located at the Signaling Name under
-each Signaling Domain using a trusted DNS resolver and enforce
-DNSSEC validation;<a href="#section-3.2-3.3.1" class="pilcrow">¶</a></p>
+each out-of-bailiwick Signaling Domain using a trusted DNS resolver
+and enforce DNSSEC validation;<a href="#section-3.2-3.3.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-3.2-3.4">
             <p id="section-3.2-3.4.1">check (separately by record type) that all record sets retrieved
@@ -1660,7 +1667,8 @@ publication of the DS record set under the precautions described in
 <p id="section-3.2-5">If, however, an error condition occurs, in particular:<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2-6.1">
-            <p id="section-3.2-6.1.1">in Step 1: the Child is already securely delegated;<a href="#section-3.2-6.1.1" class="pilcrow">¶</a></p>
+            <p id="section-3.2-6.1.1">in Step 1: the Child is already securely delegated or has in-bailiwick
+nameservers only;<a href="#section-3.2-6.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.2-6.2">
             <p id="section-3.2-6.2.1">in Step 2: any failure during the retrieval of the CDS/CDNSKEY
@@ -1686,23 +1694,24 @@ non-empty in the other;<a href="#section-3.2-6.4.1" class="pilcrow">¶</a></p>
           </h4>
 <p id="section-3.2.1-1">To verify the CDS/CDNSKEY records for the Child <code>example.co.uk</code>, the
 Parental Agent (assuming that the Child delegation's NS records are
-<code>ns1.example.net</code> and <code>ns2.example.net</code>)<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+<code>ns1.example.net</code>, <code>ns2.example.org</code>, and <code>ns3.example.co.uk</code>)<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-3.2.1-2">
 <li id="section-3.2.1-2.1">
               <p id="section-3.2.1-2.1.1">checks that the Child domain is not yet securely delegated;<a href="#section-3.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-3.2.1-2.2">
               <p id="section-3.2.1-2.2.1">queries CDS/CDNSKEY records for <code>example.co.uk</code> directly from
-<code>ns1.example.net</code> and <code>ns2.example.net</code>;<a href="#section-3.2.1-2.2.1" class="pilcrow">¶</a></p>
+<code>ns1.example.net</code>, <code>ns2.example.org</code>, and <code>ns3.example.co.uk</code>;<a href="#section-3.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-3.2.1-2.3">
               <p id="section-3.2.1-2.3.1">queries and validates the CDS/CDNSKEY records located at (see
-<a href="#signalingnames" class="xref">Section 2.2</a>)<a href="#section-3.2.1-2.3.1" class="pilcrow">¶</a></p>
+<a href="#signalingnames" class="xref">Section 2.2</a>; <code>ns3.example.co.uk</code> is ignored because it is in
+bailiwick)<a href="#section-3.2.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
 <div class="alignLeft art-text artwork" id="section-3.2.1-3">
 <pre>_dsboot.example.co.uk._signal.ns1.example.net
-_dsboot.example.co.uk._signal.ns2.example.net
+_dsboot.example.co.uk._signal.ns2.example.org
 </pre><a href="#section-3.2.1-3" class="pilcrow">¶</a>
 </div>
 <ol start="4" type="1" class="normal type-1" id="section-3.2.1-4">
@@ -1712,6 +1721,11 @@ and 3 agree across responses.<a href="#section-3.2.1-4.1" class="pilcrow">¶</a>
           </ol>
 <p id="section-3.2.1-5">If all these steps succeed, the Parental Agent can proceed to publish
 a DS record set as indicated by the validated CDS/CDNSKEY records.<a href="#section-3.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-6">The Parental Agent does not use in-bailiwick Signaling Names during
+validation because they cannot have a pre-established chain of trust at
+bootstrapping time, so are not useful for bootstrapping.
+Consequently, if all NS hostnames are in bailiwick, validation cannot be
+completed, and DS records are not published.<a href="#section-3.2.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1762,7 +1776,7 @@ listed in the Child's delegation from the Parent.<a href="#section-3.3-5" class=
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-limitations" class="section-name selfRef">Limitations</a>
         </h3>
 <p id="section-3.4-1">As a consequence of Step 3 in <a href="#bootstrapping" class="xref">Section 3.2</a>, DS bootstrapping does
-not work for in-bailiwick delegations, as no pre-existing chain of
+not work for fully in-bailiwick delegations, as no pre-existing chain of
 trust to the Child domain is available during bootstrapping.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.4-2">The protocol is further restricted by the fact that the fully
 qualified Signaling Names fit within the general limits that apply to
@@ -1920,8 +1934,8 @@ provisioning of DS records.<a href="#section-6-3" class="pilcrow">¶</a></p>
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
       </h2>
 <p id="section-8-1">Thanks to Brian Dickson, Ond&amp;#345;ej Caletka, John R. Levine, Christian
-Elmerot, Oli Schacher, and Donald Eastlake for reviewing draft proposals
-and offering comments and suggestions.<a href="#section-8-1" class="pilcrow">¶</a></p>
+Elmerot, Oli Schacher, Donald Eastlake, and Libor Peltan for reviewing
+draft proposals and offering comments and suggestions.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <p id="section-8-2">Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.<a href="#section-8-2" class="pilcrow">¶</a></p>
 </section>
@@ -1979,16 +1993,17 @@ early-stage brainstorming.<a href="#section-8-2" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <blockquote id="appendix-A-2">
-        <p id="appendix-A-2.1">Clarified Operational Recommendations according to operator feedback.<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
-<p id="appendix-A-2.2">Turn loose Security Considerations points into coherent text.<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
-<p id="appendix-A-2.3">Do no longer suggest NSEC-walking Signaling Domains.
+        <p id="appendix-A-2.1">Allow bootstrapping when some (not all) NS hostnames are in bailiwick.<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.2">Clarified Operational Recommendations according to operator feedback.<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.3">Turn loose Security Considerations points into coherent text.<a href="#appendix-A-2.3" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.4">Do no longer suggest NSEC-walking Signaling Domains.
   (It does not work well due to the Signaling Type prefix. What's more,
   it's unclear who would do this: Parents know there delegations and can
-  do a targeted scan; others are not interested.)<a href="#appendix-A-2.3" class="pilcrow">¶</a></p>
-<p id="appendix-A-2.4">Editorial changes.<a href="#appendix-A-2.4" class="pilcrow">¶</a></p>
-<p id="appendix-A-2.5">Added IANA request.<a href="#appendix-A-2.5" class="pilcrow">¶</a></p>
-<p id="appendix-A-2.6">Introduced Signaling Type prefix (<code>_dsboot</code>), renamed Signaling Name
-  infix from <code>_dsauth</code> to <code>_signal</code>.<a href="#appendix-A-2.6" class="pilcrow">¶</a></p>
+  do a targeted scan; others are not interested.)<a href="#appendix-A-2.4" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.5">Editorial changes.<a href="#appendix-A-2.5" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.6">Added IANA request.<a href="#appendix-A-2.6" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.7">Introduced Signaling Type prefix (<code>_dsboot</code>), renamed Signaling Name
+  infix from <code>_dsauth</code> to <code>_signal</code>.<a href="#appendix-A-2.7" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
 <li class="normal" id="appendix-A-3.1">draft-ietf-dnsop-dnssec-bootstrapping-00<a href="#appendix-A-3.1" class="pilcrow">¶</a>
