@@ -410,14 +410,11 @@ modifications of the zone containing the nameserver hostname.
 ## Parental Agent
 
 It is RECOMMENDED to perform queries within Signaling Domains
-((#bootstrapping)) with an (initially) cold resolver cache as to
-retrieve the most current information regardless of TTL.
+((#bootstrapping)) with an (initially) cold resolver cache or to limit
+the TTL of cached records to the interval between scans, as to retrieve
+the most current information regardless of TTL.
 (When a batch job is used to attempt bootstrapping for a large number
 of delegations, the cache does not need to get cleared in between.)
-
-[ TODO It is expected that Signaling Records have few consumers only, so
-that caching would not normally have a performance benefit.
-Perhaps it is thus better to RECOMMEND low TTLs instead? ]
 
 
 # Implementation Status
@@ -511,6 +508,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-01
+
+> Clarified Operational Recommendations according to operator feedback.
 
 > Turn loose Security Considerations points into coherent text.
 

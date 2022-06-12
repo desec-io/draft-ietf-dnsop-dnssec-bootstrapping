@@ -6,7 +6,7 @@ DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
 Updates: 7344, 8078 (if approved)                              N. Wisiol
 Intended status: Standards Track    deSEC, Technische Universität Berlin
-Expires: 5 December 2022                                     3 June 2022
+Expires: 14 December 2022                                   12 June 2022
 
 
   Automatic DNSSEC Bootstrapping using Authenticated Signals from the
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Thomassen & Wisiol       Expires 5 December 2022                [Page 1]
+Thomassen & Wisiol      Expires 14 December 2022                [Page 1]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -63,7 +63,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 December 2022.
+   This Internet-Draft will expire on 14 December 2022.
 
 Copyright Notice
 
@@ -98,7 +98,7 @@ Table of Contents
    4.  Operational Recommendations . . . . . . . . . . . . . . . . .   9
      4.1.  Child DNS Operator  . . . . . . . . . . . . . . . . . . .   9
      4.2.  Parental Agent  . . . . . . . . . . . . . . . . . . . . .   9
-   5.  Implementation Status . . . . . . . . . . . . . . . . . . . .  10
+   5.  Implementation Status . . . . . . . . . . . . . . . . . . . .   9
      5.1.  Child DNS Operator-side . . . . . . . . . . . . . . . . .  10
      5.2.  Parental Agent-side . . . . . . . . . . . . . . . . . . .  10
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomassen & Wisiol       Expires 5 December 2022                [Page 2]
+Thomassen & Wisiol      Expires 14 December 2022                [Page 2]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -165,7 +165,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-Thomassen & Wisiol       Expires 5 December 2022                [Page 3]
+Thomassen & Wisiol      Expires 14 December 2022                [Page 3]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -221,7 +221,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-Thomassen & Wisiol       Expires 5 December 2022                [Page 4]
+Thomassen & Wisiol      Expires 14 December 2022                [Page 4]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -277,7 +277,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-Thomassen & Wisiol       Expires 5 December 2022                [Page 5]
+Thomassen & Wisiol      Expires 14 December 2022                [Page 5]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -333,7 +333,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-Thomassen & Wisiol       Expires 5 December 2022                [Page 6]
+Thomassen & Wisiol      Expires 14 December 2022                [Page 6]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -389,7 +389,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-Thomassen & Wisiol       Expires 5 December 2022                [Page 7]
+Thomassen & Wisiol      Expires 14 December 2022                [Page 7]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -445,7 +445,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-Thomassen & Wisiol       Expires 5 December 2022                [Page 8]
+Thomassen & Wisiol      Expires 14 December 2022                [Page 8]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -486,30 +486,25 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 4.2.  Parental Agent
 
    It is RECOMMENDED to perform queries within Signaling Domains
-   (Section 3.2) with an (initially) cold resolver cache as to retrieve
+   (Section 3.2) with an (initially) cold resolver cache or to limit the
+   TTL of cached records to the interval between scans, as to retrieve
    the most current information regardless of TTL.  (When a batch job is
    used to attempt bootstrapping for a large number of delegations, the
    cache does not need to get cleared in between.)
-
-   [ TODO It is expected that Signaling Records have few consumers only,
-   so that caching would not normally have a performance benefit.
-   Perhaps it is thus better to RECOMMEND low TTLs instead? ]
-
-
-
-
-
-
-
-Thomassen & Wisiol       Expires 5 December 2022                [Page 9]
-
-Internet-Draft            dnssec-bootstrapping                 June 2022
-
 
 5.  Implementation Status
 
    *Note to the RFC Editor*: please remove this entire section before
    publication.
+
+
+
+
+
+Thomassen & Wisiol      Expires 14 December 2022                [Page 9]
+
+Internet-Draft            dnssec-bootstrapping                 June 2022
+
 
 5.1.  Child DNS Operator-side
 
@@ -553,21 +548,20 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
    TODO In principle, this applies to any CDS update.  Should we phrase
    it as a general update to [RFC8078]? ]
 
-
-
-
-
-Thomassen & Wisiol       Expires 5 December 2022               [Page 10]
-
-Internet-Draft            dnssec-bootstrapping                 June 2022
-
-
    Because the parents of a Signaling Domain (such as the corresponding
    TLD registry) are in control of its chain of trust, they are also
    able to undermine the signal's authenticity.  To mitigate this risk,
    it is RECOMMENDED to increase the effort required to collude for
    taking control of all Signaling Domains, by diversifying the path
    from the root to each nameserver.  This is best achieved by using
+
+
+
+Thomassen & Wisiol      Expires 14 December 2022               [Page 10]
+
+Internet-Draft            dnssec-bootstrapping                 June 2022
+
+
    different and independently operated TLDs for each one.  (TLD-
    independent NS hostnames are advisable anyways in DNS operations, in
    order to prevent the TLD from becoming a single point of failure.)
@@ -608,20 +602,21 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
               RFC 4033, DOI 10.17487/RFC4033, March 2005,
               <https://www.rfc-editor.org/info/rfc4033>.
 
-
-
-
-
-
-Thomassen & Wisiol       Expires 5 December 2022               [Page 11]
-
-Internet-Draft            dnssec-bootstrapping                 June 2022
-
-
    [RFC4034]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Resource Records for the DNS Security Extensions",
               RFC 4034, DOI 10.17487/RFC4034, March 2005,
               <https://www.rfc-editor.org/info/rfc4034>.
+
+
+
+
+
+
+
+Thomassen & Wisiol      Expires 14 December 2022               [Page 11]
+
+Internet-Draft            dnssec-bootstrapping                 June 2022
+
 
    [RFC4035]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Protocol Modifications for the DNS Security
@@ -656,6 +651,9 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-01
 
+   |  Clarified Operational Recommendations according to operator
+   |  feedback.
+   |  
    |  Turn loose Security Considerations points into coherent text.
    |  
    |  Do no longer suggest NSEC-walking Signaling Domains.  (It does not
@@ -666,15 +664,16 @@ Appendix A.  Change History (to be removed before publication)
    |  Editorial changes.
    |  
    |  Added IANA request.
+   |  
 
 
 
-Thomassen & Wisiol       Expires 5 December 2022               [Page 12]
+
+Thomassen & Wisiol      Expires 14 December 2022               [Page 12]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
-   |  
    |  Introduced Signaling Type prefix (_dsboot), renamed Signaling Name
    |  infix from _dsauth to _signal.
 
@@ -722,15 +721,15 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
    |  Reworked Signaling Name scheme.
    |  
    |  Recommend using cold cache for consumption.
+   |  
 
 
 
-Thomassen & Wisiol       Expires 5 December 2022               [Page 13]
+Thomassen & Wisiol      Expires 14 December 2022               [Page 13]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
-   |  
    |  Updated terminology (replace "Bootstrapping" by "Signaling").
    |  
    |  Added NSEC recommendation for Bootstrapping Zones.
@@ -781,4 +780,5 @@ Authors' Addresses
 
 
 
-Thomassen & Wisiol       Expires 5 December 2022               [Page 14]
+
+Thomassen & Wisiol      Expires 14 December 2022               [Page 14]
