@@ -22,11 +22,8 @@ resorting to out-of-band validation or weaker types of cross-checks
 such as &quot;Accept after Delay&quot; ( ). 
        This document updates   and replaces its Section 3 with
   of this document. 
-       [ Ed note: Text inside square brackets ([]) is additional background
-information, answers to frequently asked questions, general musings,
-etc.  They will be removed before publication.
-This document is being collaborated on at
- https://github.com/desec-io/draft-thomassen-dnsop-dnssec-bootstrapping/ .
+       [ Ed note: This document is being collaborated on at
+ https://github.com/desec-io/draft-ietf-dnsop-dnssec-bootstrapping/ .
 The authors gratefully accept pull requests. ] 
     " name="description">
 <meta content="xml2rfc 3.12.2" name="generator">
@@ -1247,11 +1244,8 @@ resorting to out-of-band validation or weaker types of cross-checks
 such as "Accept after Delay" (<span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span>).<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 <p id="section-abstract-3">This document updates <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span> and replaces its Section 3 with
 <a href="#bootstrapping" class="xref">Section 3.2</a> of this document.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
-<p id="section-abstract-4">[ Ed note: Text inside square brackets ([]) is additional background
-information, answers to frequently asked questions, general musings,
-etc.  They will be removed before publication.
-This document is being collaborated on at
-<a href="https://github.com/desec-io/draft-thomassen-dnsop-dnssec-bootstrapping/">https://github.com/desec-io/draft-thomassen-dnsop-dnssec-bootstrapping/</a>.
+<p id="section-abstract-4">[ Ed note: This document is being collaborated on at
+<a href="https://github.com/desec-io/draft-ietf-dnsop-dnssec-bootstrapping/">https://github.com/desec-io/draft-ietf-dnsop-dnssec-bootstrapping/</a>.
 The authors gratefully accept pull requests. ]<a href="#section-abstract-4" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
@@ -1892,9 +1886,7 @@ apply as in <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span>.<a href="
 publication of a half-baked DS RRset (authorized only under a subset
 of NS hostnames).
 This ensures, for example, that an operator in a multi-homed setup
-cannot enable DNSSEC unless all other operators agree.
-[ TODO In principle, this applies to any CDS update. Should we phrase
-it as a general update to <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span>? ]<a href="#section-6-2" class="pilcrow">¶</a></p>
+cannot enable DNSSEC unless all other operators agree.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <p id="section-6-3">Because the parents of a Signaling Domain (such as the corresponding TLD
 registry) are in control of its chain of trust, they are also able to
 undermine the signal's authenticity.

@@ -58,11 +58,8 @@ such as "Accept after Delay" ([@!RFC8078]).
 This document updates [@!RFC8078] and replaces its Section 3 with
 (#bootstrapping) of this document.
 
-[ Ed note: Text inside square brackets ([]) is additional background
-information, answers to frequently asked questions, general musings,
-etc.  They will be removed before publication.
-This document is being collaborated on at
-<https://github.com/desec-io/draft-thomassen-dnsop-dnssec-bootstrapping/>.
+[ Ed note: This document is being collaborated on at
+<https://github.com/desec-io/draft-ietf-dnsop-dnssec-bootstrapping/>.
 The authors gratefully accept pull requests. ]
 
 {mainmatter}
@@ -478,8 +475,6 @@ publication of a half-baked DS RRset (authorized only under a subset
 of NS hostnames).
 This ensures, for example, that an operator in a multi-homed setup
 cannot enable DNSSEC unless all other operators agree.
-[ TODO In principle, this applies to any CDS update. Should we phrase
-it as a general update to [@!RFC8078]? ]
 
 Because the parents of a Signaling Domain (such as the corresponding TLD
 registry) are in control of its chain of trust, they are also able to
