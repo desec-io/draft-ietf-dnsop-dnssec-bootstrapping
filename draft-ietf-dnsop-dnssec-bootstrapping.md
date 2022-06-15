@@ -103,7 +103,8 @@ methods have been used so far to complete the chain of trust, or
 cryptographic validation has been entirely dispensed with, in
 exchange for weaker types of cross-checks such as "Accept after
 Delay" ([@!RFC8078] Section 3.3).
-An in-band validation method for enabling DNSSEC has been missing.
+[@!RFC8078] does not define an in-band validation method for enabling
+DNSSEC.
 
 This document aims to close this gap by introducing an in-band method
 for DNS Operators to publish arbitrary information about the zones
