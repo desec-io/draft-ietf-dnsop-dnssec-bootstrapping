@@ -290,9 +290,9 @@ hostnames, MUST execute the following steps:
 1. verify that the Child is not currently securely delegated and that at
    least one of its nameservers is out of bailiwick;
 
-2. query the CDS/CDNSKEY records at the Child zone apex directly from
+2. query the CDS/CDNSKEY records at the Child zone apex from
    each of the authoritative servers as determined by the delegation's
-   NS record set;
+   NS record set without caching;
 
 3. query the CDS/CDNSKEY records located at the Signaling Name under
    each out-of-bailiwick Signaling Domain using a trusted DNS resolver
@@ -333,8 +333,9 @@ Parental Agent (assuming that the Child delegation's NS records are
 
 1. checks that the Child domain is not yet securely delegated;
 
-2. queries CDS/CDNSKEY records for `example.co.uk` directly from
-   `ns1.example.net`, `ns2.example.org`, and `ns3.example.co.uk`;
+2. queries CDS/CDNSKEY records for `example.co.uk` from
+   `ns1.example.net`, `ns2.example.org`, and `ns3.example.co.uk`
+   without caching;
 
 3. queries and validates the CDS/CDNSKEY records located at (see
    (#signalingnames); `ns3.example.co.uk` is ignored because it is in
