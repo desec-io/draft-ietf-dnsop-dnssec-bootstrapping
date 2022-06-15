@@ -141,7 +141,7 @@ Child DNS Operator
   the Child DNS.
 
 Parent
-: The domain in which the Child in registered.
+: The domain in which the Child is registered.
 
 Parental Agent
 : The entity that has the authority to insert DS records into the
@@ -218,12 +218,12 @@ The type and contents of these Signaling Records depend on the type of
 signal.
 
 The Signaling Name identifies the Child and the Signaling Type.
-It is identical to the Child name (with the final root label removed),
+It is identical to the Child name (but with the final root label removed),
 prefixed with a label containing the Signaling Type.
 
 # Bootstrapping a DNSSEC Delegation
 
-When Child zone's CDS/CDNSKEY RRsets are used for setting up initial
+When the Child zone's CDS/CDNSKEY RRsets are used for setting up initial
 trust, they need to be authenticated.
 This is achieved by co-publishing the Child's CDS/CDNSKEY records as an
 authenticated signal from the Child DNS Operator.
