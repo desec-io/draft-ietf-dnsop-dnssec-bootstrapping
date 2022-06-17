@@ -1192,7 +1192,7 @@ li > p:last-of-type {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomassen &amp; Wisiol</td>
-<td class="center">Expires 14 December 2022</td>
+<td class="center">Expires 19 December 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1208,12 +1208,12 @@ li > p:last-of-type {
 <a href="https://www.rfc-editor.org/rfc/rfc7344" class="eref">7344</a>, <a href="https://www.rfc-editor.org/rfc/rfc8078" class="eref">8078</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-06-12" class="published">12 June 2022</time>
+<time datetime="2022-06-17" class="published">17 June 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-12-14">14 December 2022</time></dd>
+<dd class="expires"><time datetime="2022-12-19">19 December 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1267,7 +1267,7 @@ The authors gratefully accept pull requests. ]<a href="#section-abstract-4" clas
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 December 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 19 December 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1427,7 +1427,8 @@ methods have been used so far to complete the chain of trust, or
 cryptographic validation has been entirely dispensed with, in
 exchange for weaker types of cross-checks such as "Accept after
 Delay" (<span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span> Section 3.3).
-An in-band validation method for enabling DNSSEC has been missing.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span> does not define an in-band validation method for enabling
+DNSSEC.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">This document aims to close this gap by introducing an in-band method
 for DNS Operators to publish arbitrary information about the zones
 they are authoritative for, in an authenticated manner and on a
@@ -1465,7 +1466,7 @@ the Child DNS.<a href="#section-1.1-2.6" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-2.7">Parent</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.8">The domain in which the Child in registered.<a href="#section-1.1-2.8" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.8">The domain in which the Child is registered.<a href="#section-1.1-2.8" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-2.9">Parental Agent</dt>
@@ -1499,7 +1500,7 @@ information about the Child.<a href="#section-1.1-2.16" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-2.19">Signaling Zone</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.20">The zone which is authoritative for a given Signaling Domain.<a href="#section-1.1-2.20" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.20">The zone which is authoritative for a given Signaling Record.<a href="#section-1.1-2.20" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1558,7 +1559,7 @@ the corresponding Signaling Zone's key(s).
 The type and contents of these Signaling Records depend on the type of
 signal.<a href="#section-2.2-2" class="pilcrow">¶</a></p>
 <p id="section-2.2-3">The Signaling Name identifies the Child and the Signaling Type.
-It is identical to the Child name (with the final root label removed),
+It is identical to the Child name (but with the final root label removed),
 prefixed with a label containing the Signaling Type.<a href="#section-2.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1569,7 +1570,7 @@ prefixed with a label containing the Signaling Type.<a href="#section-2.2-3" cla
       <h2 id="name-bootstrapping-a-dnssec-dele">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-bootstrapping-a-dnssec-dele" class="section-name selfRef">Bootstrapping a DNSSEC Delegation</a>
       </h2>
-<p id="section-3-1">When Child zone's CDS/CDNSKEY RRsets are used for setting up initial
+<p id="section-3-1">When the Child zone's CDS/CDNSKEY RRsets are used for setting up initial
 trust, they need to be authenticated.
 This is achieved by co-publishing the Child's CDS/CDNSKEY records as an
 authenticated signal from the Child DNS Operator.
@@ -1642,7 +1643,7 @@ least one of its nameservers is out of bailiwick;<a href="#section-3.2-3.1.1" cl
           <li id="section-3.2-3.2">
             <p id="section-3.2-3.2.1">query the CDS/CDNSKEY records at the Child zone apex directly from
 each of the authoritative servers as determined by the delegation's
-NS record set;<a href="#section-3.2-3.2.1" class="pilcrow">¶</a></p>
+NS record set (without caching);<a href="#section-3.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-3.2-3.3">
             <p id="section-3.2-3.3.1">query the CDS/CDNSKEY records located at the Signaling Name under
@@ -1695,7 +1696,8 @@ Parental Agent (assuming that the Child delegation's NS records are
 </li>
             <li id="section-3.2.1-2.2">
               <p id="section-3.2.1-2.2.1">queries CDS/CDNSKEY records for <code>example.co.uk</code> directly from
-<code>ns1.example.net</code>, <code>ns2.example.org</code>, and <code>ns3.example.co.uk</code>;<a href="#section-3.2.1-2.2.1" class="pilcrow">¶</a></p>
+<code>ns1.example.net</code>, <code>ns2.example.org</code>, and <code>ns3.example.co.uk</code>
+(without caching);<a href="#section-3.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-3.2.1-2.3">
               <p id="section-3.2.1-2.3.1">queries and validates the CDS/CDNSKEY records located at (see
@@ -1752,8 +1754,8 @@ algorithm (<a href="#bootstrapping" class="xref">Section 3.2</a>) for querying S
 <p id="section-3.3-4">Some discovery methods, however, do not imply reliable knowledge of the
 Child's NS record set.
 For example, when discovering Signaling Names by performing an NSEC
-walk or zone transfer of a Signaling Zone, the Parental Agent MUST NOT
-assume that the nameserver(s) under whose Signaling Domain(s) a
+walk or zone transfer for a Signaling Domain, the Parental Agent MUST
+NOT assume that the nameserver(s) under whose Signaling Domain(s) a
 Signaling Name appears is in fact authoritative for the corresponding
 Child.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
 <p id="section-3.3-5">In this case (and in other cases alike where some list of
@@ -1789,16 +1791,16 @@ DNS names (such as their length and label count).<a href="#section-3.4-2" class=
         <h3 id="name-child-dns-operator">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-child-dns-operator" class="section-name selfRef">Child DNS Operator</a>
         </h3>
-<p id="section-4.1-1">To keep the size of the Signaling Zones minimal and bulk processing
-efficient (such as via zone transfers), Child DNS Operators SHOULD
-remove Signaling Records which are found to have been acted upon.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">Signaling Domains SHOULD be delegated as zones of their own, so
+<p id="section-4.1-1">Signaling Domains SHOULD be delegated as zones of their own, so
 that the Signaling Zone's apex coincides with the Signaling
 Domain (such as <code>_signal.ns1.example.net</code>).
 While it is permissible for the Signaling Domain to be contained
 in a Signaling Zone of fewer labels (such as <code>example.net</code>), a
 zone cut ensures that bootstrapping activities do not require
-modifications of the zone containing the nameserver hostname.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+modifications of the zone containing the nameserver hostname.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">To keep the size of the Signaling Zones minimal and bulk processing
+efficient (such as via zone transfers), Child DNS Operators SHOULD
+remove Signaling Records which are found to have been acted upon.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="parental-agent">

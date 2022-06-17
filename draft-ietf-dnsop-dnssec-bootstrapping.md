@@ -169,7 +169,7 @@ Signaling Type
 : A signal type identifier, such as `_dsboot` for DNSSEC bootstrapping.
 
 Signaling Zone
-: The zone which is authoritative for a given Signaling Domain.
+: The zone which is authoritative for a given Signaling Record.
 
 
 ## Requirements Notation
@@ -290,9 +290,9 @@ hostnames, MUST execute the following steps:
 1. verify that the Child is not currently securely delegated and that at
    least one of its nameservers is out of bailiwick;
 
-2. query the CDS/CDNSKEY records at the Child zone apex from
+2. query the CDS/CDNSKEY records at the Child zone apex directly from
    each of the authoritative servers as determined by the delegation's
-   NS record set without caching;
+   NS record set (without caching);
 
 3. query the CDS/CDNSKEY records located at the Signaling Name under
    each out-of-bailiwick Signaling Domain using a trusted DNS resolver
@@ -333,9 +333,9 @@ Parental Agent (assuming that the Child delegation's NS records are
 
 1. checks that the Child domain is not yet securely delegated;
 
-2. queries CDS/CDNSKEY records for `example.co.uk` from
+2. queries CDS/CDNSKEY records for `example.co.uk` directly from
    `ns1.example.net`, `ns2.example.org`, and `ns3.example.co.uk`
-   without caching;
+   (without caching);
 
 3. queries and validates the CDS/CDNSKEY records located at (see
    (#signalingnames); `ns3.example.co.uk` is ignored because it is in
@@ -381,8 +381,8 @@ algorithm ((#bootstrapping)) for querying Signaling Records.
 Some discovery methods, however, do not imply reliable knowledge of the
 Child's NS record set.
 For example, when discovering Signaling Names by performing an NSEC
-walk or zone transfer of a Signaling Zone, the Parental Agent MUST NOT
-assume that the nameserver(s) under whose Signaling Domain(s) a
+walk or zone transfer for a Signaling Domain, the Parental Agent MUST
+NOT assume that the nameserver(s) under whose Signaling Domain(s) a
 Signaling Name appears is in fact authoritative for the corresponding
 Child. 
 
@@ -410,10 +410,6 @@ DNS names (such as their length and label count).
 
 ## Child DNS Operator
 
-To keep the size of the Signaling Zones minimal and bulk processing
-efficient (such as via zone transfers), Child DNS Operators SHOULD
-remove Signaling Records which are found to have been acted upon.
-
 Signaling Domains SHOULD be delegated as zones of their own, so
 that the Signaling Zone's apex coincides with the Signaling
 Domain (such as `_signal.ns1.example.net`).
@@ -421,6 +417,10 @@ While it is permissible for the Signaling Domain to be contained
 in a Signaling Zone of fewer labels (such as `example.net`), a
 zone cut ensures that bootstrapping activities do not require
 modifications of the zone containing the nameserver hostname.
+
+To keep the size of the Signaling Zones minimal and bulk processing
+efficient (such as via zone transfers), Child DNS Operators SHOULD
+remove Signaling Records which are found to have been acted upon.
 
 ## Parental Agent
 

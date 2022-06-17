@@ -6,7 +6,7 @@ DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
 Updates: 7344, 8078 (if approved)                              N. Wisiol
 Intended status: Standards Track    deSEC, Technische Universität Berlin
-Expires: 14 December 2022                                   12 June 2022
+Expires: 19 December 2022                                   17 June 2022
 
 
   Automatic DNSSEC Bootstrapping using Authenticated Signals from the
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Thomassen & Wisiol      Expires 14 December 2022                [Page 1]
+Thomassen & Wisiol      Expires 19 December 2022                [Page 1]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -63,7 +63,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 December 2022.
+   This Internet-Draft will expire on 19 December 2022.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomassen & Wisiol      Expires 14 December 2022                [Page 2]
+Thomassen & Wisiol      Expires 19 December 2022                [Page 2]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -152,8 +152,8 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
    methods have been used so far to complete the chain of trust, or
    cryptographic validation has been entirely dispensed with, in
    exchange for weaker types of cross-checks such as "Accept after
-   Delay" ([RFC8078] Section 3.3).  An in-band validation method for
-   enabling DNSSEC has been missing.
+   Delay" ([RFC8078] Section 3.3).  [RFC8078] does not define an in-band
+   validation method for enabling DNSSEC.
 
 
 
@@ -165,7 +165,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-Thomassen & Wisiol      Expires 14 December 2022                [Page 3]
+Thomassen & Wisiol      Expires 19 December 2022                [Page 3]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -200,7 +200,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
    Child DNS Operator  The entity that maintains and publishes the zone
       information for the Child DNS.
 
-   Parent  The domain in which the Child in registered.
+   Parent  The domain in which the Child is registered.
 
    Parental Agent  The entity that has the authority to insert DS
       records into the Parent zone on behalf of the Child.  (It could
@@ -221,7 +221,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-Thomassen & Wisiol      Expires 14 December 2022                [Page 4]
+Thomassen & Wisiol      Expires 19 December 2022                [Page 4]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -230,7 +230,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
       bootstrapping.
 
    Signaling Zone  The zone which is authoritative for a given Signaling
-      Domain.
+      Record.
 
 1.2.  Requirements Notation
 
@@ -272,24 +272,24 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
    these Signaling Records depend on the type of signal.
 
    The Signaling Name identifies the Child and the Signaling Type.  It
-   is identical to the Child name (with the final root label removed),
-   prefixed with a label containing the Signaling Type.
+   is identical to the Child name (but with the final root label
+   removed), prefixed with a label containing the Signaling Type.
 
 
 
-Thomassen & Wisiol      Expires 14 December 2022                [Page 5]
+Thomassen & Wisiol      Expires 19 December 2022                [Page 5]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 3.  Bootstrapping a DNSSEC Delegation
 
-   When Child zone's CDS/CDNSKEY RRsets are used for setting up initial
-   trust, they need to be authenticated.  This is achieved by co-
-   publishing the Child's CDS/CDNSKEY records as an authenticated signal
-   from the Child DNS Operator.  The Parent can discover and validate
-   this signal, thus transferring trust from the Child DNS Operator to
-   the Child zone.
+   When the Child zone's CDS/CDNSKEY RRsets are used for setting up
+   initial trust, they need to be authenticated.  This is achieved by
+   co-publishing the Child's CDS/CDNSKEY records as an authenticated
+   signal from the Child DNS Operator.  The Parent can discover and
+   validate this signal, thus transferring trust from the Child DNS
+   Operator to the Child zone.
 
    Child DNS Operators and Parental Agents who wish to use CDS/CDNSKEY
    records for DNSSEC bootstrapping SHOULD support the authentication
@@ -333,7 +333,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-Thomassen & Wisiol      Expires 14 December 2022                [Page 6]
+Thomassen & Wisiol      Expires 19 December 2022                [Page 6]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -357,7 +357,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
    2.  query the CDS/CDNSKEY records at the Child zone apex directly
        from each of the authoritative servers as determined by the
-       delegation's NS record set;
+       delegation's NS record set (without caching);
 
    3.  query the CDS/CDNSKEY records located at the Signaling Name under
        each out-of-bailiwick Signaling Domain using a trusted DNS
@@ -389,7 +389,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-Thomassen & Wisiol      Expires 14 December 2022                [Page 7]
+Thomassen & Wisiol      Expires 19 December 2022                [Page 7]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -409,7 +409,8 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
    1.  checks that the Child domain is not yet securely delegated;
 
    2.  queries CDS/CDNSKEY records for example.co.uk directly from
-       ns1.example.net, ns2.example.org, and ns3.example.co.uk;
+       ns1.example.net, ns2.example.org, and ns3.example.co.uk (without
+       caching);
 
    3.  queries and validates the CDS/CDNSKEY records located at (see
        Section 2.2; ns3.example.co.uk is ignored because it is in
@@ -444,8 +445,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-
-Thomassen & Wisiol      Expires 14 December 2022                [Page 8]
+Thomassen & Wisiol      Expires 19 December 2022                [Page 8]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -459,9 +459,9 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
    Some discovery methods, however, do not imply reliable knowledge of
    the Child's NS record set.  For example, when discovering Signaling
-   Names by performing an NSEC walk or zone transfer of a Signaling
-   Zone, the Parental Agent MUST NOT assume that the nameserver(s) under
-   whose Signaling Domain(s) a Signaling Name appears is in fact
+   Names by performing an NSEC walk or zone transfer for a Signaling
+   Domain, the Parental Agent MUST NOT assume that the nameserver(s)
+   under whose Signaling Domain(s) a Signaling Name appears is in fact
    authoritative for the corresponding Child.
 
    In this case (and in other cases alike where some list of
@@ -485,10 +485,6 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 4.1.  Child DNS Operator
 
-   To keep the size of the Signaling Zones minimal and bulk processing
-   efficient (such as via zone transfers), Child DNS Operators SHOULD
-   remove Signaling Records which are found to have been acted upon.
-
    Signaling Domains SHOULD be delegated as zones of their own, so that
    the Signaling Zone's apex coincides with the Signaling Domain (such
    as _signal.ns1.example.net).  While it is permissible for the
@@ -497,11 +493,15 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
    activities do not require modifications of the zone containing the
    nameserver hostname.
 
+   To keep the size of the Signaling Zones minimal and bulk processing
+   efficient (such as via zone transfers), Child DNS Operators SHOULD
+   remove Signaling Records which are found to have been acted upon.
 
 
 
 
-Thomassen & Wisiol      Expires 14 December 2022                [Page 9]
+
+Thomassen & Wisiol      Expires 19 December 2022                [Page 9]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -557,7 +557,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-Thomassen & Wisiol      Expires 14 December 2022               [Page 10]
+Thomassen & Wisiol      Expires 19 December 2022               [Page 10]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -613,7 +613,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-Thomassen & Wisiol      Expires 14 December 2022               [Page 11]
+Thomassen & Wisiol      Expires 19 December 2022               [Page 11]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -669,7 +669,7 @@ Appendix A.  Change History (to be removed before publication)
 
 
 
-Thomassen & Wisiol      Expires 14 December 2022               [Page 12]
+Thomassen & Wisiol      Expires 19 December 2022               [Page 12]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -725,7 +725,7 @@ Internet-Draft            dnssec-bootstrapping                 June 2022
 
 
 
-Thomassen & Wisiol      Expires 14 December 2022               [Page 13]
+Thomassen & Wisiol      Expires 19 December 2022               [Page 13]
 
 Internet-Draft            dnssec-bootstrapping                 June 2022
 
@@ -781,4 +781,4 @@ Authors' Addresses
 
 
 
-Thomassen & Wisiol      Expires 14 December 2022               [Page 14]
+Thomassen & Wisiol      Expires 19 December 2022               [Page 14]
