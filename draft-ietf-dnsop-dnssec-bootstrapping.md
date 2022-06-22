@@ -367,9 +367,9 @@ Parental Agents SHOULD trigger the procedure described in
   - The Parental Agent receives a new or updated NS record set for a
     Child;
 
-  - The Parental Agent encounters Signaling Records during a
-    proactive, opportunistic scan (e.g. daily queries for the
-    Signaling Records of some or all of its delegations);
+  - The Parental Agent encounters a Signaling Record during a proactive,
+    opportunistic scan (e.g. daily queries for the Signaling Records of
+    some or all of its delegations);
 
   - Any other condition as deemed appropriate by local policy.
 
@@ -381,8 +381,8 @@ algorithm ((#bootstrapping)) for querying Signaling Records.
 Some discovery methods, however, do not imply reliable knowledge of the
 Child's NS record set.
 For example, when discovering Signaling Names by performing an NSEC
-walk or zone transfer for a Signaling Domain, the Parental Agent MUST
-NOT assume that the nameserver(s) under whose Signaling Domain(s) a
+walk or zone transfer of a Signaling Zone, the Parental Agent MUST NOT
+assume that the nameserver(s) under whose Signaling Domain(s) a
 Signaling Name appears is in fact authoritative for the corresponding
 Child. 
 
@@ -519,6 +519,11 @@ early-stage brainstorming.
 
 
 # Change History (to be removed before publication)
+
+* draft-ietf-dnsop-dnssec-bootstrapping-02
+
+> Editorial changes.
+
 
 * draft-ietf-dnsop-dnssec-bootstrapping-01
 
