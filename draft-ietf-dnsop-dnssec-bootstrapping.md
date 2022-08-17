@@ -55,8 +55,8 @@ The parent can then provision DS records for the delegation without
 resorting to out-of-band validation or weaker types of cross-checks
 such as "Accept after Delay" ([@!RFC8078]).
 
-This document updates [@!RFC8078] and replaces its Section 3 with
-(#bootstrapping) of this document.
+This document deprecates the DS enrollment methods described in Section
+3 of [@!RFC8078] in favor of (#dnssec-bootstrapping) of this document.
 
 [ Ed note: This document is being collaborated on at
 <https://github.com/desec-io/draft-ietf-dnsop-dnssec-bootstrapping/>.
@@ -89,11 +89,11 @@ the first place.
 To alleviate these problems, automated provisioning of DS records has
 been specified in ([@!RFC8078]).
 It is based on the Parental Agent (registry or registrar) fetching
-DNSSEC key parameters in the form of CDS and CDNSKEY records
-([@!RFC7344]) from the Child zone's apex, and validating them
-somehow.
-This validation can be done using DNSSEC itself if the objective is
-to update an existing DS record set (such as during key rollover).
+DNSSEC key parameters from the CDS and CDNSKEY records ([@!RFC7344])
+located at the Child zone's apex, and validating them somehow.
+This validation can be done using the Child's existing DNSSEC chain of
+trust if the objective is to update an existing DS record set (such as
+during key rollover).
 However, when bootstrapping a DNSSEC delegation, the Child zone has
 no existing DNSSEC validation path, and other means to ensure the
 CDS/CDNSKEY records' legitimacy must be found.
@@ -218,21 +218,24 @@ The type and contents of these Signaling Records depend on the type of
 signal.
 
 The Signaling Name identifies the Child and the Signaling Type.
-It is identical to the Child name (but with the final root label removed),
+It is identical to the Child name (with the final root label removed),
 prefixed with a label containing the Signaling Type.
 
+{#dnssec-bootstrapping}
 # Bootstrapping a DNSSEC Delegation
 
 When the Child zone's CDS/CDNSKEY RRsets are used for setting up initial
 trust, they need to be authenticated.
 This is achieved by co-publishing the Child's CDS/CDNSKEY records as an
-authenticated signal from the Child DNS Operator.
-The Parent can discover and validate this signal, thus transferring
-trust from the Child DNS Operator to the Child zone.
+authenticated signal as described in (#signaling).
+The Parent can discover and validate it, thus transferring trust from
+the Child DNS Operator nameservers' chain of trust to the Child zone.
 
+The DS enrollment methods described in Section 3 of [@!RFC8078] are
+deprecated and SHOULD NOT be used.
 Child DNS Operators and Parental Agents who wish to use CDS/CDNSKEY
-records for DNSSEC bootstrapping SHOULD support the authentication
-protocol described in this section.
+records for initial DS enrollment SHOULD instead support the
+authentication protocol described in this section.
 
 
 {#signalingrecords}
@@ -245,7 +248,7 @@ out-of-bailiwick Signaling Domain ((#signalingnames)).
 For simplicity, the Child DNS Operator MAY also co-publish the Child's
 CDS/CDNSKEY RRsets under Signaling Domains that are in bailiwick,
 although those Signaling Domains are not used for validation
-((#bootstrapping)).
+((#cds-auth)).
 
 Unlike the CDS/CDNSKEY records at the Child's apex, Signaling
 Records MUST be signed with the corresponding Signaling Zone's
@@ -278,10 +281,8 @@ of the respective Signaling Zone.
 Publication of Signaling Records under the in-bailiwick domain
 `_signal.ns3.example.co.uk` is not required.
 
-{#bootstrapping}
+{#cds-auth}
 ## Validating CDS/CDNSKEY Records for DNSSEC Bootstrapping
-
-This section replaces Section 3 of [@!RFC8078].
 
 To validate a Child's CDS/CDNSKEY RRset for DNSSEC bootstrapping, the
 Parental Agent, knowing both the Child zone name and its NS
@@ -361,22 +362,26 @@ completed, and DS records are not published.
 {#triggers}
 ## Triggers
 
-Parental Agents SHOULD trigger the procedure described in
-(#bootstrapping) once one of the following conditions is fulfilled:
+Parental Agents SHOULD trigger the procedure described in (#cds-auth)
+once one of the following conditions is fulfilled:
 
   - The Parental Agent receives a new or updated NS record set for a
     Child;
 
   - The Parental Agent encounters a Signaling Record during a proactive,
-    opportunistic scan (e.g. daily queries for the Signaling Records of
-    some or all of its delegations);
+    opportunistic scan (e.g. daily queries of Signaling Records for some
+    or all of its delegations);
+
+  - The Parental Agent encounters a Signaling Record during an NSEC walk
+    or when parsing a Signaling Zone (e.g. when made available via AXFR
+    by the Child DNS Operator);
 
   - Any other condition as deemed appropriate by local policy.
 
 Most types of discovery (such as daily scans of delegations) are based
 directly on the delegation's NS record set.
 In this case, these NS names can be used as is by the bootstrapping
-algorithm ((#bootstrapping)) for querying Signaling Records.
+algorithm ((#cds-auth)) for querying Signaling Records.
 
 Some discovery methods, however, do not imply reliable knowledge of the
 Child's NS record set.
@@ -387,8 +392,8 @@ Signaling Name appears is in fact authoritative for the corresponding
 Child. 
 
 In this case (and in other cases alike where some list of
-"bootstrappable domains" is retrieved elsewhere), the Parental Agent
-MUST ascertain that the Child's delegation actually contains the
+"bootstrappable domains" is retrieved from elsewhere), the Parental
+Agent MUST ascertain that the Child's delegation actually contains the
 nameserver hostname seen during discovery, and ensure that Signaling
 Record queries are only made against the proper set of nameservers as
 listed in the Child's delegation from the Parent.
@@ -397,9 +402,12 @@ listed in the Child's delegation from the Parent.
 {#limitations}
 ## Limitations
 
-As a consequence of Step 3 in (#bootstrapping), DS bootstrapping does
-not work for fully in-bailiwick delegations, as no pre-existing chain of
+As a consequence of Step 3 in (#cds-auth), DS bootstrapping does not
+work for fully in-bailiwick delegations, as no pre-existing chain of
 trust to the Child domain is available during bootstrapping.
+(As a workaround, one can add an out-of-bailiwick nameserver to the
+initial NS record set and remove it once bootstrapping is completed.
+Automation for this is available via CSYNC records, see [@!RFC7477].)
 
 The protocol is further restricted by the fact that the fully
 qualified Signaling Names fit within the general limits that apply to
@@ -425,9 +433,9 @@ remove Signaling Records which are found to have been acted upon.
 ## Parental Agent
 
 It is RECOMMENDED to perform queries within Signaling Domains
-((#bootstrapping)) with an (initially) cold resolver cache or to limit
-the TTL of cached records to the interval between scans, as to retrieve
-the most current information regardless of TTL.
+((#cds-auth)) with an (initially) cold resolver cache or to limit the
+TTL of cached records to the interval between scans, as to retrieve the
+most current information regardless of TTL.
 (When a batch job is used to attempt bootstrapping for a large number
 of delegations, the cache does not need to get cleared in between.)
 
@@ -438,29 +446,30 @@ of delegations, the cache does not need to get cleared in between.)
 
 ## Child DNS Operator-side
 
+* A (LUA-scripted) implementation of bootstrapping record synthesis in
+  PowerDNS is available at https://github.com/desec-io/desec-ns/pull/46.
+
+* This implementation is used for several ten thousand zones at
+  `_signal.ns1.desec.io` and `_signal.ns2.desec.org`.
+
+* Cloudflare has implemented bootstrapping record synthesis for all
+  signed customer zones.
+
 * Knot DNS supports manual creation of non-apex CDS/CDNSKEY records.
 
-* PowerDNS supports manual creation of non-apex CDS/CDNSKEY records.
-
-* Proof-of-concept Signaling Domains with several thousand Signaling
-  Names exist at `_signal.ns1.desec.io` and `_signal.ns2.desec.org`.
-
-* Another DNS operator has implemented the protocol (synthesizing
-  Signaling Records for a significant number of domains).
-
-* The authors are planning to develop a tool for automatic generation
-  of signaling records.
-
 ## Parental Agent-side
+
+* SWITCH (.ch, .li) has implemented authentication of consumed CDS
+  records based on this draft.
+
+* Some other registries/registrars (e.g. .cl, GoDaddy) are working on
+  implementations of the protocol.
 
 * A tool to retrieve and process Signaling Records for bootstrapping
   purposes, either directly or via zone walking, is available at
   <https://github.com/desec-io/dsbootstrap>.
   The tool outputs the validated DS records which then can be added
   to the Parent zone.
-
-* Some registries/registrars (e.g. .cl, GoDaddy) are working on
-  implementations of the protocol.
 
 
 # Security Considerations
@@ -472,9 +481,8 @@ approaches described in that document (e.g. "Accept after Delay").
 Apart from this general improvement, the same Security Considerations
 apply as in [@!RFC8078].
 
-The level of rigor in (#bootstrapping) is needed to prevent
-publication of a half-baked DS RRset (authorized only under a subset
-of NS hostnames).
+The level of rigor in (#cds-auth) is needed to prevent publication of a
+half-baked DS RRset (authorized only under a subset of NS hostnames).
 This ensures, for example, that an operator in a multi-homed setup
 cannot enable DNSSEC unless all other operators agree.
 
@@ -522,6 +530,13 @@ early-stage brainstorming.
 
 * draft-ietf-dnsop-dnssec-bootstrapping-02
 
+> Clarified that RFC 8078 Section 3 is not replaced, but its methods are
+  deprecated.
+
+> Added new deployments to Implementation section.
+
+> Included NSEC walk / AXFR as possible triggers for DS bootstrapping.
+
 > Editorial changes.
 
 
@@ -557,7 +572,7 @@ early-stage brainstorming.
 
 > Pointed out limitations.
 
-> Replace [@!RFC8078] Section 3 with our (#bootstrapping).
+> Replace [@!RFC8078] Section 3 with our (#cds-auth).
 
 > Changed `_boot` label to `_dsauth`.
 
