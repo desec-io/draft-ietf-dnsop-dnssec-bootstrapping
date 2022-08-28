@@ -146,7 +146,7 @@ Parent
 Parental Agent
 : The entity that has the authority to insert DS records into the
   Parent zone on behalf of the Child.
-  (It could the the registry, registrar, a reseller, or some other
+  (It could be the registry, registrar, a reseller, or some other
   authorized entity.)
 
 Signaling Domain
