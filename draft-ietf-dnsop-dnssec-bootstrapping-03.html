@@ -1833,6 +1833,8 @@ of delegations, the cache does not need to get cleared in between.)<a href="#sec
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
       </h2>
 <p id="section-5-1"><strong>Note to the RFC Editor</strong>: please remove this entire section before publication.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">In addition to the information in this section, deployment is tracked
+by the community at <a href="https://github.com/oskar456/cds-updates">https://github.com/oskar456/cds-updates</a>.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <div id="child-dns-operator-side">
 <section id="section-5.1">
         <h3 id="name-child-dns-operator-side">
@@ -1840,19 +1842,28 @@ of delegations, the cache does not need to get cleared in between.)<a href="#sec
         </h3>
 <ul class="normal">
 <li class="normal" id="section-5.1-1.1">
-            <p id="section-5.1-1.1.1">A (LUA-scripted) implementation of bootstrapping record synthesis in
-PowerDNS is available at <a href="https://github.com/desec-io/desec-ns/pull/46">https://github.com/desec-io/desec-ns/pull/46</a>.<a href="#section-5.1-1.1.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.1.1">Operator support:<a href="#section-5.1-1.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.1-1.1.2.1">Cloudflare has implemented bootstrapping record synthesis for all
+signed customer zones.<a href="#section-5.1-1.1.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-5.1-1.1.2.2">Glauca HexDNS publishes bootstrapping records for its customer
+zones.<a href="#section-5.1-1.1.2.2" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-5.1-1.1.2.3">deSEC performs bootstrapping record synthesis for its zones using
+names <code>_signal.ns1.desec.io</code> and <code>_signal.ns2.desec.org</code>.<a href="#section-5.1-1.1.2.3" class="pilcrow">¶</a>
+</li>
+            </ul>
 </li>
           <li class="normal" id="section-5.1-1.2">
-            <p id="section-5.1-1.2.1">This implementation is used for several ten thousand zones at
-<code>_signal.ns1.desec.io</code> and <code>_signal.ns2.desec.org</code>.<a href="#section-5.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.2.1">Authoritative nameserver support:<a href="#section-5.1-1.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.1-1.2.2.1">An implementation of bootstrapping record synthesis in PowerDNS is
+available at <a href="https://github.com/desec-io/desec-ns/pull/46">https://github.com/desec-io/desec-ns/pull/46</a>.<a href="#section-5.1-1.2.2.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-5.1-1.3">
-            <p id="section-5.1-1.3.1">Cloudflare has implemented bootstrapping record synthesis for all
-signed customer zones.<a href="#section-5.1-1.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-5.1-1.2.2.2">Knot DNS supports manual creation of non-apex CDS/CDNSKEY records.<a href="#section-5.1-1.2.2.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-5.1-1.4">
-            <p id="section-5.1-1.4.1">Knot DNS supports manual creation of non-apex CDS/CDNSKEY records.<a href="#section-5.1-1.4.1" class="pilcrow">¶</a></p>
+            </ul>
 </li>
         </ul>
 </section>
@@ -1864,19 +1875,40 @@ signed customer zones.<a href="#section-5.1-1.3.1" class="pilcrow">¶</a></p>
         </h3>
 <ul class="normal">
 <li class="normal" id="section-5.2-1.1">
-            <p id="section-5.2-1.1.1">SWITCH (.ch, .li) has implemented authentication of consumed CDS
-records based on this draft.<a href="#section-5.2-1.1.1" class="pilcrow">¶</a></p>
+            <p id="section-5.2-1.1.1">ccTLD:<a href="#section-5.2-1.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.2-1.1.2.1">SWITCH (.ch, .li) has implemented authentication of consumed CDS
+records based on this draft.<a href="#section-5.2-1.1.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-5.2-1.1.2.2">.cl is working on an implementation.<a href="#section-5.2-1.1.2.2" class="pilcrow">¶</a>
+</li>
+            </ul>
 </li>
           <li class="normal" id="section-5.2-1.2">
-            <p id="section-5.2-1.2.1">Some other registries/registrars (e.g. .cl, GoDaddy) are working on
-implementations of the protocol.<a href="#section-5.2-1.2.1" class="pilcrow">¶</a></p>
+            <p id="section-5.2-1.2.1">gTLD:<a href="#section-5.2-1.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.2-1.2.2.1">Knipp has implemented consumption of DNSSEC bootstrapping records
+in its TANGO and CORE registry systems.<a href="#section-5.2-1.2.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-5.2-1.2.2.2">A deployment of this is running at .swiss.<a href="#section-5.2-1.2.2.2" class="pilcrow">¶</a>
+</li>
+            </ul>
 </li>
           <li class="normal" id="section-5.2-1.3">
-            <p id="section-5.2-1.3.1">A tool to retrieve and process Signaling Records for bootstrapping
+            <p id="section-5.2-1.3.1">Registrars:<a href="#section-5.2-1.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.2-1.3.2.1">GoDaddy is working on an implementation.<a href="#section-5.2-1.3.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-5.2-1.3.2.2">Glauca is working on an implementation.<a href="#section-5.2-1.3.2.2" class="pilcrow">¶</a>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="section-5.2-1.4">
+            <p id="section-5.2-1.4.1">A tool to retrieve and process Signaling Records for bootstrapping
 purposes, either directly or via zone walking, is available at
 <a href="https://github.com/desec-io/dsbootstrap">https://github.com/desec-io/dsbootstrap</a>.
 The tool outputs the validated DS records which then can be added
-to the Parent zone.<a href="#section-5.2-1.3.1" class="pilcrow">¶</a></p>
+to the Parent zone.<a href="#section-5.2-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -2000,7 +2032,8 @@ early-stage brainstorming.<a href="#section-8-2" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <blockquote id="appendix-A-2">
-        <p id="appendix-A-2.1">Typo fix.<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
+        <p id="appendix-A-2.1">Updated Implementation section.<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.2">Typo fix.<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
 <li class="normal" id="appendix-A-3.1">draft-ietf-dnsop-dnssec-bootstrapping-02<a href="#appendix-A-3.1" class="pilcrow">¶</a>

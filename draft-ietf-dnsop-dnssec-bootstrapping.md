@@ -444,26 +444,40 @@ of delegations, the cache does not need to get cleared in between.)
 
 **Note to the RFC Editor**: please remove this entire section before publication.
 
+In addition to the information in this section, deployment is tracked
+by the community at <https://github.com/oskar456/cds-updates>.
+
 ## Child DNS Operator-side
 
-* A (LUA-scripted) implementation of bootstrapping record synthesis in
-  PowerDNS is available at https://github.com/desec-io/desec-ns/pull/46.
+* Operator support:
 
-* This implementation is used for several ten thousand zones at
-  `_signal.ns1.desec.io` and `_signal.ns2.desec.org`.
+  - Cloudflare has implemented bootstrapping record synthesis for all
+    signed customer zones.
+  - Glauca HexDNS publishes bootstrapping records for its customer
+    zones.
+  - deSEC performs bootstrapping record synthesis for its zones using
+    names `_signal.ns1.desec.io` and `_signal.ns2.desec.org`.
 
-* Cloudflare has implemented bootstrapping record synthesis for all
-  signed customer zones.
-
-* Knot DNS supports manual creation of non-apex CDS/CDNSKEY records.
+* Authoritative nameserver support:
+  - An implementation of bootstrapping record synthesis in PowerDNS is
+    available at https://github.com/desec-io/desec-ns/pull/46.
+  - Knot DNS supports manual creation of non-apex CDS/CDNSKEY records.
 
 ## Parental Agent-side
 
-* SWITCH (.ch, .li) has implemented authentication of consumed CDS
-  records based on this draft.
+* ccTLD:
+  - SWITCH (.ch, .li) has implemented authentication of consumed CDS
+    records based on this draft.
+  - .cl is working on an implementation.
 
-* Some other registries/registrars (e.g. .cl, GoDaddy) are working on
-  implementations of the protocol.
+* gTLD:
+  - Knipp has implemented consumption of DNSSEC bootstrapping records
+    in its TANGO and CORE registry systems.
+  - A deployment of this is running at .swiss.
+
+* Registrars:
+  - GoDaddy is working on an implementation.
+  - Glauca is working on an implementation.
 
 * A tool to retrieve and process Signaling Records for bootstrapping
   purposes, either directly or via zone walking, is available at
@@ -529,6 +543,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-03
+
+> Updated Implementation section.
 
 > Typo fix.
 

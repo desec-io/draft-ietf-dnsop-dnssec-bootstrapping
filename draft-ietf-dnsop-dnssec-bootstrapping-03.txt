@@ -100,10 +100,10 @@ Table of Contents
      4.2.  Parental Agent  . . . . . . . . . . . . . . . . . . . . .  10
    5.  Implementation Status . . . . . . . . . . . . . . . . . . . .  10
      5.1.  Child DNS Operator-side . . . . . . . . . . . . . . . . .  10
-     5.2.  Parental Agent-side . . . . . . . . . . . . . . . . . . .  10
+     5.2.  Parental Agent-side . . . . . . . . . . . . . . . . . . .  11
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
-   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  11
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
+   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  12
    9.  Normative References  . . . . . . . . . . . . . . . . . . . .  12
    Appendix A.  Change History (to be removed before publication)  .  13
 
@@ -526,33 +526,33 @@ Internet-Draft            dnssec-bootstrapping             February 2023
    *Note to the RFC Editor*: please remove this entire section before
    publication.
 
+   In addition to the information in this section, deployment is tracked
+   by the community at https://github.com/oskar456/cds-updates
+   (https://github.com/oskar456/cds-updates).
+
 5.1.  Child DNS Operator-side
 
-   *  A (LUA-scripted) implementation of bootstrapping record synthesis
-      in PowerDNS is available at https://github.com/desec-io/desec-ns/
-      pull/46 (https://github.com/desec-io/desec-ns/pull/46).
+   *  Operator support:
 
-   *  This implementation is used for several ten thousand zones at
-      _signal.ns1.desec.io and _signal.ns2.desec.org.
+      -  Cloudflare has implemented bootstrapping record synthesis for
+         all signed customer zones.
 
-   *  Cloudflare has implemented bootstrapping record synthesis for all
-      signed customer zones.
+      -  Glauca HexDNS publishes bootstrapping records for its customer
+         zones.
 
-   *  Knot DNS supports manual creation of non-apex CDS/CDNSKEY records.
+      -  deSEC performs bootstrapping record synthesis for its zones
+         using names _signal.ns1.desec.io and _signal.ns2.desec.org.
 
-5.2.  Parental Agent-side
+   *  Authoritative nameserver support:
 
-   *  SWITCH (.ch, .li) has implemented authentication of consumed CDS
-      records based on this draft.
+      -  An implementation of bootstrapping record synthesis in PowerDNS
+         is available at https://github.com/desec-io/desec-ns/pull/46
+         (https://github.com/desec-io/desec-ns/pull/46).
 
-   *  Some other registries/registrars (e.g. .cl, GoDaddy) are working
-      on implementations of the protocol.
+      -  Knot DNS supports manual creation of non-apex CDS/CDNSKEY
+         records.
 
-   *  A tool to retrieve and process Signaling Records for bootstrapping
-      purposes, either directly or via zone walking, is available at
-      https://github.com/desec-io/dsbootstrap (https://github.com/desec-
-      io/dsbootstrap).  The tool outputs the validated DS records which
-      then can be added to the Parent zone.
+
 
 
 
@@ -561,6 +561,34 @@ Thomassen & Wisiol       Expires 21 August 2023                [Page 10]
 
 Internet-Draft            dnssec-bootstrapping             February 2023
 
+
+5.2.  Parental Agent-side
+
+   *  ccTLD:
+
+      -  SWITCH (.ch, .li) has implemented authentication of consumed
+         CDS records based on this draft.
+
+      -  .cl is working on an implementation.
+
+   *  gTLD:
+
+      -  Knipp has implemented consumption of DNSSEC bootstrapping
+         records in its TANGO and CORE registry systems.
+
+      -  A deployment of this is running at .swiss.
+
+   *  Registrars:
+
+      -  GoDaddy is working on an implementation.
+
+      -  Glauca is working on an implementation.
+
+   *  A tool to retrieve and process Signaling Records for bootstrapping
+      purposes, either directly or via zone walking, is available at
+      https://github.com/desec-io/dsbootstrap (https://github.com/desec-
+      io/dsbootstrap).  The tool outputs the validated DS records which
+      then can be added to the Parent zone.
 
 6.  Security Considerations
 
@@ -582,6 +610,14 @@ Internet-Draft            dnssec-bootstrapping             February 2023
    it is RECOMMENDED to increase the effort required to collude for
    taking control of all Signaling Domains, by diversifying the path
    from the root to each nameserver.  This is best achieved by using
+
+
+
+Thomassen & Wisiol       Expires 21 August 2023                [Page 11]
+
+Internet-Draft            dnssec-bootstrapping             February 2023
+
+
    different and independently operated TLDs for each one.  (TLD-
    independent NS hostnames are advisable anyways in DNS operations, in
    order to prevent the TLD from becoming a single point of failure.)
@@ -610,14 +646,6 @@ Internet-Draft            dnssec-bootstrapping             February 2023
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
 
-
-
-
-Thomassen & Wisiol       Expires 21 August 2023                [Page 11]
-
-Internet-Draft            dnssec-bootstrapping             February 2023
-
-
 9.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
@@ -634,6 +662,17 @@ Internet-Draft            dnssec-bootstrapping             February 2023
               Rose, "Resource Records for the DNS Security Extensions",
               RFC 4034, DOI 10.17487/RFC4034, March 2005,
               <https://www.rfc-editor.org/info/rfc4034>.
+
+
+
+
+
+
+
+Thomassen & Wisiol       Expires 21 August 2023                [Page 12]
+
+Internet-Draft            dnssec-bootstrapping             February 2023
+
 
    [RFC4035]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Protocol Modifications for the DNS Security
@@ -663,17 +702,6 @@ Internet-Draft            dnssec-bootstrapping             February 2023
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
-
-
-
-
-
-
-Thomassen & Wisiol       Expires 21 August 2023                [Page 12]
-
-Internet-Draft            dnssec-bootstrapping             February 2023
-
-
    [RFC8552]  Crocker, D., "Scoped Interpretation of DNS Resource
               Records through "Underscored" Naming of Attribute Leaves",
               BCP 222, RFC 8552, DOI 10.17487/RFC8552, March 2019,
@@ -683,6 +711,8 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-03
 
+   |  Updated Implementation section.
+   |  
    |  Typo fix.
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-02
@@ -692,6 +722,14 @@ Appendix A.  Change History (to be removed before publication)
    |  
    |  Added new deployments to Implementation section.
    |  
+
+
+
+Thomassen & Wisiol       Expires 21 August 2023                [Page 13]
+
+Internet-Draft            dnssec-bootstrapping             February 2023
+
+
    |  Included NSEC walk / AXFR as possible triggers for DS
    |  bootstrapping.
    |  
@@ -723,13 +761,6 @@ Appendix A.  Change History (to be removed before publication)
 
    |  Editorial changes.
 
-
-
-Thomassen & Wisiol       Expires 21 August 2023                [Page 13]
-
-Internet-Draft            dnssec-bootstrapping             February 2023
-
-
    *  draft-thomassen-dnsop-dnssec-bootstrapping-03
 
    |  Clarified importance of record cleanup by moving paragraph up.
@@ -747,6 +778,14 @@ Internet-Draft            dnssec-bootstrapping             February 2023
    *  draft-thomassen-dnsop-dnssec-bootstrapping-02
 
    |  Reframed as an authentication mechanism for RFC 8078.
+
+
+
+Thomassen & Wisiol       Expires 21 August 2023                [Page 14]
+
+Internet-Draft            dnssec-bootstrapping             February 2023
+
+
    |  
    |  Removed multi-signer use case (focus on RFC 8078 authentication).
    |  
@@ -779,13 +818,6 @@ Internet-Draft            dnssec-bootstrapping             February 2023
    |  
    |  Editorial changes.
 
-
-
-Thomassen & Wisiol       Expires 21 August 2023                [Page 14]
-
-Internet-Draft            dnssec-bootstrapping             February 2023
-
-
    *  draft-thomassen-dnsop-dnssec-bootstrapping-00
 
    |  Initial public draft.
@@ -797,6 +829,17 @@ Authors' Addresses
    Berlin
    Germany
    Email: peter@desec.io
+
+
+
+
+
+
+
+
+Thomassen & Wisiol       Expires 21 August 2023                [Page 15]
+
+Internet-Draft            dnssec-bootstrapping             February 2023
 
 
    Nils Wisiol
@@ -837,4 +880,17 @@ Authors' Addresses
 
 
 
-Thomassen & Wisiol       Expires 21 August 2023                [Page 15]
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thomassen & Wisiol       Expires 21 August 2023                [Page 16]
