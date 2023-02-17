@@ -528,6 +528,11 @@ early-stage brainstorming.
 
 # Change History (to be removed before publication)
 
+* draft-ietf-dnsop-dnssec-bootstrapping-03
+
+> Typo fix.
+
+
 * draft-ietf-dnsop-dnssec-bootstrapping-02
 
 > Clarified that RFC 8078 Section 3 is not replaced, but its methods are
