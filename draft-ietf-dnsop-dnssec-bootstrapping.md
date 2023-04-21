@@ -122,7 +122,7 @@ names, or DNSSEC bootstrapping for domains with in-bailick nameservers
 only (see (#limitations)).
 
 Readers are expected to be familiar with DNSSEC, including [@!RFC4033],
-[@!RFC4034], [@!RFC4035], [@!RFC6781], [@!RFC7344], and [@!RFC8078].
+[@!RFC4034], [@!RFC4035], [@RFC6781], [@!RFC7344], and [@!RFC8078].
 
 
 ## Terminology
@@ -440,6 +440,48 @@ most current information regardless of TTL.
 of delegations, the cache does not need to get cleared in between.)
 
 
+# Security Considerations
+
+The protocol adds authentication to the CDS/CDNSKEY-based
+bootstrapping concept of [@!RFC8078], while removing nothing.
+Its security level is therefore strictly higher than that of existing
+approaches described in that document (e.g. "Accept after Delay").
+Apart from this general improvement, the same Security Considerations
+apply as in [@!RFC8078].
+
+The level of rigor in (#cds-auth) is needed to prevent publication of a
+half-baked DS RRset (authorized only under a subset of NS hostnames).
+This ensures, for example, that an operator in a multi-homed setup
+cannot enable DNSSEC unless all other operators agree.
+
+Because the parents of a Signaling Domain (such as the corresponding TLD
+registry) are in control of its chain of trust, they are also able to
+undermine the signal's authenticity.
+To mitigate this risk, it is RECOMMENDED to increase the effort required
+to collude for taking control of all Signaling Domains, by diversifying
+the path from the root to each nameserver.
+This is best achieved by using different and independently operated TLDs
+for each one.
+(TLD-independent NS hostnames are advisable anyways in DNS operations,
+in order to prevent the TLD from becoming a single point of failure.)
+Furthermore, as the Child DNS Operator has authoritative knowledge of
+the Child's CDS/CDNSKEY records, it can readily detect fraudulent
+provisioning of DS records.
+
+
+# IANA Considerations
+
+Per [@!RFC8552], IANA is requested to add the following entries to the
+"Underscored and Globally Scoped DNS Node Names" registry:
+
+    +---------+------------+-----------------------------------------+
+    | RR Type | _NODE NAME | Reference                               |
+    +---------+------------+-----------------------------------------+
+    | CDS     | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
+    | CDNSKEY | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
+    +---------+------------+-----------------------------------------+
+
+
 # Implementation Status
 
 **Note to the RFC Editor**: please remove this entire section before publication.
@@ -486,48 +528,6 @@ by the community at <https://github.com/oskar456/cds-updates>.
   to the Parent zone.
 
 
-# Security Considerations
-
-The protocol adds authentication to the CDS/CDNSKEY-based
-bootstrapping concept of [@!RFC8078], while removing nothing.
-Its security level is therefore strictly higher than that of existing
-approaches described in that document (e.g. "Accept after Delay").
-Apart from this general improvement, the same Security Considerations
-apply as in [@!RFC8078].
-
-The level of rigor in (#cds-auth) is needed to prevent publication of a
-half-baked DS RRset (authorized only under a subset of NS hostnames).
-This ensures, for example, that an operator in a multi-homed setup
-cannot enable DNSSEC unless all other operators agree.
-
-Because the parents of a Signaling Domain (such as the corresponding TLD
-registry) are in control of its chain of trust, they are also able to
-undermine the signal's authenticity.
-To mitigate this risk, it is RECOMMENDED to increase the effort required
-to collude for taking control of all Signaling Domains, by diversifying
-the path from the root to each nameserver.
-This is best achieved by using different and independently operated TLDs
-for each one.
-(TLD-independent NS hostnames are advisable anyways in DNS operations,
-in order to prevent the TLD from becoming a single point of failure.)
-Furthermore, as the Child DNS Operator has authoritative knowledge of
-the Child's CDS/CDNSKEY records, it can readily detect fraudulent
-provisioning of DS records.
-
-
-# IANA Considerations
-
-Per [@!RFC8552], IANA is requested to add the following entries to the
-"Underscored and Globally Scoped DNS Node Names" registry:
-
-    +---------+------------+-----------------------------------------+
-    | RR Type | _NODE NAME | Reference                               |
-    +---------+------------+-----------------------------------------+
-    | CDS     | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
-    | CDNSKEY | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
-    +---------+------------+-----------------------------------------+
-
-
 # Acknowledgements
 
 Thanks to Brian Dickson, Ondřej Caletka, John R. Levine, Christian
@@ -541,6 +541,11 @@ early-stage brainstorming.
 
 
 # Change History (to be removed before publication)
+
+* draft-ietf-dnsop-dnssec-bootstrapping-04
+
+> Editorial changes.
+
 
 * draft-ietf-dnsop-dnssec-bootstrapping-03
 
