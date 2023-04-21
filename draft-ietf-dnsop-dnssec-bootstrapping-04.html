@@ -1188,11 +1188,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">dnssec-bootstrapping</td>
-<td class="right">April 2023</td>
+<td class="right">May 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomassen &amp; Wisiol</td>
-<td class="center">Expires 23 October 2023</td>
+<td class="center">Expires 2 November 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1208,12 +1208,12 @@ li > p:last-of-type {
 <a href="https://www.rfc-editor.org/rfc/rfc7344" class="eref">7344</a>, <a href="https://www.rfc-editor.org/rfc/rfc8078" class="eref">8078</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-04-21" class="published">21 April 2023</time>
+<time datetime="2023-05-01" class="published">1 May 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-10-23">23 October 2023</time></dd>
+<dd class="expires"><time datetime="2023-11-02">2 November 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1267,7 +1267,7 @@ The authors gratefully accept pull requests. ]<a href="#section-abstract-4" clas
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 23 October 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 2 November 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1803,16 +1803,24 @@ DNS names (such as their length and label count).<a href="#section-3.4-2" class=
         <h3 id="name-child-dns-operator">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-child-dns-operator" class="section-name selfRef">Child DNS Operator</a>
         </h3>
-<p id="section-4.1-1">Signaling Domains SHOULD be delegated as zones of their own, so
+<p id="section-4.1-1">CDS/CDNSKEY records and corresponding signaling records MUST NOT be
+published without the zone owner's consent.
+Likewise, the Child DNS Operator MUST enable the zone owner to signal
+the desire to turn off DNSSEC by offering publication of a corresponding
+deletion signal in the form of the special-value CDS/CDNSKEY RRset
+specified in <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span> Section 4.
+To facilitate transitions between DNS operators, Child DNS Operators
+SHOULD support the multi-signer protocols described in <span>[<a href="#RFC8901" class="xref">RFC8901</a>]</span>.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">Signaling Domains SHOULD be delegated as zones of their own, so
 that the Signaling Zone's apex coincides with the Signaling
 Domain (such as <code>_signal.ns1.example.net</code>).
 While it is permissible for the Signaling Domain to be contained
 in a Signaling Zone of fewer labels (such as <code>example.net</code>), a
 zone cut ensures that bootstrapping activities do not require
-modifications of the zone containing the nameserver hostname.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">To keep the size of the Signaling Zones minimal and bulk processing
+modifications of the zone containing the nameserver hostname.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">To keep the size of the Signaling Zones minimal and bulk processing
 efficient (such as via zone transfers), Child DNS Operators SHOULD
-remove Signaling Records which are found to have been acted upon.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+remove Signaling Records which are found to have been acted upon.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="parental-agent">
@@ -1972,8 +1980,8 @@ to the Parent zone.<a href="#section-7.2-1.4.1" class="pilcrow">¶</a></p>
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
       </h2>
 <p id="section-8-1">Thanks to Brian Dickson, Ond&amp;#345;ej Caletka, John R. Levine, Christian
-Elmerot, Oli Schacher, Donald Eastlake, and Libor Peltan for reviewing
-draft proposals and offering comments and suggestions.<a href="#section-8-1" class="pilcrow">¶</a></p>
+Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari for
+reviewing draft proposals and offering comments and suggestions.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <p id="section-8-2">Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.<a href="#section-8-2" class="pilcrow">¶</a></p>
 </section>
@@ -2027,8 +2035,12 @@ early-stage brainstorming.<a href="#section-8-2" class="pilcrow">¶</a></p>
       </h2>
 <dl class="references">
 <dt id="RFC6781">[RFC6781]</dt>
-    <dd>
+      <dd>
 <span class="refAuthor">Kolkman, O.</span>, <span class="refAuthor">Mekking, W.</span>, and <span class="refAuthor">R. Gieben</span>, <span class="refTitle">"DNSSEC Operational Practices, Version 2"</span>, <span class="seriesInfo">RFC 6781</span>, <span class="seriesInfo">DOI 10.17487/RFC6781</span>, <time datetime="2012-12" class="refDate">December 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6781">https://www.rfc-editor.org/info/rfc6781</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8901">[RFC8901]</dt>
+    <dd>
+<span class="refAuthor">Huque, S.</span>, <span class="refAuthor">Aras, P.</span>, <span class="refAuthor">Dickinson, J.</span>, <span class="refAuthor">Vcelak, J.</span>, and <span class="refAuthor">D. Blacka</span>, <span class="refTitle">"Multi-Signer DNSSEC Models"</span>, <span class="seriesInfo">RFC 8901</span>, <span class="seriesInfo">DOI 10.17487/RFC8901</span>, <time datetime="2020-09" class="refDate">September 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8901">https://www.rfc-editor.org/info/rfc8901</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -2042,7 +2054,8 @@ early-stage brainstorming.<a href="#section-8-2" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <blockquote id="appendix-A-2">
-        <p id="appendix-A-2.1">Editorial changes.<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
+        <p id="appendix-A-2.1">Added consent considerations.<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.2">Editorial changes.<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
 <li class="normal" id="appendix-A-3.1">draft-ietf-dnsop-dnssec-bootstrapping-03<a href="#appendix-A-3.1" class="pilcrow">¶</a>

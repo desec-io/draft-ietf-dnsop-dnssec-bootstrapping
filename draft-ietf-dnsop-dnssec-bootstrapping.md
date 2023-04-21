@@ -418,6 +418,15 @@ DNS names (such as their length and label count).
 
 ## Child DNS Operator
 
+CDS/CDNSKEY records and corresponding signaling records MUST NOT be
+published without the zone owner's consent.
+Likewise, the Child DNS Operator MUST enable the zone owner to signal
+the desire to turn off DNSSEC by offering publication of a corresponding
+deletion signal in the form of the special-value CDS/CDNSKEY RRset
+specified in [@!RFC8078] Section 4.
+To facilitate transitions between DNS operators, Child DNS Operators
+SHOULD support the multi-signer protocols described in [@RFC8901].
+
 Signaling Domains SHOULD be delegated as zones of their own, so
 that the Signaling Zone's apex coincides with the Signaling
 Domain (such as `_signal.ns1.example.net`).
@@ -531,8 +540,8 @@ by the community at <https://github.com/oskar456/cds-updates>.
 # Acknowledgements
 
 Thanks to Brian Dickson, Ondřej Caletka, John R. Levine, Christian
-Elmerot, Oli Schacher, Donald Eastlake, and Libor Peltan for reviewing
-draft proposals and offering comments and suggestions.
+Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari for
+reviewing draft proposals and offering comments and suggestions.
 
 Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.
@@ -543,6 +552,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-04
+
+> Added consent considerations.
 
 > Editorial changes.
 

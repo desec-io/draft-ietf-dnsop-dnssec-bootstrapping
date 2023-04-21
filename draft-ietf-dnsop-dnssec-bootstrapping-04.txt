@@ -6,7 +6,7 @@ DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
 Updates: 7344, 8078 (if approved)                              N. Wisiol
 Intended status: Standards Track    deSEC, Technische Universität Berlin
-Expires: 23 October 2023                                   21 April 2023
+Expires: 2 November 2023                                      1 May 2023
 
 
   Automatic DNSSEC Bootstrapping using Authenticated Signals from the
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Thomassen & Wisiol       Expires 23 October 2023                [Page 1]
+Thomassen & Wisiol       Expires 2 November 2023                [Page 1]
 
-Internet-Draft            dnssec-bootstrapping                April 2023
+Internet-Draft            dnssec-bootstrapping                  May 2023
 
 
    Internet-Drafts are draft documents valid for a maximum of six months
@@ -63,7 +63,7 @@ Internet-Draft            dnssec-bootstrapping                April 2023
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 October 2023.
+   This Internet-Draft will expire on 2 November 2023.
 
 Copyright Notice
 
@@ -99,23 +99,23 @@ Table of Contents
      4.1.  Child DNS Operator  . . . . . . . . . . . . . . . . . . .   9
      4.2.  Parental Agent  . . . . . . . . . . . . . . . . . . . . .  10
    5.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  10
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
    7.  Implementation Status . . . . . . . . . . . . . . . . . . . .  11
      7.1.  Child DNS Operator-side . . . . . . . . . . . . . . . . .  11
-     7.2.  Parental Agent-side . . . . . . . . . . . . . . . . . . .  11
+     7.2.  Parental Agent-side . . . . . . . . . . . . . . . . . . .  12
    8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  12
    9.  Normative References  . . . . . . . . . . . . . . . . . . . .  12
    10. Informative References  . . . . . . . . . . . . . . . . . . .  13
 
 
 
-Thomassen & Wisiol       Expires 23 October 2023                [Page 2]
+Thomassen & Wisiol       Expires 2 November 2023                [Page 2]
 
-Internet-Draft            dnssec-bootstrapping                April 2023
+Internet-Draft            dnssec-bootstrapping                  May 2023
 
 
-   Appendix A.  Change History (to be removed before publication)  .  13
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  15
+   Appendix A.  Change History (to be removed before publication)  .  14
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  16
 
 1.  Introduction
 
@@ -165,9 +165,9 @@ Internet-Draft            dnssec-bootstrapping                April 2023
 
 
 
-Thomassen & Wisiol       Expires 23 October 2023                [Page 3]
+Thomassen & Wisiol       Expires 2 November 2023                [Page 3]
 
-Internet-Draft            dnssec-bootstrapping                April 2023
+Internet-Draft            dnssec-bootstrapping                  May 2023
 
 
    This document aims to close this gap by introducing an in-band method
@@ -221,9 +221,9 @@ Internet-Draft            dnssec-bootstrapping                April 2023
 
 
 
-Thomassen & Wisiol       Expires 23 October 2023                [Page 4]
+Thomassen & Wisiol       Expires 2 November 2023                [Page 4]
 
-Internet-Draft            dnssec-bootstrapping                April 2023
+Internet-Draft            dnssec-bootstrapping                  May 2023
 
 
    Signaling Type  A signal type identifier, such as _dsboot for DNSSEC
@@ -277,9 +277,9 @@ Internet-Draft            dnssec-bootstrapping                April 2023
 
 
 
-Thomassen & Wisiol       Expires 23 October 2023                [Page 5]
+Thomassen & Wisiol       Expires 2 November 2023                [Page 5]
 
-Internet-Draft            dnssec-bootstrapping                April 2023
+Internet-Draft            dnssec-bootstrapping                  May 2023
 
 
 3.  Bootstrapping a DNSSEC Delegation
@@ -333,9 +333,9 @@ Internet-Draft            dnssec-bootstrapping                April 2023
 
 
 
-Thomassen & Wisiol       Expires 23 October 2023                [Page 6]
+Thomassen & Wisiol       Expires 2 November 2023                [Page 6]
 
-Internet-Draft            dnssec-bootstrapping                April 2023
+Internet-Draft            dnssec-bootstrapping                  May 2023
 
 
    _dsboot.example.co.uk._signal.ns1.example.net
@@ -389,9 +389,9 @@ Internet-Draft            dnssec-bootstrapping                April 2023
 
 
 
-Thomassen & Wisiol       Expires 23 October 2023                [Page 7]
+Thomassen & Wisiol       Expires 2 November 2023                [Page 7]
 
-Internet-Draft            dnssec-bootstrapping                April 2023
+Internet-Draft            dnssec-bootstrapping                  May 2023
 
 
    *  in Step 4: inconsistent responses (for at least one of the types),
@@ -445,9 +445,9 @@ Internet-Draft            dnssec-bootstrapping                April 2023
 
 
 
-Thomassen & Wisiol       Expires 23 October 2023                [Page 8]
+Thomassen & Wisiol       Expires 2 November 2023                [Page 8]
 
-Internet-Draft            dnssec-bootstrapping                April 2023
+Internet-Draft            dnssec-bootstrapping                  May 2023
 
 
    *  The Parental Agent encounters a Signaling Record during an NSEC
@@ -492,20 +492,29 @@ Internet-Draft            dnssec-bootstrapping                April 2023
 
 4.1.  Child DNS Operator
 
+   CDS/CDNSKEY records and corresponding signaling records MUST NOT be
+   published without the zone owner's consent.  Likewise, the Child DNS
+   Operator MUST enable the zone owner to signal the desire to turn off
+   DNSSEC by offering publication of a corresponding deletion signal in
+   the form of the special-value CDS/CDNSKEY RRset specified in
+   [RFC8078] Section 4.  To facilitate transitions between DNS
+
+
+
+Thomassen & Wisiol       Expires 2 November 2023                [Page 9]
+
+Internet-Draft            dnssec-bootstrapping                  May 2023
+
+
+   operators, Child DNS Operators SHOULD support the multi-signer
+   protocols described in [RFC8901].
+
    Signaling Domains SHOULD be delegated as zones of their own, so that
    the Signaling Zone's apex coincides with the Signaling Domain (such
    as _signal.ns1.example.net).  While it is permissible for the
    Signaling Domain to be contained in a Signaling Zone of fewer labels
    (such as example.net), a zone cut ensures that bootstrapping
    activities do not require modifications of the zone containing the
-
-
-
-Thomassen & Wisiol       Expires 23 October 2023                [Page 9]
-
-Internet-Draft            dnssec-bootstrapping                April 2023
-
-
    nameserver hostname.
 
    To keep the size of the Signaling Zones minimal and bulk processing
@@ -535,6 +544,24 @@ Internet-Draft            dnssec-bootstrapping                April 2023
    hostnames).  This ensures, for example, that an operator in a multi-
    homed setup cannot enable DNSSEC unless all other operators agree.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thomassen & Wisiol       Expires 2 November 2023               [Page 10]
+
+Internet-Draft            dnssec-bootstrapping                  May 2023
+
+
    Because the parents of a Signaling Domain (such as the corresponding
    TLD registry) are in control of its chain of trust, they are also
    able to undermine the signal's authenticity.  To mitigate this risk,
@@ -552,15 +579,6 @@ Internet-Draft            dnssec-bootstrapping                April 2023
 
    Per [RFC8552], IANA is requested to add the following entries to the
    "Underscored and Globally Scoped DNS Node Names" registry:
-
-
-
-
-
-Thomassen & Wisiol       Expires 23 October 2023               [Page 10]
-
-Internet-Draft            dnssec-bootstrapping                April 2023
-
 
    +---------+------------+-----------------------------------------+
    | RR Type | _NODE NAME | Reference                               |
@@ -593,6 +611,13 @@ Internet-Draft            dnssec-bootstrapping                April 2023
 
    *  Authoritative nameserver support:
 
+
+
+Thomassen & Wisiol       Expires 2 November 2023               [Page 11]
+
+Internet-Draft            dnssec-bootstrapping                  May 2023
+
+
       -  An implementation of bootstrapping record synthesis in PowerDNS
          is available at https://github.com/desec-io/desec-ns/pull/46
          (https://github.com/desec-io/desec-ns/pull/46).
@@ -610,13 +635,6 @@ Internet-Draft            dnssec-bootstrapping                April 2023
       -  .cl is working on an implementation.
 
    *  gTLD:
-
-
-
-Thomassen & Wisiol       Expires 23 October 2023               [Page 11]
-
-Internet-Draft            dnssec-bootstrapping                April 2023
-
 
       -  Knipp has implemented consumption of DNSSEC bootstrapping
          records in its TANGO and CORE registry systems.
@@ -638,13 +656,23 @@ Internet-Draft            dnssec-bootstrapping                April 2023
 8.  Acknowledgements
 
    Thanks to Brian Dickson, Ond&#345;ej Caletka, John R.  Levine,
-   Christian Elmerot, Oli Schacher, Donald Eastlake, and Libor Peltan
-   for reviewing draft proposals and offering comments and suggestions.
+   Christian Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan,
+   Warren Kumari for reviewing draft proposals and offering comments and
+   suggestions.
 
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
 
 9.  Normative References
+
+
+
+
+
+Thomassen & Wisiol       Expires 2 November 2023               [Page 12]
+
+Internet-Draft            dnssec-bootstrapping                  May 2023
+
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -665,14 +693,6 @@ Internet-Draft            dnssec-bootstrapping                April 2023
               Rose, "Protocol Modifications for the DNS Security
               Extensions", RFC 4035, DOI 10.17487/RFC4035, March 2005,
               <https://www.rfc-editor.org/info/rfc4035>.
-
-
-
-
-Thomassen & Wisiol       Expires 23 October 2023               [Page 12]
-
-Internet-Draft            dnssec-bootstrapping                April 2023
-
 
    [RFC7344]  Kumari, W., Gudmundsson, O., and G. Barwood, "Automating
               DNSSEC Delegation Trust Maintenance", RFC 7344,
@@ -699,15 +719,33 @@ Internet-Draft            dnssec-bootstrapping                April 2023
 
 10.  Informative References
 
+
+
+
+
+
+
+Thomassen & Wisiol       Expires 2 November 2023               [Page 13]
+
+Internet-Draft            dnssec-bootstrapping                  May 2023
+
+
    [RFC6781]  Kolkman, O., Mekking, W., and R. Gieben, "DNSSEC
               Operational Practices, Version 2", RFC 6781,
               DOI 10.17487/RFC6781, December 2012,
               <https://www.rfc-editor.org/info/rfc6781>.
 
+   [RFC8901]  Huque, S., Aras, P., Dickinson, J., Vcelak, J., and D.
+              Blacka, "Multi-Signer DNSSEC Models", RFC 8901,
+              DOI 10.17487/RFC8901, September 2020,
+              <https://www.rfc-editor.org/info/rfc8901>.
+
 Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-04
 
+   |  Added consent considerations.
+   |  
    |  Editorial changes.
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-03
@@ -722,14 +760,6 @@ Appendix A.  Change History (to be removed before publication)
    |  are deprecated.
    |  
    |  Added new deployments to Implementation section.
-
-
-
-Thomassen & Wisiol       Expires 23 October 2023               [Page 13]
-
-Internet-Draft            dnssec-bootstrapping                April 2023
-
-
    |  
    |  Included NSEC walk / AXFR as possible triggers for DS
    |  bootstrapping.
@@ -746,6 +776,16 @@ Internet-Draft            dnssec-bootstrapping                April 2023
    |  
    |  Turn loose Security Considerations points into coherent text.
    |  
+
+
+
+
+
+Thomassen & Wisiol       Expires 2 November 2023               [Page 14]
+
+Internet-Draft            dnssec-bootstrapping                  May 2023
+
+
    |  Do no longer suggest NSEC-walking Signaling Domains.  (It does not
    |  work well due to the Signaling Type prefix.  What's more, it's
    |  unclear who would do this: Parents know there delegations and can
@@ -778,14 +818,6 @@ Internet-Draft            dnssec-bootstrapping                April 2023
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-02
 
-
-
-
-Thomassen & Wisiol       Expires 23 October 2023               [Page 14]
-
-Internet-Draft            dnssec-bootstrapping                April 2023
-
-
    |  Reframed as an authentication mechanism for RFC 8078.
    |  
    |  Removed multi-signer use case (focus on RFC 8078 authentication).
@@ -802,6 +834,14 @@ Internet-Draft            dnssec-bootstrapping                April 2023
    |  Add section on Triggers.
    |  
    |  Clarified title.
+
+
+
+Thomassen & Wisiol       Expires 2 November 2023               [Page 15]
+
+Internet-Draft            dnssec-bootstrapping                  May 2023
+
+
    |  
    |  Improved abstract.
    |  
@@ -832,16 +872,6 @@ Authors' Addresses
    Email: peter@desec.io
 
 
-
-
-
-
-
-Thomassen & Wisiol       Expires 23 October 2023               [Page 15]
-
-Internet-Draft            dnssec-bootstrapping                April 2023
-
-
    Nils Wisiol
    deSEC, Technische Universität Berlin
    Berlin
@@ -863,34 +893,4 @@ Internet-Draft            dnssec-bootstrapping                April 2023
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Thomassen & Wisiol       Expires 23 October 2023               [Page 16]
+Thomassen & Wisiol       Expires 2 November 2023               [Page 16]
