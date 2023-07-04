@@ -133,15 +133,14 @@ CDS/CDNSKEY
 : This notation refers to CDS and/or CDNSKEY, i.e., one or both.
 
 Child
-: The entity on record that has the delegation of the domain from the
-  Parent.
+: see [@!RFC8499] Section 7
 
 Child DNS Operator
 : The entity that maintains and publishes the zone information for
   the Child DNS.
 
 Parent
-: The domain in which the Child is registered.
+: see [@!RFC8499] Section 7
 
 Parental Agent
 : The entity that has the authority to insert DS records into the
@@ -195,13 +194,14 @@ Authenticity is ensured through standard DNSSEC validation.
 ## Chain of Trust
 
 If a Child DNS Operator implements the protocol, each Signaling Zone
-MUST be signed and securely delegated, i.e. have a valid DNSSEC chain
-of trust.
+MUST be signed and be validatable by the Parental Agent (i.e. have a
+valid DNSSEC chain of trust).
+This is typically achieved by securely delegating each Signaling Zone.
 
 For example, when publishing a signal that relates to a Child zone
 with NS records `ns1.example.net` and `ns2.example.org`, the Child
-DNS Operator needs to ensure that a valid DNSSEC chain of trust
-exists for the zone(s) that are authoritative for the Signaling
+DNS Operator needs to ensure that the Parental Agent has a valid DNSSEC
+chain of trust for the zone(s) that are authoritative for the Signaling
 Domains `_signal.ns1.example.net` and `_signal.ns2.example.org`.
 
 
@@ -421,9 +421,8 @@ DNS names (such as their length and label count).
 CDS/CDNSKEY records and corresponding signaling records MUST NOT be
 published without the zone owner's consent.
 Likewise, the Child DNS Operator MUST enable the zone owner to signal
-the desire to turn off DNSSEC by offering publication of a corresponding
-deletion signal in the form of the special-value CDS/CDNSKEY RRset
-specified in [@!RFC8078] Section 4.
+the desire to turn off DNSSEC by publication of the special-value
+CDS/CDNSKEY RRset specified in [@!RFC8078] Section 4.
 To facilitate transitions between DNS operators, Child DNS Operators
 SHOULD support the multi-signer protocols described in [@RFC8901].
 
@@ -446,13 +445,15 @@ It is RECOMMENDED to perform queries within Signaling Domains
 TTL of cached records to the interval between scans, as to retrieve the
 most current information regardless of TTL.
 (When a batch job is used to attempt bootstrapping for a large number
-of delegations, the cache does not need to get cleared in between.)
+of delegations, the cache does not need to get cleared in between
+queries pertaining to different Children.)
 
 
 # Security Considerations
 
-The protocol adds authentication to the CDS/CDNSKEY-based
-bootstrapping concept of [@!RFC8078], while removing nothing.
+The DNSSEC bootstrapping method introduced in this document is based on
+the (now deprecated) approaches described in [@!RFC8078] Section 3, but
+adds authentication to the CDS/CDNSKEY concept.
 Its security level is therefore strictly higher than that of existing
 approaches described in that document (e.g. "Accept after Delay").
 Apart from this general improvement, the same Security Considerations
@@ -540,8 +541,9 @@ by the community at <https://github.com/oskar456/cds-updates>.
 # Acknowledgements
 
 Thanks to Brian Dickson, Ondřej Caletka, John R. Levine, Christian
-Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari for
-reviewing draft proposals and offering comments and suggestions.
+Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari,
+Scott Rose for reviewing draft proposals and offering comments and
+suggestions.
 
 Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.
@@ -552,6 +554,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-05
+
+> Editorial changes
 
 
 * draft-ietf-dnsop-dnssec-bootstrapping-04

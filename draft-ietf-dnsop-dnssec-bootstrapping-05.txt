@@ -6,7 +6,7 @@ DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
 Updates: 7344, 8078 (if approved)                              N. Wisiol
 Intended status: Standards Track    deSEC, Technische Universität Berlin
-Expires: 5 January 2024                                      4 July 2023
+Expires: 11 January 2024                                    10 July 2023
 
 
   Automatic DNSSEC Bootstrapping using Authenticated Signals from the
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Thomassen & Wisiol       Expires 5 January 2024                 [Page 1]
+Thomassen & Wisiol       Expires 11 January 2024                [Page 1]
 
 Internet-Draft            dnssec-bootstrapping                 July 2023
 
@@ -63,7 +63,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 January 2024.
+   This Internet-Draft will expire on 11 January 2024.
 
 Copyright Notice
 
@@ -95,8 +95,8 @@ Table of Contents
        3.2.1.  Example . . . . . . . . . . . . . . . . . . . . . . .   8
      3.3.  Triggers  . . . . . . . . . . . . . . . . . . . . . . . .   8
      3.4.  Limitations . . . . . . . . . . . . . . . . . . . . . . .   9
-   4.  Operational Recommendations . . . . . . . . . . . . . . . . .   9
-     4.1.  Child DNS Operator  . . . . . . . . . . . . . . . . . . .   9
+   4.  Operational Recommendations . . . . . . . . . . . . . . . . .  10
+     4.1.  Child DNS Operator  . . . . . . . . . . . . . . . . . . .  10
      4.2.  Parental Agent  . . . . . . . . . . . . . . . . . . . . .  10
    5.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomassen & Wisiol       Expires 5 January 2024                 [Page 2]
+Thomassen & Wisiol       Expires 11 January 2024                [Page 2]
 
 Internet-Draft            dnssec-bootstrapping                 July 2023
 
@@ -165,7 +165,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 5 January 2024                 [Page 3]
+Thomassen & Wisiol       Expires 11 January 2024                [Page 3]
 
 Internet-Draft            dnssec-bootstrapping                 July 2023
 
@@ -194,13 +194,12 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
    CDS/CDNSKEY  This notation refers to CDS and/or CDNSKEY, i.e., one or
       both.
 
-   Child  The entity on record that has the delegation of the domain
-      from the Parent.
+   Child  see [RFC8499] Section 7
 
    Child DNS Operator  The entity that maintains and publishes the zone
       information for the Child DNS.
 
-   Parent  The domain in which the Child is registered.
+   Parent  see [RFC8499] Section 7
 
    Parental Agent  The entity that has the authority to insert DS
       records into the Parent zone on behalf of the Child.  (It could be
@@ -221,7 +220,8 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 5 January 2024                 [Page 4]
+
+Thomassen & Wisiol       Expires 11 January 2024                [Page 4]
 
 Internet-Draft            dnssec-bootstrapping                 July 2023
 
@@ -251,14 +251,16 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 2.1.  Chain of Trust
 
    If a Child DNS Operator implements the protocol, each Signaling Zone
-   MUST be signed and securely delegated, i.e. have a valid DNSSEC chain
-   of trust.
+   MUST be signed and be validatable by the Parental Agent (i.e. have a
+   valid DNSSEC chain of trust).  This is typically achieved by securely
+   delegating each Signaling Zone.
 
    For example, when publishing a signal that relates to a Child zone
    with NS records ns1.example.net and ns2.example.org, the Child DNS
-   Operator needs to ensure that a valid DNSSEC chain of trust exists
-   for the zone(s) that are authoritative for the Signaling Domains
-   _signal.ns1.example.net and _signal.ns2.example.org.
+   Operator needs to ensure that the Parental Agent has a valid DNSSEC
+   chain of trust for the zone(s) that are authoritative for the
+   Signaling Domains _signal.ns1.example.net and
+   _signal.ns2.example.org.
 
 2.2.  Signaling Names
 
@@ -271,16 +273,18 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
    the corresponding Signaling Zone's key(s).  The type and contents of
    these Signaling Records depend on the type of signal.
 
-   The Signaling Name identifies the Child and the Signaling Type.  It
-   is identical to the Child name (with the final root label removed),
-   prefixed with a label containing the Signaling Type.
 
 
 
-Thomassen & Wisiol       Expires 5 January 2024                 [Page 5]
+
+Thomassen & Wisiol       Expires 11 January 2024                [Page 5]
 
 Internet-Draft            dnssec-bootstrapping                 July 2023
 
+
+   The Signaling Name identifies the Child and the Signaling Type.  It
+   is identical to the Child name (with the final root label removed),
+   prefixed with a label containing the Signaling Type.
 
 3.  Bootstrapping a DNSSEC Delegation
 
@@ -325,18 +329,18 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
    the required Signaling Domains are _signal.ns1.example.net and
    _signal.ns2.example.org.
 
-   In the zones containing these domains, the Child DNS Operator
-   authenticates the CDS/CDNSKEY records found at the Child's apex by
-   co-publishing them at the names:
 
 
 
 
-
-Thomassen & Wisiol       Expires 5 January 2024                 [Page 6]
+Thomassen & Wisiol       Expires 11 January 2024                [Page 6]
 
 Internet-Draft            dnssec-bootstrapping                 July 2023
 
+
+   In the zones containing these domains, the Child DNS Operator
+   authenticates the CDS/CDNSKEY records found at the Child's apex by
+   co-publishing them at the names:
 
    _dsboot.example.co.uk._signal.ns1.example.net
    _dsboot.example.co.uk._signal.ns2.example.org
@@ -381,18 +385,19 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
       records located at the Child apex from any of the authoritative
       nameservers;
 
+
+
+
+
+Thomassen & Wisiol       Expires 11 January 2024                [Page 7]
+
+Internet-Draft            dnssec-bootstrapping                 July 2023
+
+
    *  in Step 3: any failure to retrieve the CDS/CDNSKEY RRsets located
       at the Signaling Name under any Signaling Domain, including
       failure of DNSSEC validation, or unauthenticated data (AD bit not
       set);
-
-
-
-
-Thomassen & Wisiol       Expires 5 January 2024                 [Page 7]
-
-Internet-Draft            dnssec-bootstrapping                 July 2023
-
 
    *  in Step 4: inconsistent responses (for at least one of the types),
       including a record set that is empty in one of Steps 2 or 3, but
@@ -436,19 +441,21 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
    Parental Agents SHOULD trigger the procedure described in Section 3.2
    once one of the following conditions is fulfilled:
 
+
+
+
+
+Thomassen & Wisiol       Expires 11 January 2024                [Page 8]
+
+Internet-Draft            dnssec-bootstrapping                 July 2023
+
+
    *  The Parental Agent receives a new or updated NS record set for a
       Child;
 
    *  The Parental Agent encounters a Signaling Record during a
       proactive, opportunistic scan (e.g. daily queries of Signaling
       Records for some or all of its delegations);
-
-
-
-Thomassen & Wisiol       Expires 5 January 2024                 [Page 8]
-
-Internet-Draft            dnssec-bootstrapping                 July 2023
-
 
    *  The Parental Agent encounters a Signaling Record during an NSEC
       walk or when parsing a Signaling Zone (e.g. when made available
@@ -488,6 +495,17 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
    qualified Signaling Names fit within the general limits that apply to
    DNS names (such as their length and label count).
 
+
+
+
+
+
+
+Thomassen & Wisiol       Expires 11 January 2024                [Page 9]
+
+Internet-Draft            dnssec-bootstrapping                 July 2023
+
+
 4.  Operational Recommendations
 
 4.1.  Child DNS Operator
@@ -495,18 +513,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
    CDS/CDNSKEY records and corresponding signaling records MUST NOT be
    published without the zone owner's consent.  Likewise, the Child DNS
    Operator MUST enable the zone owner to signal the desire to turn off
-   DNSSEC by offering publication of a corresponding deletion signal in
-   the form of the special-value CDS/CDNSKEY RRset specified in
-   [RFC8078] Section 4.  To facilitate transitions between DNS
-
-
-
-Thomassen & Wisiol       Expires 5 January 2024                 [Page 9]
-
-Internet-Draft            dnssec-bootstrapping                 July 2023
-
-
-   operators, Child DNS Operators SHOULD support the multi-signer
+   DNSSEC by publication of the special-value CDS/CDNSKEY RRset
+   specified in [RFC8078] Section 4.  To facilitate transitions between
+   DNS operators, Child DNS Operators SHOULD support the multi-signer
    protocols described in [RFC8901].
 
    Signaling Domains SHOULD be delegated as zones of their own, so that
@@ -528,16 +537,18 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
    TTL of cached records to the interval between scans, as to retrieve
    the most current information regardless of TTL.  (When a batch job is
    used to attempt bootstrapping for a large number of delegations, the
-   cache does not need to get cleared in between.)
+   cache does not need to get cleared in between queries pertaining to
+   different Children.)
 
 5.  Security Considerations
 
-   The protocol adds authentication to the CDS/CDNSKEY-based
-   bootstrapping concept of [RFC8078], while removing nothing.  Its
-   security level is therefore strictly higher than that of existing
-   approaches described in that document (e.g.  "Accept after Delay").
-   Apart from this general improvement, the same Security Considerations
-   apply as in [RFC8078].
+   The DNSSEC bootstrapping method introduced in this document is based
+   on the (now deprecated) approaches described in [RFC8078] Section 3,
+   but adds authentication to the CDS/CDNSKEY concept.  Its security
+   level is therefore strictly higher than that of existing approaches
+   described in that document (e.g.  "Accept after Delay").  Apart from
+   this general improvement, the same Security Considerations apply as
+   in [RFC8078].
 
    The level of rigor in Section 3.2 is needed to prevent publication of
    a half-baked DS RRset (authorized only under a subset of NS
@@ -546,18 +557,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-Thomassen & Wisiol       Expires 5 January 2024                [Page 10]
+Thomassen & Wisiol       Expires 11 January 2024               [Page 10]
 
 Internet-Draft            dnssec-bootstrapping                 July 2023
 
@@ -613,7 +613,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 5 January 2024                [Page 11]
+Thomassen & Wisiol       Expires 11 January 2024               [Page 11]
 
 Internet-Draft            dnssec-bootstrapping                 July 2023
 
@@ -657,8 +657,8 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
    Thanks to Brian Dickson, Ond&#345;ej Caletka, John R.  Levine,
    Christian Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan,
-   Warren Kumari for reviewing draft proposals and offering comments and
-   suggestions.
+   Warren Kumari, Scott Rose for reviewing draft proposals and offering
+   comments and suggestions.
 
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
@@ -669,7 +669,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 5 January 2024                [Page 12]
+Thomassen & Wisiol       Expires 11 January 2024               [Page 12]
 
 Internet-Draft            dnssec-bootstrapping                 July 2023
 
@@ -712,6 +712,10 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
+   [RFC8499]  Hoffman, P., Sullivan, A., and K. Fujiwara, "DNS
+              Terminology", BCP 219, RFC 8499, DOI 10.17487/RFC8499,
+              January 2019, <https://www.rfc-editor.org/info/rfc8499>.
+
    [RFC8552]  Crocker, D., "Scoped Interpretation of DNS Resource
               Records through "Underscored" Naming of Attribute Leaves",
               BCP 222, RFC 8552, DOI 10.17487/RFC8552, March 2019,
@@ -721,11 +725,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-
-
-
-
-Thomassen & Wisiol       Expires 5 January 2024                [Page 13]
+Thomassen & Wisiol       Expires 11 January 2024               [Page 13]
 
 Internet-Draft            dnssec-bootstrapping                 July 2023
 
@@ -743,6 +743,8 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-05
+
+   |  Editorial changes
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-04
 
@@ -776,16 +778,16 @@ Appendix A.  Change History (to be removed before publication)
    |  Clarified Operational Recommendations according to operator
    |  feedback.
    |  
-   |  Turn loose Security Considerations points into coherent text.
-   |  
 
 
 
-Thomassen & Wisiol       Expires 5 January 2024                [Page 14]
+Thomassen & Wisiol       Expires 11 January 2024               [Page 14]
 
 Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
+   |  Turn loose Security Considerations points into coherent text.
+   |  
    |  Do no longer suggest NSEC-walking Signaling Domains.  (It does not
    |  work well due to the Signaling Type prefix.  What's more, it's
    |  unclear who would do this: Parents know there delegations and can
@@ -832,16 +834,16 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
    *  draft-thomassen-dnsop-dnssec-bootstrapping-01
 
    |  Add section on Triggers.
-   |  
-   |  Clarified title.
 
 
 
-Thomassen & Wisiol       Expires 5 January 2024                [Page 15]
+Thomassen & Wisiol       Expires 11 January 2024               [Page 15]
 
 Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
+   |  
+   |  Clarified title.
    |  
    |  Improved abstract.
    |  
@@ -891,6 +893,4 @@ Authors' Addresses
 
 
 
-
-
-Thomassen & Wisiol       Expires 5 January 2024                [Page 16]
+Thomassen & Wisiol       Expires 11 January 2024               [Page 16]
