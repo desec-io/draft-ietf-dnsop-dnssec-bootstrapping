@@ -551,6 +551,9 @@ early-stage brainstorming.
 
 # Change History (to be removed before publication)
 
+* draft-ietf-dnsop-dnssec-bootstrapping-05
+
+
 * draft-ietf-dnsop-dnssec-bootstrapping-04
 
 > Added consent considerations.
