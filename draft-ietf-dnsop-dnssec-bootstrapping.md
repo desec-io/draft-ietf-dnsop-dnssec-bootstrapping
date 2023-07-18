@@ -553,6 +553,9 @@ early-stage brainstorming.
 
 # Change History (to be removed before publication)
 
+* draft-ietf-dnsop-dnssec-bootstrapping-06
+
+
 * draft-ietf-dnsop-dnssec-bootstrapping-05
 
 > Editorial changes
