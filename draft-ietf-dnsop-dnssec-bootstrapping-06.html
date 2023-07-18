@@ -1445,8 +1445,13 @@ success secure the delegation.<a href="#section-1-6" class="pilcrow">¶</a></p>
 not support certain edge cases, such as excessively long Child zone
 names, or DNSSEC bootstrapping for domains with in-bailick nameservers
 only (see <a href="#limitations" class="xref">Section 3.4</a>).<a href="#section-1-7" class="pilcrow">¶</a></p>
-<p id="section-1-8">Readers are expected to be familiar with DNSSEC, including <span>[<a href="#RFC4033" class="xref">RFC4033</a>]</span>,
-<span>[<a href="#RFC4034" class="xref">RFC4034</a>]</span>, <span>[<a href="#RFC4035" class="xref">RFC4035</a>]</span>, <span>[<a href="#RFC6781" class="xref">RFC6781</a>]</span>, <span>[<a href="#RFC7344" class="xref">RFC7344</a>]</span>, and <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span>.<a href="#section-1-8" class="pilcrow">¶</a></p>
+<p id="section-1-8">DNSSEC bootstrapping is just one application of the generic signaling
+mechanism specified in this document.
+Other applications might arise in the future, such as publication of
+API endpoints for third-party interaction with the DNS Operator or of
+other operational metadata which the DNS Operator likes to publish.<a href="#section-1-8" class="pilcrow">¶</a></p>
+<p id="section-1-9">Readers are expected to be familiar with DNSSEC, including <span>[<a href="#RFC4033" class="xref">RFC4033</a>]</span>,
+<span>[<a href="#RFC4034" class="xref">RFC4034</a>]</span>, <span>[<a href="#RFC4035" class="xref">RFC4035</a>]</span>, <span>[<a href="#RFC6781" class="xref">RFC6781</a>]</span>, <span>[<a href="#RFC7344" class="xref">RFC7344</a>]</span>, and <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span>.<a href="#section-1-9" class="pilcrow">¶</a></p>
 <div id="terminology">
 <section id="section-1.1">
         <h3 id="name-terminology">
@@ -1584,6 +1589,10 @@ deprecated and SHOULD NOT be used.
 Child DNS Operators and Parental Agents who wish to use CDS/CDNSKEY
 records for initial DS enrollment SHOULD instead support the
 authentication protocol described in this section.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">This protocol is not intended for updating an existing DS RRset.
+For this purpose, the Parental Agent can validate the Child's
+CDS/CDNSKEY records directly, using the chain of trust established by
+the existing DS RRset (<span>[<a href="#RFC7344" class="xref">RFC7344</a>]</span> Section 4).<a href="#section-3-3" class="pilcrow">¶</a></p>
 <div id="signalingrecords">
 <section id="section-3.1">
         <h3 id="name-signaling-consent-to-act-as">
@@ -2056,112 +2065,115 @@ early-stage brainstorming.<a href="#section-8-2" class="pilcrow">¶</a></p>
 <a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-change-history-to-be-remove" class="section-name selfRef">Change History (to be removed before publication)</a>
       </h2>
 <ul class="normal">
-<li class="normal" id="appendix-A-1.1">
-          <p id="appendix-A-1.1.1">draft-ietf-dnsop-dnssec-bootstrapping-06<a href="#appendix-A-1.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-A-1.2">
-          <p id="appendix-A-1.2.1">draft-ietf-dnsop-dnssec-bootstrapping-05<a href="#appendix-A-1.2.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-A-1.1">draft-ietf-dnsop-dnssec-bootstrapping-06<a href="#appendix-A-1.1" class="pilcrow">¶</a>
 </li>
       </ul>
 <blockquote id="appendix-A-2">
-        <p id="appendix-A-2.1">Editorial changes<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
+        <p id="appendix-A-2.1">Editorial changes from Secdir early review<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
-<li class="normal" id="appendix-A-3.1">draft-ietf-dnsop-dnssec-bootstrapping-04<a href="#appendix-A-3.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-A-3.1">draft-ietf-dnsop-dnssec-bootstrapping-05<a href="#appendix-A-3.1" class="pilcrow">¶</a>
 </li>
       </ul>
 <blockquote id="appendix-A-4">
-        <p id="appendix-A-4.1">Added consent considerations.<a href="#appendix-A-4.1" class="pilcrow">¶</a></p>
-<p id="appendix-A-4.2">Editorial changes.<a href="#appendix-A-4.2" class="pilcrow">¶</a></p>
+        <p id="appendix-A-4.1">Editorial changes<a href="#appendix-A-4.1" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
-<li class="normal" id="appendix-A-5.1">draft-ietf-dnsop-dnssec-bootstrapping-03<a href="#appendix-A-5.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-A-5.1">draft-ietf-dnsop-dnssec-bootstrapping-04<a href="#appendix-A-5.1" class="pilcrow">¶</a>
 </li>
       </ul>
 <blockquote id="appendix-A-6">
-        <p id="appendix-A-6.1">Updated Implementation section.<a href="#appendix-A-6.1" class="pilcrow">¶</a></p>
-<p id="appendix-A-6.2">Typo fix.<a href="#appendix-A-6.2" class="pilcrow">¶</a></p>
+        <p id="appendix-A-6.1">Added consent considerations.<a href="#appendix-A-6.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-6.2">Editorial changes.<a href="#appendix-A-6.2" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
-<li class="normal" id="appendix-A-7.1">draft-ietf-dnsop-dnssec-bootstrapping-02<a href="#appendix-A-7.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-A-7.1">draft-ietf-dnsop-dnssec-bootstrapping-03<a href="#appendix-A-7.1" class="pilcrow">¶</a>
 </li>
       </ul>
 <blockquote id="appendix-A-8">
-        <p id="appendix-A-8.1">Clarified that RFC 8078 Section 3 is not replaced, but its methods are
-  deprecated.<a href="#appendix-A-8.1" class="pilcrow">¶</a></p>
-<p id="appendix-A-8.2">Added new deployments to Implementation section.<a href="#appendix-A-8.2" class="pilcrow">¶</a></p>
-<p id="appendix-A-8.3">Included NSEC walk / AXFR as possible triggers for DS bootstrapping.<a href="#appendix-A-8.3" class="pilcrow">¶</a></p>
-<p id="appendix-A-8.4">Editorial changes.<a href="#appendix-A-8.4" class="pilcrow">¶</a></p>
+        <p id="appendix-A-8.1">Updated Implementation section.<a href="#appendix-A-8.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-8.2">Typo fix.<a href="#appendix-A-8.2" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
-<li class="normal" id="appendix-A-9.1">draft-ietf-dnsop-dnssec-bootstrapping-01<a href="#appendix-A-9.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-A-9.1">draft-ietf-dnsop-dnssec-bootstrapping-02<a href="#appendix-A-9.1" class="pilcrow">¶</a>
 </li>
       </ul>
 <blockquote id="appendix-A-10">
-        <p id="appendix-A-10.1">Allow bootstrapping when some (not all) NS hostnames are in bailiwick.<a href="#appendix-A-10.1" class="pilcrow">¶</a></p>
-<p id="appendix-A-10.2">Clarified Operational Recommendations according to operator feedback.<a href="#appendix-A-10.2" class="pilcrow">¶</a></p>
-<p id="appendix-A-10.3">Turn loose Security Considerations points into coherent text.<a href="#appendix-A-10.3" class="pilcrow">¶</a></p>
-<p id="appendix-A-10.4">Do no longer suggest NSEC-walking Signaling Domains.
-  (It does not work well due to the Signaling Type prefix. What's more,
-  it's unclear who would do this: Parents know there delegations and can
-  do a targeted scan; others are not interested.)<a href="#appendix-A-10.4" class="pilcrow">¶</a></p>
-<p id="appendix-A-10.5">Editorial changes.<a href="#appendix-A-10.5" class="pilcrow">¶</a></p>
-<p id="appendix-A-10.6">Added IANA request.<a href="#appendix-A-10.6" class="pilcrow">¶</a></p>
-<p id="appendix-A-10.7">Introduced Signaling Type prefix (<code>_dsboot</code>), renamed Signaling Name
-  infix from <code>_dsauth</code> to <code>_signal</code>.<a href="#appendix-A-10.7" class="pilcrow">¶</a></p>
+        <p id="appendix-A-10.1">Clarified that RFC 8078 Section 3 is not replaced, but its methods are
+  deprecated.<a href="#appendix-A-10.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-10.2">Added new deployments to Implementation section.<a href="#appendix-A-10.2" class="pilcrow">¶</a></p>
+<p id="appendix-A-10.3">Included NSEC walk / AXFR as possible triggers for DS bootstrapping.<a href="#appendix-A-10.3" class="pilcrow">¶</a></p>
+<p id="appendix-A-10.4">Editorial changes.<a href="#appendix-A-10.4" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
-<li class="normal" id="appendix-A-11.1">draft-ietf-dnsop-dnssec-bootstrapping-00<a href="#appendix-A-11.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-A-11.1">draft-ietf-dnsop-dnssec-bootstrapping-01<a href="#appendix-A-11.1" class="pilcrow">¶</a>
 </li>
       </ul>
 <blockquote id="appendix-A-12">
-        <p id="appendix-A-12.1">Editorial changes.<a href="#appendix-A-12.1" class="pilcrow">¶</a></p>
+        <p id="appendix-A-12.1">Allow bootstrapping when some (not all) NS hostnames are in bailiwick.<a href="#appendix-A-12.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-12.2">Clarified Operational Recommendations according to operator feedback.<a href="#appendix-A-12.2" class="pilcrow">¶</a></p>
+<p id="appendix-A-12.3">Turn loose Security Considerations points into coherent text.<a href="#appendix-A-12.3" class="pilcrow">¶</a></p>
+<p id="appendix-A-12.4">Do no longer suggest NSEC-walking Signaling Domains.
+  (It does not work well due to the Signaling Type prefix. What's more,
+  it's unclear who would do this: Parents know there delegations and can
+  do a targeted scan; others are not interested.)<a href="#appendix-A-12.4" class="pilcrow">¶</a></p>
+<p id="appendix-A-12.5">Editorial changes.<a href="#appendix-A-12.5" class="pilcrow">¶</a></p>
+<p id="appendix-A-12.6">Added IANA request.<a href="#appendix-A-12.6" class="pilcrow">¶</a></p>
+<p id="appendix-A-12.7">Introduced Signaling Type prefix (<code>_dsboot</code>), renamed Signaling Name
+  infix from <code>_dsauth</code> to <code>_signal</code>.<a href="#appendix-A-12.7" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
-<li class="normal" id="appendix-A-13.1">draft-thomassen-dnsop-dnssec-bootstrapping-03<a href="#appendix-A-13.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-A-13.1">draft-ietf-dnsop-dnssec-bootstrapping-00<a href="#appendix-A-13.1" class="pilcrow">¶</a>
 </li>
       </ul>
 <blockquote id="appendix-A-14">
-        <p id="appendix-A-14.1">Clarified importance of record cleanup by moving paragraph up.<a href="#appendix-A-14.1" class="pilcrow">¶</a></p>
-<p id="appendix-A-14.2">Pointed out limitations.<a href="#appendix-A-14.2" class="pilcrow">¶</a></p>
-<p id="appendix-A-14.3">Replace <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span> Section 3 with our <a href="#cds-auth" class="xref">Section 3.2</a>.<a href="#appendix-A-14.3" class="pilcrow">¶</a></p>
-<p id="appendix-A-14.4">Changed <code>_boot</code> label to <code>_dsauth</code>.<a href="#appendix-A-14.4" class="pilcrow">¶</a></p>
-<p id="appendix-A-14.5">Removed hashing of Child name components in Signaling Names.<a href="#appendix-A-14.5" class="pilcrow">¶</a></p>
-<p id="appendix-A-14.6">Editorial changes.<a href="#appendix-A-14.6" class="pilcrow">¶</a></p>
+        <p id="appendix-A-14.1">Editorial changes.<a href="#appendix-A-14.1" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
-<li class="normal" id="appendix-A-15.1">draft-thomassen-dnsop-dnssec-bootstrapping-02<a href="#appendix-A-15.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-A-15.1">draft-thomassen-dnsop-dnssec-bootstrapping-03<a href="#appendix-A-15.1" class="pilcrow">¶</a>
 </li>
       </ul>
 <blockquote id="appendix-A-16">
-        <p id="appendix-A-16.1">Reframed as an authentication mechanism for RFC 8078.<a href="#appendix-A-16.1" class="pilcrow">¶</a></p>
-<p id="appendix-A-16.2">Removed multi-signer use case (focus on RFC 8078 authentication).<a href="#appendix-A-16.2" class="pilcrow">¶</a></p>
-<p id="appendix-A-16.3">Triggers need to fetch NS records (if not implicit from context).<a href="#appendix-A-16.3" class="pilcrow">¶</a></p>
-<p id="appendix-A-16.4">Improved title.<a href="#appendix-A-16.4" class="pilcrow">¶</a></p>
-<p id="appendix-A-16.5">Recognized that hash collisions are dealt with by Child apex check.<a href="#appendix-A-16.5" class="pilcrow">¶</a></p>
+        <p id="appendix-A-16.1">Clarified importance of record cleanup by moving paragraph up.<a href="#appendix-A-16.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-16.2">Pointed out limitations.<a href="#appendix-A-16.2" class="pilcrow">¶</a></p>
+<p id="appendix-A-16.3">Replace <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span> Section 3 with our <a href="#cds-auth" class="xref">Section 3.2</a>.<a href="#appendix-A-16.3" class="pilcrow">¶</a></p>
+<p id="appendix-A-16.4">Changed <code>_boot</code> label to <code>_dsauth</code>.<a href="#appendix-A-16.4" class="pilcrow">¶</a></p>
+<p id="appendix-A-16.5">Removed hashing of Child name components in Signaling Names.<a href="#appendix-A-16.5" class="pilcrow">¶</a></p>
+<p id="appendix-A-16.6">Editorial changes.<a href="#appendix-A-16.6" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
-<li class="normal" id="appendix-A-17.1">draft-thomassen-dnsop-dnssec-bootstrapping-01<a href="#appendix-A-17.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-A-17.1">draft-thomassen-dnsop-dnssec-bootstrapping-02<a href="#appendix-A-17.1" class="pilcrow">¶</a>
 </li>
       </ul>
 <blockquote id="appendix-A-18">
-        <p id="appendix-A-18.1">Add section on Triggers.<a href="#appendix-A-18.1" class="pilcrow">¶</a></p>
-<p id="appendix-A-18.2">Clarified title.<a href="#appendix-A-18.2" class="pilcrow">¶</a></p>
-<p id="appendix-A-18.3">Improved abstract.<a href="#appendix-A-18.3" class="pilcrow">¶</a></p>
-<p id="appendix-A-18.4">Require CDS/CDNSKEY records at the Child.<a href="#appendix-A-18.4" class="pilcrow">¶</a></p>
-<p id="appendix-A-18.5">Reworked Signaling Name scheme.<a href="#appendix-A-18.5" class="pilcrow">¶</a></p>
-<p id="appendix-A-18.6">Recommend using cold cache for consumption.<a href="#appendix-A-18.6" class="pilcrow">¶</a></p>
-<p id="appendix-A-18.7">Updated terminology (replace "Bootstrapping" by "Signaling").<a href="#appendix-A-18.7" class="pilcrow">¶</a></p>
-<p id="appendix-A-18.8">Added NSEC recommendation for Bootstrapping Zones.<a href="#appendix-A-18.8" class="pilcrow">¶</a></p>
-<p id="appendix-A-18.9">Added multi-signer use case.<a href="#appendix-A-18.9" class="pilcrow">¶</a></p>
-<p id="appendix-A-18.10">Editorial changes.<a href="#appendix-A-18.10" class="pilcrow">¶</a></p>
+        <p id="appendix-A-18.1">Reframed as an authentication mechanism for RFC 8078.<a href="#appendix-A-18.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-18.2">Removed multi-signer use case (focus on RFC 8078 authentication).<a href="#appendix-A-18.2" class="pilcrow">¶</a></p>
+<p id="appendix-A-18.3">Triggers need to fetch NS records (if not implicit from context).<a href="#appendix-A-18.3" class="pilcrow">¶</a></p>
+<p id="appendix-A-18.4">Improved title.<a href="#appendix-A-18.4" class="pilcrow">¶</a></p>
+<p id="appendix-A-18.5">Recognized that hash collisions are dealt with by Child apex check.<a href="#appendix-A-18.5" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
-<li class="normal" id="appendix-A-19.1">draft-thomassen-dnsop-dnssec-bootstrapping-00<a href="#appendix-A-19.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-A-19.1">draft-thomassen-dnsop-dnssec-bootstrapping-01<a href="#appendix-A-19.1" class="pilcrow">¶</a>
 </li>
       </ul>
 <blockquote id="appendix-A-20">
-        <p id="appendix-A-20.1">Initial public draft.<a href="#appendix-A-20.1" class="pilcrow">¶</a></p>
+        <p id="appendix-A-20.1">Add section on Triggers.<a href="#appendix-A-20.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-20.2">Clarified title.<a href="#appendix-A-20.2" class="pilcrow">¶</a></p>
+<p id="appendix-A-20.3">Improved abstract.<a href="#appendix-A-20.3" class="pilcrow">¶</a></p>
+<p id="appendix-A-20.4">Require CDS/CDNSKEY records at the Child.<a href="#appendix-A-20.4" class="pilcrow">¶</a></p>
+<p id="appendix-A-20.5">Reworked Signaling Name scheme.<a href="#appendix-A-20.5" class="pilcrow">¶</a></p>
+<p id="appendix-A-20.6">Recommend using cold cache for consumption.<a href="#appendix-A-20.6" class="pilcrow">¶</a></p>
+<p id="appendix-A-20.7">Updated terminology (replace "Bootstrapping" by "Signaling").<a href="#appendix-A-20.7" class="pilcrow">¶</a></p>
+<p id="appendix-A-20.8">Added NSEC recommendation for Bootstrapping Zones.<a href="#appendix-A-20.8" class="pilcrow">¶</a></p>
+<p id="appendix-A-20.9">Added multi-signer use case.<a href="#appendix-A-20.9" class="pilcrow">¶</a></p>
+<p id="appendix-A-20.10">Editorial changes.<a href="#appendix-A-20.10" class="pilcrow">¶</a></p>
+</blockquote>
+<ul class="normal">
+<li class="normal" id="appendix-A-21.1">draft-thomassen-dnsop-dnssec-bootstrapping-00<a href="#appendix-A-21.1" class="pilcrow">¶</a>
+</li>
+      </ul>
+<blockquote id="appendix-A-22">
+        <p id="appendix-A-22.1">Initial public draft.<a href="#appendix-A-22.1" class="pilcrow">¶</a></p>
 </blockquote>
 </section>
 </div>

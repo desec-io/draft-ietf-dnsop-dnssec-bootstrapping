@@ -121,6 +121,12 @@ not support certain edge cases, such as excessively long Child zone
 names, or DNSSEC bootstrapping for domains with in-bailick nameservers
 only (see (#limitations)).
 
+DNSSEC bootstrapping is just one application of the generic signaling
+mechanism specified in this document.
+Other applications might arise in the future, such as publication of
+API endpoints for third-party interaction with the DNS Operator or of
+other operational metadata which the DNS Operator likes to publish.
+
 Readers are expected to be familiar with DNSSEC, including [@!RFC4033],
 [@!RFC4034], [@!RFC4035], [@RFC6781], [@!RFC7344], and [@!RFC8078].
 
@@ -236,6 +242,11 @@ deprecated and SHOULD NOT be used.
 Child DNS Operators and Parental Agents who wish to use CDS/CDNSKEY
 records for initial DS enrollment SHOULD instead support the
 authentication protocol described in this section.
+
+This protocol is not intended for updating an existing DS RRset.
+For this purpose, the Parental Agent can validate the Child's
+CDS/CDNSKEY records directly, using the chain of trust established by
+the existing DS RRset ([@!RFC7344] Section 4).
 
 
 {#signalingrecords}
@@ -554,6 +565,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-06
+
+> Editorial changes from Secdir early review
 
 
 * draft-ietf-dnsop-dnssec-bootstrapping-05
