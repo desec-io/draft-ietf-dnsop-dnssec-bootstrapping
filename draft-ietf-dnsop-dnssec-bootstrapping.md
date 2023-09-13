@@ -53,10 +53,10 @@ enables the parent's registry or registrar to cryptographically
 validate the CDS/CDNSKEY records found at the child's apex.
 The parent can then provision DS records for the delegation without
 resorting to out-of-band validation or weaker types of cross-checks
-such as "Accept after Delay" ([@!RFC8078]).
+such as "Accept after Delay".
 
 This document deprecates the DS enrollment methods described in Section
-3 of [@!RFC8078] in favor of (#dnssec-bootstrapping) of this document.
+3 of RFC 8078 in favor of (#dnssec-bootstrapping) of this document.
 
 [ Ed note: This document is being collaborated on at
 <https://github.com/desec-io/draft-ietf-dnsop-dnssec-bootstrapping/>.
@@ -389,7 +389,7 @@ For example, when discovering Signaling Names by performing an NSEC
 walk or zone transfer of a Signaling Zone, the Parental Agent MUST NOT
 assume that the nameserver(s) under whose Signaling Domain(s) a
 Signaling Name appears is in fact authoritative for the corresponding
-Child. 
+Child.
 
 In this case (and in other cases alike where some list of
 "bootstrappable domains" is retrieved from elsewhere), the Parental
