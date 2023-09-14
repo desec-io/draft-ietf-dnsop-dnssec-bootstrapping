@@ -6,7 +6,7 @@ DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
 Updates: 7344, 8078 (if approved)                              N. Wisiol
 Intended status: Standards Track    deSEC, Technische Universität Berlin
-Expires: 19 January 2024                                    18 July 2023
+Expires: 17 March 2024                                 14 September 2023
 
 
   Automatic DNSSEC Bootstrapping using Authenticated Signals from the
@@ -27,10 +27,10 @@ Abstract
    validate the CDS/CDNSKEY records found at the child's apex.  The
    parent can then provision DS records for the delegation without
    resorting to out-of-band validation or weaker types of cross-checks
-   such as "Accept after Delay" ([RFC8078]).
+   such as "Accept after Delay".
 
    This document deprecates the DS enrollment methods described in
-   Section 3 of [RFC8078] in favor of Section 3 of this document.
+   Section 3 of RFC 8078 in favor of Section 3 of this document.
 
    [ Ed note: This document is being collaborated on at
    https://github.com/desec-io/draft-ietf-dnsop-dnssec-bootstrapping/
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024                [Page 1]
+Thomassen & Wisiol        Expires 17 March 2024                 [Page 1]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
    Internet-Drafts are draft documents valid for a maximum of six months
@@ -63,7 +63,7 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 January 2024.
+   This Internet-Draft will expire on 17 March 2024.
 
 Copyright Notice
 
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024                [Page 2]
+Thomassen & Wisiol        Expires 17 March 2024                 [Page 2]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
    Appendix A.  Change History (to be removed before publication)  .  14
@@ -165,9 +165,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024                [Page 3]
+Thomassen & Wisiol        Expires 17 March 2024                 [Page 3]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
    This document aims to close this gap by introducing an in-band method
@@ -221,9 +221,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024                [Page 4]
+Thomassen & Wisiol        Expires 17 March 2024                 [Page 4]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
       order to identify a Signaling Type and a Child zone's name (see
@@ -277,9 +277,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024                [Page 5]
+Thomassen & Wisiol        Expires 17 March 2024                 [Page 5]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 2.2.  Signaling Names
@@ -333,9 +333,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024                [Page 6]
+Thomassen & Wisiol        Expires 17 March 2024                 [Page 6]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
    Unlike the CDS/CDNSKEY records at the Child's apex, Signaling Records
@@ -389,9 +389,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024                [Page 7]
+Thomassen & Wisiol        Expires 17 March 2024                 [Page 7]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
    4.  check (separately by record type) that all record sets retrieved
@@ -445,9 +445,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024                [Page 8]
+Thomassen & Wisiol        Expires 17 March 2024                 [Page 8]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
    4.  checks that the CDS/CDNSKEY record sets retrieved in Steps 2 and
@@ -501,9 +501,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024                [Page 9]
+Thomassen & Wisiol        Expires 17 March 2024                 [Page 9]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 3.4.  Limitations
@@ -557,9 +557,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024               [Page 10]
+Thomassen & Wisiol        Expires 17 March 2024                [Page 10]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 5.  Security Considerations
@@ -613,9 +613,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024               [Page 11]
+Thomassen & Wisiol        Expires 17 March 2024                [Page 11]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 7.1.  Child DNS Operator-side
@@ -669,9 +669,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024               [Page 12]
+Thomassen & Wisiol        Expires 17 March 2024                [Page 12]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
    *  A tool to retrieve and process Signaling Records for bootstrapping
@@ -684,8 +684,8 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
    Thanks to Brian Dickson, Ond&#345;ej Caletka, John R.  Levine,
    Christian Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan,
-   Warren Kumari, Scott Rose for reviewing draft proposals and offering
-   comments and suggestions.
+   Warren Kumari, Scott Rose, Linda Dunbar, Tim Wicinski for reviewing
+   draft proposals and offering comments and suggestions.
 
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
@@ -725,9 +725,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024               [Page 13]
+Thomassen & Wisiol        Expires 17 March 2024                [Page 13]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
    [RFC8078]  Gudmundsson, O. and P. Wouters, "Managing DS Records from
@@ -764,6 +764,8 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-06
 
+   |  Editorial nits
+   |  
    |  Editorial changes from Secdir early review
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-05
@@ -776,15 +778,15 @@ Appendix A.  Change History (to be removed before publication)
    |  
    |  Editorial changes.
 
-   *  draft-ietf-dnsop-dnssec-bootstrapping-03
 
 
 
-
-Thomassen & Wisiol       Expires 19 January 2024               [Page 14]
+Thomassen & Wisiol        Expires 17 March 2024                [Page 14]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
+
+   *  draft-ietf-dnsop-dnssec-bootstrapping-03
 
    |  Updated Implementation section.
    |  
@@ -832,16 +834,16 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
    |  Clarified importance of record cleanup by moving paragraph up.
    |  
+
+
+
+Thomassen & Wisiol        Expires 17 March 2024                [Page 15]
+
+Internet-Draft            dnssec-bootstrapping            September 2023
+
+
    |  Pointed out limitations.
    |  
-
-
-
-Thomassen & Wisiol       Expires 19 January 2024               [Page 15]
-
-Internet-Draft            dnssec-bootstrapping                 July 2023
-
-
    |  Replace [RFC8078] Section 3 with our Section 3.2.
    |  
    |  Changed _boot label to _dsauth.
@@ -891,11 +893,9 @@ Internet-Draft            dnssec-bootstrapping                 July 2023
 
 
 
-
-
-Thomassen & Wisiol       Expires 19 January 2024               [Page 16]
+Thomassen & Wisiol        Expires 17 March 2024                [Page 16]
 
-Internet-Draft            dnssec-bootstrapping                 July 2023
+Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 Authors' Addresses
@@ -949,4 +949,4 @@ Authors' Addresses
 
 
 
-Thomassen & Wisiol       Expires 19 January 2024               [Page 17]
+Thomassen & Wisiol        Expires 17 March 2024                [Page 17]

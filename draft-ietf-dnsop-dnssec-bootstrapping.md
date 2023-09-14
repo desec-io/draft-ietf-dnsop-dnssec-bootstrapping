@@ -553,8 +553,8 @@ by the community at <https://github.com/oskar456/cds-updates>.
 
 Thanks to Brian Dickson, Ondřej Caletka, John R. Levine, Christian
 Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari,
-Scott Rose for reviewing draft proposals and offering comments and
-suggestions.
+Scott Rose, Linda Dunbar, Tim Wicinski for reviewing draft proposals
+and offering comments and suggestions.
 
 Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.
@@ -565,6 +565,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-06
+
+> Editorial nits
 
 > Editorial changes from Secdir early review
 
