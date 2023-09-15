@@ -6,7 +6,7 @@ DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
 Updates: 7344, 8078 (if approved)                              N. Wisiol
 Intended status: Standards Track    deSEC, Technische Universität Berlin
-Expires: 17 March 2024                                 14 September 2023
+Expires: 18 March 2024                                 15 September 2023
 
 
   Automatic DNSSEC Bootstrapping using Authenticated Signals from the
@@ -30,7 +30,8 @@ Abstract
    such as "Accept after Delay".
 
    This document deprecates the DS enrollment methods described in
-   Section 3 of RFC 8078 in favor of Section 3 of this document.
+   Section 3 of RFC 8078 in favor of Section 3 of this document, and
+   also updates RFC 7344.
 
    [ Ed note: This document is being collaborated on at
    https://github.com/desec-io/draft-ietf-dnsop-dnssec-bootstrapping/
@@ -52,8 +53,7 @@ Status of This Memo
 
 
 
-
-Thomassen & Wisiol        Expires 17 March 2024                 [Page 1]
+Thomassen & Wisiol        Expires 18 March 2024                 [Page 1]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -63,7 +63,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 March 2024.
+   This Internet-Draft will expire on 18 March 2024.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                 [Page 2]
+Thomassen & Wisiol        Expires 18 March 2024                 [Page 2]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -165,7 +165,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                 [Page 3]
+Thomassen & Wisiol        Expires 18 March 2024                 [Page 3]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -221,7 +221,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                 [Page 4]
+Thomassen & Wisiol        Expires 18 March 2024                 [Page 4]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -277,7 +277,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                 [Page 5]
+Thomassen & Wisiol        Expires 18 March 2024                 [Page 5]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -333,7 +333,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                 [Page 6]
+Thomassen & Wisiol        Expires 18 March 2024                 [Page 6]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -389,7 +389,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                 [Page 7]
+Thomassen & Wisiol        Expires 18 March 2024                 [Page 7]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -445,7 +445,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                 [Page 8]
+Thomassen & Wisiol        Expires 18 March 2024                 [Page 8]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -501,7 +501,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                 [Page 9]
+Thomassen & Wisiol        Expires 18 March 2024                 [Page 9]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -557,7 +557,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                [Page 10]
+Thomassen & Wisiol        Expires 18 March 2024                [Page 10]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -613,7 +613,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                [Page 11]
+Thomassen & Wisiol        Expires 18 March 2024                [Page 11]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -669,7 +669,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                [Page 12]
+Thomassen & Wisiol        Expires 18 March 2024                [Page 12]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -725,7 +725,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                [Page 13]
+Thomassen & Wisiol        Expires 18 March 2024                [Page 13]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -781,7 +781,7 @@ Appendix A.  Change History (to be removed before publication)
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                [Page 14]
+Thomassen & Wisiol        Expires 18 March 2024                [Page 14]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -837,7 +837,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                [Page 15]
+Thomassen & Wisiol        Expires 18 March 2024                [Page 15]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -893,7 +893,7 @@ Internet-Draft            dnssec-bootstrapping            September 2023
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                [Page 16]
+Thomassen & Wisiol        Expires 18 March 2024                [Page 16]
 
 Internet-Draft            dnssec-bootstrapping            September 2023
 
@@ -949,4 +949,4 @@ Authors' Addresses
 
 
 
-Thomassen & Wisiol        Expires 17 March 2024                [Page 17]
+Thomassen & Wisiol        Expires 18 March 2024                [Page 17]

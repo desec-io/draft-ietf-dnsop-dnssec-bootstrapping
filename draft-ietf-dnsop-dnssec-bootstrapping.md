@@ -56,7 +56,8 @@ resorting to out-of-band validation or weaker types of cross-checks
 such as "Accept after Delay".
 
 This document deprecates the DS enrollment methods described in Section
-3 of RFC 8078 in favor of (#dnssec-bootstrapping) of this document.
+3 of RFC 8078 in favor of (#dnssec-bootstrapping) of this document, and
+also updates RFC 7344.
 
 [ Ed note: This document is being collaborated on at
 <https://github.com/desec-io/draft-ietf-dnsop-dnssec-bootstrapping/>.
