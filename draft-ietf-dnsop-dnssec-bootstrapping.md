@@ -188,6 +188,20 @@ BCP 14 [@!RFC2119] [@!RFC8174] when, and only when, they appear in all
 capitals, as shown here.
 
 
+# Updates to RFCs
+
+The DS enrollment methods described in Section 3 of [@!RFC8078] are
+deprecated and SHOULD NOT be used.
+Child DNS Operators and Parental Agents who wish to use CDS/CDNSKEY
+records for initial DS enrollment SHOULD instead support the
+authentication protocol described in (#dnssec-bootstrapping) of this
+document.
+
+In order to facilitate publication of signaling records for the purpose
+of DNSSEC bootstrapping (see (#signalingrecords)), the first bullet
+("Location") of [@!RFC7344] Section 4.1 is removed.
+
+
 {#signaling}
 # Signaling
 
@@ -238,12 +252,6 @@ authenticated signal as described in (#signaling).
 The Parent can discover and validate it, thus transferring trust from
 the Child DNS Operator nameservers' chain of trust to the Child zone.
 
-The DS enrollment methods described in Section 3 of [@!RFC8078] are
-deprecated and SHOULD NOT be used.
-Child DNS Operators and Parental Agents who wish to use CDS/CDNSKEY
-records for initial DS enrollment SHOULD instead support the
-authentication protocol described in this section.
-
 This protocol is not intended for updating an existing DS RRset.
 For this purpose, the Parental Agent can validate the Child's
 CDS/CDNSKEY records directly, using the chain of trust established by
@@ -267,7 +275,7 @@ Records MUST be signed with the corresponding Signaling Zone's
 key(s).  Their contents MUST be identical to the corresponding
 records published at the Child's apex.
 
-Existing use of CDS/CDNSKEY records is specified at the Child apex
+Existing use of CDS/CDNSKEY records was specified at the Child apex
 only ([@!RFC7344], Section 4.1).  This protocol extends the use of
 these record types to non-apex owner names for the purpose of DNSSEC
 bootstrapping.  To exclude the possibility of semantic collision,
@@ -566,6 +574,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-06
+
+> Add section "Updates to RFCs"
 
 > Editorial nits
 
