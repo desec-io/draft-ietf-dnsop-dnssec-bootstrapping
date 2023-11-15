@@ -573,6 +573,9 @@ early-stage brainstorming.
 
 # Change History (to be removed before publication)
 
+* draft-ietf-dnsop-dnssec-bootstrapping-07
+
+
 * draft-ietf-dnsop-dnssec-bootstrapping-06
 
 > Add section "Updates to RFCs"
