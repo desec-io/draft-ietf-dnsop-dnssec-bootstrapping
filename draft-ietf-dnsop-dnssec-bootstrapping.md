@@ -548,8 +548,8 @@ by the community at <https://github.com/oskar456/cds-updates>.
   - A deployment of this is running at .swiss.
 
 * Registrars:
+  - Glauca has implemented authenticated CDS processing.
   - GoDaddy is working on an implementation.
-  - Glauca is working on an implementation.
 
 * A tool to retrieve and process Signaling Records for bootstrapping
   purposes, either directly or via zone walking, is available at
@@ -574,6 +574,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-07
+
+> Add Glauca registrar implementation
 
 
 * draft-ietf-dnsop-dnssec-bootstrapping-06

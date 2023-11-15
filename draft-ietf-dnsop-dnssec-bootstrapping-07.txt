@@ -658,9 +658,9 @@ Internet-Draft            dnssec-bootstrapping             November 2023
 
    *  Registrars:
 
-      -  GoDaddy is working on an implementation.
+      -  Glauca has implemented authenticated CDS processing.
 
-      -  Glauca is working on an implementation.
+      -  GoDaddy is working on an implementation.
 
 
 
@@ -764,6 +764,8 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-07
 
+   |  Add Glauca registrar implementation
+
    *  draft-ietf-dnsop-dnssec-bootstrapping-06
 
    |  Add section "Updates to RFCs"
@@ -776,8 +778,6 @@ Appendix A.  Change History (to be removed before publication)
 
    |  Editorial changes
 
-   *  draft-ietf-dnsop-dnssec-bootstrapping-04
-
 
 
 
@@ -785,6 +785,8 @@ Thomassen & Wisiol         Expires 18 May 2024                 [Page 14]
 
 Internet-Draft            dnssec-bootstrapping             November 2023
 
+
+   *  draft-ietf-dnsop-dnssec-bootstrapping-04
 
    |  Added consent considerations.
    |  
@@ -832,8 +834,6 @@ Internet-Draft            dnssec-bootstrapping             November 2023
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-00
 
-   |  Editorial changes.
-
 
 
 
@@ -841,6 +841,8 @@ Thomassen & Wisiol         Expires 18 May 2024                 [Page 15]
 
 Internet-Draft            dnssec-bootstrapping             November 2023
 
+
+   |  Editorial changes.
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-03
 
@@ -888,8 +890,6 @@ Internet-Draft            dnssec-bootstrapping             November 2023
    |  Added NSEC recommendation for Bootstrapping Zones.
    |  
    |  Added multi-signer use case.
-   |  
-   |  Editorial changes.
 
 
 
@@ -897,6 +897,9 @@ Thomassen & Wisiol         Expires 18 May 2024                 [Page 16]
 
 Internet-Draft            dnssec-bootstrapping             November 2023
 
+
+   |  
+   |  Editorial changes.
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-00
 
@@ -916,9 +919,6 @@ Authors' Addresses
    Berlin
    Germany
    Email: nils@desec.io
-
-
-
 
 
 
