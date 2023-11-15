@@ -1189,11 +1189,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">dnssec-bootstrapping</td>
-<td class="right">November 2023</td>
+<td class="right">January 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomassen &amp; Wisiol</td>
-<td class="center">Expires 18 May 2024</td>
+<td class="center">Expires 22 July 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1209,12 +1209,12 @@ li > p:last-of-type {
 <a href="https://www.rfc-editor.org/rfc/rfc7344" class="eref">7344</a>, <a href="https://www.rfc-editor.org/rfc/rfc8078" class="eref">8078</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-11-15" class="published">15 November 2023</time>
+<time datetime="2024-01-19" class="published">19 January 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-05-18">18 May 2024</time></dd>
+<dd class="expires"><time datetime="2024-07-22">22 July 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1269,7 +1269,7 @@ The authors gratefully accept pull requests. ]<a href="#section-abstract-4" clas
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 22 July 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1278,7 +1278,7 @@ The authors gratefully accept pull requests. ]<a href="#section-abstract-4" clas
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2023 IETF Trust and the persons identified as the
+            Copyright (c) 2024 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1631,6 +1631,11 @@ only (<span>[<a href="#RFC7344" class="xref">RFC7344</a>]</span>, Section 4.1). 
 these record types to non-apex owner names for the purpose of DNSSEC
 bootstrapping.  To exclude the possibility of semantic collision,
 there MUST NOT be a zone cut at a Signaling Name.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-4">To avoid relying on the benevolence of a single Signaling Domain parent
+(such as the corresponding TLD registry), it is RECOMMENDED to diversify
+the path from the root to the Child's nameserver hostnames.
+This is best achieved by using different and independently operated TLDs
+for each one.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
 <div id="example">
 <section id="section-4.1.1">
           <h4 id="name-example">
@@ -1879,19 +1884,14 @@ apply as in <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span>.<a href="
 half-baked DS RRset (authorized only under a subset of NS hostnames).
 This ensures, for example, that an operator in a multi-homed setup
 cannot enable DNSSEC unless all other operators agree.<a href="#section-6-2" class="pilcrow">¶</a></p>
-<p id="section-6-3">Because the parents of a Signaling Domain (such as the corresponding TLD
-registry) are in control of its chain of trust, they are also able to
-undermine the signal's authenticity.
-To mitigate this risk, it is RECOMMENDED to increase the effort required
-to collude for taking control of all Signaling Domains, by diversifying
-the path from the root to each nameserver.
-This is best achieved by using different and independently operated TLDs
-for each one.
-(TLD-independent NS hostnames are advisable anyways in DNS operations,
-in order to prevent the TLD from becoming a single point of failure.)
-Furthermore, as the Child DNS Operator has authoritative knowledge of
+<p id="section-6-3">In any case, as the Child DNS Operator has authoritative knowledge of
 the Child's CDS/CDNSKEY records, it can readily detect fraudulent
 provisioning of DS records.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-4">In order to prevent the TLD of nameserver hostnames from becoming a
+single point of failure for a delegation (both in terms of resolution
+availability and for the trust model of this protocol), it is advisable
+to use NS hostnames that are independent from each other with respect to
+their TLD.<a href="#section-6-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
@@ -2007,8 +2007,8 @@ to the Parent zone.<a href="#section-8.2-1.4.1" class="pilcrow">¶</a></p>
       </h2>
 <p id="section-9-1">Thanks to Brian Dickson, Ond&amp;#345;ej Caletka, John R. Levine, Christian
 Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari,
-Scott Rose, Linda Dunbar, Tim Wicinski for reviewing draft proposals
-and offering comments and suggestions.<a href="#section-9-1" class="pilcrow">¶</a></p>
+Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters for reviewing draft
+proposals and offering comments and suggestions.<a href="#section-9-1" class="pilcrow">¶</a></p>
 <p id="section-9-2">Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.<a href="#section-9-2" class="pilcrow">¶</a></p>
 </section>
@@ -2086,6 +2086,7 @@ early-stage brainstorming.<a href="#section-9-2" class="pilcrow">¶</a></p>
       </ul>
 <blockquote id="appendix-A-2">
         <p id="appendix-A-2.1">Add Glauca registrar implementation<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.2">Editorial changes to Security Considerations<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
 <li class="normal" id="appendix-A-3.1">draft-ietf-dnsop-dnssec-bootstrapping-06<a href="#appendix-A-3.1" class="pilcrow">¶</a>

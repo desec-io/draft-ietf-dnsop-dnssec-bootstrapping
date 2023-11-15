@@ -281,6 +281,12 @@ these record types to non-apex owner names for the purpose of DNSSEC
 bootstrapping.  To exclude the possibility of semantic collision,
 there MUST NOT be a zone cut at a Signaling Name.
 
+To avoid relying on the benevolence of a single Signaling Domain parent
+(such as the corresponding TLD registry), it is RECOMMENDED to diversify
+the path from the root to the Child's nameserver hostnames.
+This is best achieved by using different and independently operated TLDs
+for each one.
+
 ### Example
 
 For the purposes of bootstrapping the Child zone `example.co.uk` with NS
@@ -484,19 +490,15 @@ half-baked DS RRset (authorized only under a subset of NS hostnames).
 This ensures, for example, that an operator in a multi-homed setup
 cannot enable DNSSEC unless all other operators agree.
 
-Because the parents of a Signaling Domain (such as the corresponding TLD
-registry) are in control of its chain of trust, they are also able to
-undermine the signal's authenticity.
-To mitigate this risk, it is RECOMMENDED to increase the effort required
-to collude for taking control of all Signaling Domains, by diversifying
-the path from the root to each nameserver.
-This is best achieved by using different and independently operated TLDs
-for each one.
-(TLD-independent NS hostnames are advisable anyways in DNS operations,
-in order to prevent the TLD from becoming a single point of failure.)
-Furthermore, as the Child DNS Operator has authoritative knowledge of
+In any case, as the Child DNS Operator has authoritative knowledge of
 the Child's CDS/CDNSKEY records, it can readily detect fraudulent
 provisioning of DS records.
+
+In order to prevent the TLD of nameserver hostnames from becoming a
+single point of failure for a delegation (both in terms of resolution
+availability and for the trust model of this protocol), it is advisable
+to use NS hostnames that are independent from each other with respect to
+their TLD.
 
 
 # IANA Considerations
@@ -562,8 +564,8 @@ by the community at <https://github.com/oskar456/cds-updates>.
 
 Thanks to Brian Dickson, Ondřej Caletka, John R. Levine, Christian
 Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari,
-Scott Rose, Linda Dunbar, Tim Wicinski for reviewing draft proposals
-and offering comments and suggestions.
+Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters for reviewing draft
+proposals and offering comments and suggestions.
 
 Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.
@@ -576,6 +578,8 @@ early-stage brainstorming.
 * draft-ietf-dnsop-dnssec-bootstrapping-07
 
 > Add Glauca registrar implementation
+
+> Editorial changes to Security Considerations
 
 
 * draft-ietf-dnsop-dnssec-bootstrapping-06
