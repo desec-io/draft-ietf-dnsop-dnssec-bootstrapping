@@ -1773,36 +1773,45 @@ once one of the following conditions is fulfilled:<a href="#section-4.3-1" class
 Child;<a href="#section-4.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.3-2.2">
-            <p id="section-4.3-2.2.1">The Parental Agent encounters a Signaling Record during a proactive,
-opportunistic scan (e.g. daily queries of Signaling Records for some
-or all of its delegations);<a href="#section-4.3-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-4.3-2.2.1">The Parental Agent receives a notification indicating that the Child
+wishes to have its CDS/CDNSKEY RRset processed;<a href="#section-4.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.3-2.3">
-            <p id="section-4.3-2.3.1">The Parental Agent encounters a Signaling Record during an NSEC walk
-or when parsing a Signaling Zone (e.g. when made available via AXFR
-by the Child DNS Operator);<a href="#section-4.3-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-4.3-2.3.1">The Parental Agent encounters a Signaling Record during a proactive,
+opportunistic scan (e.g. daily queries of Signaling Records for some
+or all of its delegations);<a href="#section-4.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.3-2.4">
-            <p id="section-4.3-2.4.1">Any other condition as deemed appropriate by local policy.<a href="#section-4.3-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-4.3-2.4.1">The Parental Agent encounters a Signaling Record during an NSEC walk
+or when parsing a Signaling Zone (e.g. when made available via AXFR
+by the Child DNS Operator);<a href="#section-4.3-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.3-2.5">
+            <p id="section-4.3-2.5.1">Any other condition as deemed appropriate by local policy.<a href="#section-4.3-2.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-4.3-3">Most types of discovery (such as daily scans of delegations) are based
+<p id="section-4.3-3">Timer-based trigger mechanisms (such as scans) exhibit undesirable
+properties with respect to processing delay and scaling; on-demand
+triggers (like notifications) are preferable. Whenever possible, Child
+DNS Operators and Parental Agents are thus encouraged to use them,
+reducing both delays and the amount of scanning traffic.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.3-4">Most types of discovery (such as daily scans of delegations) are based
 directly on the delegation's NS record set.
 In this case, these NS names can be used as is by the bootstrapping
-algorithm (<a href="#cds-auth" class="xref">Section 4.2</a>) for querying Signaling Records.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
-<p id="section-4.3-4">Some discovery methods, however, do not imply reliable knowledge of the
+algorithm (<a href="#cds-auth" class="xref">Section 4.2</a>) for querying Signaling Records.<a href="#section-4.3-4" class="pilcrow">¶</a></p>
+<p id="section-4.3-5">Some discovery methods, however, do not imply reliable knowledge of the
 Child's NS record set.
 For example, when discovering Signaling Names by performing an NSEC
 walk or zone transfer of a Signaling Zone, the Parental Agent MUST NOT
 assume that the nameserver(s) under whose Signaling Domain(s) a
 Signaling Name appears is in fact authoritative for the corresponding
-Child.<a href="#section-4.3-4" class="pilcrow">¶</a></p>
-<p id="section-4.3-5">In this case (and in other cases alike where some list of
+Child.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
+<p id="section-4.3-6">In this case (and in other cases alike where some list of
 "bootstrappable domains" is retrieved from elsewhere), the Parental
 Agent MUST ascertain that the Child's delegation actually contains the
 nameserver hostname seen during discovery, and ensure that Signaling
 Record queries are only made against the proper set of nameservers as
-listed in the Child's delegation from the Parent.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
+listed in the Child's delegation from the Parent.<a href="#section-4.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="limitations">
@@ -2087,6 +2096,7 @@ early-stage brainstorming.<a href="#section-9-2" class="pilcrow">¶</a></p>
 <blockquote id="appendix-A-2">
         <p id="appendix-A-2.1">Add Glauca registrar implementation<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
 <p id="appendix-A-2.2">Editorial changes to Security Considerations<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.3">Add/discuss on-demand triggers (notifications)<a href="#appendix-A-2.3" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
 <li class="normal" id="appendix-A-3.1">draft-ietf-dnsop-dnssec-bootstrapping-06<a href="#appendix-A-3.1" class="pilcrow">¶</a>

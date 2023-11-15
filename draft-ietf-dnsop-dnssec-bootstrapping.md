@@ -394,6 +394,9 @@ once one of the following conditions is fulfilled:
   - The Parental Agent receives a new or updated NS record set for a
     Child;
 
+  - The Parental Agent receives a notification indicating that the Child
+    wishes to have its CDS/CDNSKEY RRset processed;
+
   - The Parental Agent encounters a Signaling Record during a proactive,
     opportunistic scan (e.g. daily queries of Signaling Records for some
     or all of its delegations);
@@ -403,6 +406,12 @@ once one of the following conditions is fulfilled:
     by the Child DNS Operator);
 
   - Any other condition as deemed appropriate by local policy.
+
+Timer-based trigger mechanisms (such as scans) exhibit undesirable
+properties with respect to processing delay and scaling; on-demand
+triggers (like notifications) are preferable. Whenever possible, Child
+DNS Operators and Parental Agents are thus encouraged to use them,
+reducing both delays and the amount of scanning traffic.
 
 Most types of discovery (such as daily scans of delegations) are based
 directly on the delegation's NS record set.
@@ -580,6 +589,8 @@ early-stage brainstorming.
 > Add Glauca registrar implementation
 
 > Editorial changes to Security Considerations
+
+> Add/discuss on-demand triggers (notifications)
 
 
 * draft-ietf-dnsop-dnssec-bootstrapping-06
