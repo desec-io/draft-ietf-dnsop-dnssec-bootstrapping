@@ -584,6 +584,9 @@ early-stage brainstorming.
 
 # Change History (to be removed before publication)
 
+* draft-ietf-dnsop-dnssec-bootstrapping-08
+
+
 * draft-ietf-dnsop-dnssec-bootstrapping-07
 
 > Add Glauca registrar implementation
