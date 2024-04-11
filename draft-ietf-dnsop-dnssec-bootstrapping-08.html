@@ -1410,7 +1410,7 @@ registry and the DNSSEC key holder, what exactly that means and how
 the communication is coordinated traditionally depends on the
 relationship the child has with the parent.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">A typical situation is that the key is held by the child DNS
-operator; the communication thus often involes this entity.
+operator; the communication thus often involves this entity.
 In addition, depending on the circumstances, it may also involve the
 Registrar, possibly via the Registrant (for details, see <span>[<a href="#RFC7344" class="xref">RFC7344</a>]</span>,
 Appendix A).<a href="#section-1-2" class="pilcrow">¶</a></p>
@@ -1430,9 +1430,9 @@ during key rollover).
 However, when bootstrapping a DNSSEC delegation, the child zone has
 no existing DNSSEC validation path, and other means to ensure the
 CDS/CDNSKEY records' legitimacy must be found.<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">For lack of a comprehensive DNS-innate solution, either out-of-band
-methods have been used so far to complete the chain of trust, or
-cryptographic validation has been entirely dispensed with, in
+<p id="section-1-5">Due to the lack of a comprehensive DNS-innate solution, either
+out-of-band methods have been used so far to complete the chain of
+trust, or cryptographic validation has been entirely dispensed with, in
 exchange for weaker types of cross-checks such as "Accept after
 Delay" (<span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span> Section 3.3).
 <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span> does not define an in-band validation method for enabling
@@ -1444,17 +1444,17 @@ per-zone basis.
 The mechanism allows managed DNS operators to securely announce
 DNSSEC key parameters for zones under their management.
 The parent can then use this signal to cryptographically validate the
-CDS/CDNSKEY records found at an insecure child zone's apex, and upon
-success secure the delegation.<a href="#section-1-6" class="pilcrow">¶</a></p>
+CDS/CDNSKEY records found at an insecure child zone's apex and, upon
+success, secure the delegation.<a href="#section-1-6" class="pilcrow">¶</a></p>
 <p id="section-1-7">While applicable to the vast majority of domains, the protocol does
 not support certain edge cases, such as excessively long child zone
 names, or DNSSEC bootstrapping for domains with in-bailick nameservers
 only (see <a href="#limitations" class="xref">Section 4.4</a>).<a href="#section-1-7" class="pilcrow">¶</a></p>
 <p id="section-1-8">DNSSEC bootstrapping is just one application of the generic signaling
 mechanism specified in this document.
-Other applications might arise in the future, such as publication of
-API endpoints for third-party interaction with the DNS operator or of
-other operational metadata which the DNS operator likes to publish.<a href="#section-1-8" class="pilcrow">¶</a></p>
+Other applications might arise in the future, such as publishing
+operational metadata or auxiliary information which the DNS operator
+likes to make known (e.g., API endpoints for third-party interaction).<a href="#section-1-8" class="pilcrow">¶</a></p>
 <p id="section-1-9">Readers are expected to be familiar with DNSSEC, including <span>[<a href="#RFC4033" class="xref">RFC4033</a>]</span>,
 <span>[<a href="#RFC4034" class="xref">RFC4034</a>]</span>, <span>[<a href="#RFC4035" class="xref">RFC4035</a>]</span>, <span>[<a href="#RFC6781" class="xref">RFC6781</a>]</span>, <span>[<a href="#RFC7344" class="xref">RFC7344</a>]</span>, and <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span>.<a href="#section-1-9" class="pilcrow">¶</a></p>
 <div id="terminology">
@@ -1580,7 +1580,7 @@ domains <code>_signal.ns1.example.net</code> and <code>_signal.ns2.example.org</
         <h3 id="name-signaling-names">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-signaling-names" class="section-name selfRef">Signaling Names</a>
         </h3>
-<p id="section-3.2-1">To publish a piece of information about the child zone in an
+<p id="section-3.2-1">To publish information about the child zone in an
 authenticated fashion, the child DNS operator MUST publish one or
 more signaling records at a signaling name under each signaling domain.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2-2">Signaling records MUST be accompanied by RRSIG records created with
@@ -1693,7 +1693,8 @@ in Steps 2 and 3 have equal contents;<a href="#section-4.2-2.4.1" class="pilcrow
 successfully validated, and the parental agent can proceed with the
 publication of the DS record set under the precautions described in
 <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span>, Section 5.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
-<p id="section-4.2-4">If, however, an error condition occurs, in particular:<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-4">However, the parental agent MUST abort the procedure if an error
+condition occurs, in particular:<a href="#section-4.2-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.2-5.1">
             <p id="section-4.2-5.1.1">in Step 1: the child is already securely delegated or has in-bailiwick
@@ -1712,10 +1713,9 @@ of DNSSEC validation, or unauthenticated data (AD bit not set);<a href="#section
           <li class="normal" id="section-4.2-5.4">
             <p id="section-4.2-5.4.1">in Step 4: inconsistent responses (for at least one of the types),
 including a record set that is empty in one of Steps 2 or 3, but
-non-empty in the other;<a href="#section-4.2-5.4.1" class="pilcrow">¶</a></p>
+non-empty in the other.<a href="#section-4.2-5.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-4.2-6">the parental agent MUST abort the procedure.<a href="#section-4.2-6" class="pilcrow">¶</a></p>
 <div id="example-1">
 <section id="section-4.2.1">
           <h4 id="name-example-2">
@@ -1751,9 +1751,9 @@ and 3 agree across responses.<a href="#section-4.2.1-4.1" class="pilcrow">¶</a>
           </ol>
 <p id="section-4.2.1-5">If all these steps succeed, the parental agent can proceed to publish
 a DS record set as indicated by the validated CDS/CDNSKEY records.<a href="#section-4.2.1-5" class="pilcrow">¶</a></p>
-<p id="section-4.2.1-6">The parental agent does not use in-bailiwick signaling names during
-validation because they cannot have a pre-established chain of trust at
-bootstrapping time, so are not useful for bootstrapping.
+<p id="section-4.2.1-6">As in-bailiwick signaling names do not have a chain of trust at
+bootstrapping time, the parental agent does not consider them during
+validation.
 Consequently, if all NS hostnames are in bailiwick, validation cannot be
 completed, and DS records are not published.<a href="#section-4.2.1-6" class="pilcrow">¶</a></p>
 </section>
@@ -1804,10 +1804,10 @@ child's NS record set.
 For example, when discovering signaling names by performing an NSEC
 walk or zone transfer of a signaling zone, the parental agent MUST NOT
 assume that the nameserver(s) under whose signaling domain(s) a
-signaling name appears is in fact authoritative for the corresponding
+signaling name appears is actually authoritative for the corresponding
 child.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
-<p id="section-4.3-6">In this case (and in other cases alike where some list of
-"bootstrappable domains" is retrieved from elsewhere), the parental
+<p id="section-4.3-6">Instead, whenever a list of "bootstrappable domains" is obtained other
+than directly from the parent, the parental
 agent MUST ascertain that the child's delegation actually contains the
 nameserver hostname seen during discovery, and ensure that signaling
 record queries are only made against the proper set of nameservers as
@@ -1825,9 +1825,10 @@ trust to the child domain is available during bootstrapping.
 (As a workaround, one can add an out-of-bailiwick nameserver to the
 initial NS record set and remove it once bootstrapping is completed.
 Automation for this is available via CSYNC records, see <span>[<a href="#RFC7477" class="xref">RFC7477</a>]</span>.)<a href="#section-4.4-1" class="pilcrow">¶</a></p>
-<p id="section-4.4-2">The protocol is further restricted by the fact that the fully
-qualified signaling names fit within the general limits that apply to
-DNS names (such as their length and label count).<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+<p id="section-4.4-2">Fully qualified signaling names must by valid DNS names.
+Label count and length requirements for DNS names imply that the
+protocol does not work for unusually long child domain names or NS
+hostnames.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1849,16 +1850,18 @@ the desire to turn off DNSSEC by publication of the special-value
 CDS/CDNSKEY RRset specified in <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span> Section 4.
 To facilitate transitions between DNS operators, child DNS operators
 SHOULD support the multi-signer protocols described in <span>[<a href="#RFC8901" class="xref">RFC8901</a>]</span>.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">Signaling domains SHOULD be delegated as zones of their own, so
+<p id="section-5.1-2">Signaling domains SHOULD be delegated as standalone zones, so
 that the signaling zone's apex coincides with the signaling domain (such
 as <code>_signal.ns1.example.net</code>).
 While it is permissible for the signaling domain to be contained
 in a signaling zone of fewer labels (such as <code>example.net</code>), a
 zone cut ensures that bootstrapping activities do not require
 modifications of the zone containing the nameserver hostname.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1-3">To keep the size of the signaling zones minimal and bulk processing
-efficient (such as via zone transfers), child DNS operators SHOULD
-remove signaling records which are found to have been acted upon.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">Once a Child DNS Operator determines that specific signaling records
+have been processed (e.g., by seeing the result in the parent zone),
+they are advised to remove them.
+This will reduce the size of the Signaling Zone, and facilitate more
+efficient bulk processing (such as via zone transfers).<a href="#section-5.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="parental-agent">
@@ -1866,13 +1869,12 @@ remove signaling records which are found to have been acted upon.<a href="#secti
         <h3 id="name-parental-agent">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-parental-agent" class="section-name selfRef">Parental Agent</a>
         </h3>
-<p id="section-5.2-1">It is RECOMMENDED to perform queries within signaling domains
-(<a href="#cds-auth" class="xref">Section 4.2</a>) with an (initially) cold resolver cache or to limit the
-TTL of cached records to the interval between scans, as to retrieve the
-most current information regardless of TTL.
-(When a batch job is used to attempt bootstrapping for a large number
-of delegations, the cache does not need to get cleared in between
-queries pertaining to different children.)<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-1">In order to ensure timely DNSSEC bootstrapping of insecure domains,
+stalemate situations due to mismatch of cached records (Step 4 of
+<a href="#cds-auth" class="xref">Section 4.2</a>) need to be avoided.
+It is thus RECOMMENDED to perform queries into signaling domains with an
+(initially) cold resolver cache, or to disable caching for them (e.g.,
+by limiting response TTLs to the interval between scans).<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2094,8 +2096,9 @@ early-stage brainstorming.<a href="#section-9-2" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <blockquote id="appendix-A-2">
-        <p id="appendix-A-2.1">Updated implementation section<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
-<p id="appendix-A-2.2">Change capitalization of terms from terminology section<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
+        <p id="appendix-A-2.1">Editorial changes from AD Review<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.2">Updated implementation section<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.3">Change capitalization of terms from terminology section<a href="#appendix-A-2.3" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
 <li class="normal" id="appendix-A-3.1">draft-ietf-dnsop-dnssec-bootstrapping-07<a href="#appendix-A-3.1" class="pilcrow">¶</a>

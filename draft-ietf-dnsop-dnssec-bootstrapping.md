@@ -76,7 +76,7 @@ the communication is coordinated traditionally depends on the
 relationship the child has with the parent.
 
 A typical situation is that the key is held by the child DNS
-operator; the communication thus often involes this entity.
+operator; the communication thus often involves this entity.
 In addition, depending on the circumstances, it may also involve the
 Registrar, possibly via the Registrant (for details, see [@!RFC7344],
 Appendix A).
@@ -99,9 +99,9 @@ However, when bootstrapping a DNSSEC delegation, the child zone has
 no existing DNSSEC validation path, and other means to ensure the
 CDS/CDNSKEY records' legitimacy must be found.
 
-For lack of a comprehensive DNS-innate solution, either out-of-band
-methods have been used so far to complete the chain of trust, or
-cryptographic validation has been entirely dispensed with, in
+Due to the lack of a comprehensive DNS-innate solution, either
+out-of-band methods have been used so far to complete the chain of
+trust, or cryptographic validation has been entirely dispensed with, in
 exchange for weaker types of cross-checks such as "Accept after
 Delay" ([@!RFC8078] Section 3.3).
 [@!RFC8078] does not define an in-band validation method for enabling
@@ -114,8 +114,8 @@ per-zone basis.
 The mechanism allows managed DNS operators to securely announce
 DNSSEC key parameters for zones under their management.
 The parent can then use this signal to cryptographically validate the
-CDS/CDNSKEY records found at an insecure child zone's apex, and upon
-success secure the delegation.
+CDS/CDNSKEY records found at an insecure child zone's apex and, upon
+success, secure the delegation.
 
 While applicable to the vast majority of domains, the protocol does
 not support certain edge cases, such as excessively long child zone
@@ -124,9 +124,9 @@ only (see (#limitations)).
 
 DNSSEC bootstrapping is just one application of the generic signaling
 mechanism specified in this document.
-Other applications might arise in the future, such as publication of
-API endpoints for third-party interaction with the DNS operator or of
-other operational metadata which the DNS operator likes to publish.
+Other applications might arise in the future, such as publishing
+operational metadata or auxiliary information which the DNS operator
+likes to make known (e.g., API endpoints for third-party interaction).
 
 Readers are expected to be familiar with DNSSEC, including [@!RFC4033],
 [@!RFC4034], [@!RFC4035], [@RFC6781], [@!RFC7344], and [@!RFC8078].
@@ -229,7 +229,7 @@ domains `_signal.ns1.example.net` and `_signal.ns2.example.org`.
 {#signalingnames}
 ## Signaling Names
 
-To publish a piece of information about the child zone in an
+To publish information about the child zone in an
 authenticated fashion, the child DNS operator MUST publish one or
 more signaling records at a signaling name under each signaling domain.
 
@@ -333,7 +333,8 @@ successfully validated, and the parental agent can proceed with the
 publication of the DS record set under the precautions described in
 [@!RFC8078], Section 5.
 
-If, however, an error condition occurs, in particular:
+However, the parental agent MUST abort the procedure if an error
+condition occurs, in particular:
 
 - in Step 1: the child is already securely delegated or has in-bailiwick
   nameservers only;
@@ -348,9 +349,7 @@ If, however, an error condition occurs, in particular:
 
 - in Step 4: inconsistent responses (for at least one of the types),
   including a record set that is empty in one of Steps 2 or 3, but
-  non-empty in the other;
-
-the parental agent MUST abort the procedure.
+  non-empty in the other.
 
 ### Example
 
@@ -379,9 +378,9 @@ _dsboot.example.co.uk._signal.ns2.example.org
 If all these steps succeed, the parental agent can proceed to publish
 a DS record set as indicated by the validated CDS/CDNSKEY records.
 
-The parental agent does not use in-bailiwick signaling names during
-validation because they cannot have a pre-established chain of trust at
-bootstrapping time, so are not useful for bootstrapping.
+As in-bailiwick signaling names do not have a chain of trust at
+bootstrapping time, the parental agent does not consider them during
+validation.
 Consequently, if all NS hostnames are in bailiwick, validation cannot be
 completed, and DS records are not published.
 
@@ -423,11 +422,11 @@ child's NS record set.
 For example, when discovering signaling names by performing an NSEC
 walk or zone transfer of a signaling zone, the parental agent MUST NOT
 assume that the nameserver(s) under whose signaling domain(s) a
-signaling name appears is in fact authoritative for the corresponding
+signaling name appears is actually authoritative for the corresponding
 child.
 
-In this case (and in other cases alike where some list of
-"bootstrappable domains" is retrieved from elsewhere), the parental
+Instead, whenever a list of "bootstrappable domains" is obtained other
+than directly from the parent, the parental
 agent MUST ascertain that the child's delegation actually contains the
 nameserver hostname seen during discovery, and ensure that signaling
 record queries are only made against the proper set of nameservers as
@@ -444,9 +443,10 @@ trust to the child domain is available during bootstrapping.
 initial NS record set and remove it once bootstrapping is completed.
 Automation for this is available via CSYNC records, see [@!RFC7477].)
 
-The protocol is further restricted by the fact that the fully
-qualified signaling names fit within the general limits that apply to
-DNS names (such as their length and label count).
+Fully qualified signaling names must by valid DNS names.
+Label count and length requirements for DNS names imply that the
+protocol does not work for unusually long child domain names or NS
+hostnames.
 
 
 # Operational Recommendations
@@ -461,7 +461,7 @@ CDS/CDNSKEY RRset specified in [@!RFC8078] Section 4.
 To facilitate transitions between DNS operators, child DNS operators
 SHOULD support the multi-signer protocols described in [@RFC8901].
 
-Signaling domains SHOULD be delegated as zones of their own, so
+Signaling domains SHOULD be delegated as standalone zones, so
 that the signaling zone's apex coincides with the signaling domain (such
 as `_signal.ns1.example.net`).
 While it is permissible for the signaling domain to be contained
@@ -469,19 +469,20 @@ in a signaling zone of fewer labels (such as `example.net`), a
 zone cut ensures that bootstrapping activities do not require
 modifications of the zone containing the nameserver hostname.
 
-To keep the size of the signaling zones minimal and bulk processing
-efficient (such as via zone transfers), child DNS operators SHOULD
-remove signaling records which are found to have been acted upon.
+Once a Child DNS Operator determines that specific signaling records
+have been processed (e.g., by seeing the result in the parent zone),
+they are advised to remove them.
+This will reduce the size of the Signaling Zone, and facilitate more
+efficient bulk processing (such as via zone transfers).
 
 ## Parental Agent
 
-It is RECOMMENDED to perform queries within signaling domains
-((#cds-auth)) with an (initially) cold resolver cache or to limit the
-TTL of cached records to the interval between scans, as to retrieve the
-most current information regardless of TTL.
-(When a batch job is used to attempt bootstrapping for a large number
-of delegations, the cache does not need to get cleared in between
-queries pertaining to different children.)
+In order to ensure timely DNSSEC bootstrapping of insecure domains,
+stalemate situations due to mismatch of cached records (Step 4 of
+(#cds-auth)) need to be avoided.
+It is thus RECOMMENDED to perform queries into signaling domains with an
+(initially) cold resolver cache, or to disable caching for them (e.g.,
+by limiting response TTLs to the interval between scans).
 
 
 # Security Considerations
@@ -585,6 +586,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-08
+
+> Editorial changes from AD Review
 
 > Updated implementation section
 

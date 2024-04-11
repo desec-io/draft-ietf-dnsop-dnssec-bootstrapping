@@ -128,7 +128,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    depends on the relationship the child has with the parent.
 
    A typical situation is that the key is held by the child DNS
-   operator; the communication thus often involes this entity.  In
+   operator; the communication thus often involves this entity.  In
    addition, depending on the circumstances, it may also involve the
    Registrar, possibly via the Registrant (for details, see [RFC7344],
    Appendix A).
@@ -150,9 +150,9 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    existing DNSSEC validation path, and other means to ensure the CDS/
    CDNSKEY records' legitimacy must be found.
 
-   For lack of a comprehensive DNS-innate solution, either out-of-band
-   methods have been used so far to complete the chain of trust, or
-   cryptographic validation has been entirely dispensed with, in
+   Due to the lack of a comprehensive DNS-innate solution, either out-
+   of-band methods have been used so far to complete the chain of trust,
+   or cryptographic validation has been entirely dispensed with, in
    exchange for weaker types of cross-checks such as "Accept after
    Delay" ([RFC8078] Section 3.3).  [RFC8078] does not define an in-band
    validation method for enabling DNSSEC.
@@ -171,8 +171,8 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
 
    parent can then use this signal to cryptographically validate the
-   CDS/CDNSKEY records found at an insecure child zone's apex, and upon
-   success secure the delegation.
+   CDS/CDNSKEY records found at an insecure child zone's apex and, upon
+   success, secure the delegation.
 
    While applicable to the vast majority of domains, the protocol does
    not support certain edge cases, such as excessively long child zone
@@ -181,9 +181,9 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
    DNSSEC bootstrapping is just one application of the generic signaling
    mechanism specified in this document.  Other applications might arise
-   in the future, such as publication of API endpoints for third-party
-   interaction with the DNS operator or of other operational metadata
-   which the DNS operator likes to publish.
+   in the future, such as publishing operational metadata or auxiliary
+   information which the DNS operator likes to make known (e.g., API
+   endpoints for third-party interaction).
 
    Readers are expected to be familiar with DNSSEC, including [RFC4033],
    [RFC4034], [RFC4035], [RFC6781], [RFC7344], and [RFC8078].
@@ -284,10 +284,9 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
 3.2.  Signaling Names
 
-   To publish a piece of information about the child zone in an
-   authenticated fashion, the child DNS operator MUST publish one or
-   more signaling records at a signaling name under each signaling
-   domain.
+   To publish information about the child zone in an authenticated
+   fashion, the child DNS operator MUST publish one or more signaling
+   records at a signaling name under each signaling domain.
 
    Signaling records MUST be accompanied by RRSIG records created with
    the corresponding signaling zone's key(s).  The type and contents of
@@ -326,10 +325,11 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    contents MUST be identical to the corresponding records published at
    the child's apex.
 
-
-
-
-
+   Existing use of CDS/CDNSKEY records was specified at the child apex
+   only ([RFC7344], Section 4.1).  This protocol extends the use of
+   these record types to non-apex owner names for the purpose of DNSSEC
+   bootstrapping.  To exclude the possibility of semantic collision,
+   there MUST NOT be a zone cut at a signaling name.
 
 
 
@@ -337,12 +337,6 @@ Thomassen & Wisiol       Expires 13 October 2024                [Page 6]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
-
-   Existing use of CDS/CDNSKEY records was specified at the child apex
-   only ([RFC7344], Section 4.1).  This protocol extends the use of
-   these record types to non-apex owner names for the purpose of DNSSEC
-   bootstrapping.  To exclude the possibility of semantic collision,
-   there MUST NOT be a zone cut at a signaling name.
 
    To avoid relying on the benevolence of a single signaling domain
    parent (such as the corresponding TLD registry), it is RECOMMENDED to
@@ -387,6 +381,12 @@ Internet-Draft            dnssec-bootstrapping                April 2024
        each out-of-bailiwick signaling domain using a trusted DNS
        resolver and enforce DNSSEC validation;
 
+   4.  check (separately by record type) that all record sets retrieved
+       in Steps 2 and 3 have equal contents;
+
+
+
+
 
 
 Thomassen & Wisiol       Expires 13 October 2024                [Page 7]
@@ -394,15 +394,13 @@ Thomassen & Wisiol       Expires 13 October 2024                [Page 7]
 Internet-Draft            dnssec-bootstrapping                April 2024
 
 
-   4.  check (separately by record type) that all record sets retrieved
-       in Steps 2 and 3 have equal contents;
-
    If the above steps succeed without error, the CDS/CDNSKEY records are
    successfully validated, and the parental agent can proceed with the
    publication of the DS record set under the precautions described in
    [RFC8078], Section 5.
 
-   If, however, an error condition occurs, in particular:
+   However, the parental agent MUST abort the procedure if an error
+   condition occurs, in particular:
 
    *  in Step 1: the child is already securely delegated or has in-
       bailiwick nameservers only;
@@ -418,9 +416,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
    *  in Step 4: inconsistent responses (for at least one of the types),
       including a record set that is empty in one of Steps 2 or 3, but
-      non-empty in the other;
-
-   the parental agent MUST abort the procedure.
+      non-empty in the other.
 
 4.2.1.  Example
 
@@ -441,7 +437,11 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    _dsboot.example.co.uk._signal.ns1.example.net
    _dsboot.example.co.uk._signal.ns2.example.org
 
+   4.  checks that the CDS/CDNSKEY record sets retrieved in Steps 2 and
+       3 agree across responses.
 
+   If all these steps succeed, the parental agent can proceed to publish
+   a DS record set as indicated by the validated CDS/CDNSKEY records.
 
 
 
@@ -450,17 +450,10 @@ Thomassen & Wisiol       Expires 13 October 2024                [Page 8]
 Internet-Draft            dnssec-bootstrapping                April 2024
 
 
-   4.  checks that the CDS/CDNSKEY record sets retrieved in Steps 2 and
-       3 agree across responses.
-
-   If all these steps succeed, the parental agent can proceed to publish
-   a DS record set as indicated by the validated CDS/CDNSKEY records.
-
-   The parental agent does not use in-bailiwick signaling names during
-   validation because they cannot have a pre-established chain of trust
-   at bootstrapping time, so are not useful for bootstrapping.
-   Consequently, if all NS hostnames are in bailiwick, validation cannot
-   be completed, and DS records are not published.
+   As in-bailiwick signaling names do not have a chain of trust at
+   bootstrapping time, the parental agent does not consider them during
+   validation.  Consequently, if all NS hostnames are in bailiwick,
+   validation cannot be completed, and DS records are not published.
 
 4.3.  Triggers
 
@@ -494,6 +487,13 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    these NS names can be used as is by the bootstrapping algorithm
    (Section 4.2) for querying signaling records.
 
+   Some discovery methods, however, do not imply reliable knowledge of
+   the child's NS record set.  For example, when discovering signaling
+   names by performing an NSEC walk or zone transfer of a signaling
+   zone, the parental agent MUST NOT assume that the nameserver(s) under
+   whose signaling domain(s) a signaling name appears is actually
+   authoritative for the corresponding child.
+
 
 
 
@@ -506,19 +506,12 @@ Thomassen & Wisiol       Expires 13 October 2024                [Page 9]
 Internet-Draft            dnssec-bootstrapping                April 2024
 
 
-   Some discovery methods, however, do not imply reliable knowledge of
-   the child's NS record set.  For example, when discovering signaling
-   names by performing an NSEC walk or zone transfer of a signaling
-   zone, the parental agent MUST NOT assume that the nameserver(s) under
-   whose signaling domain(s) a signaling name appears is in fact
-   authoritative for the corresponding child.
-
-   In this case (and in other cases alike where some list of
-   "bootstrappable domains" is retrieved from elsewhere), the parental
-   agent MUST ascertain that the child's delegation actually contains
-   the nameserver hostname seen during discovery, and ensure that
-   signaling record queries are only made against the proper set of
-   nameservers as listed in the child's delegation from the parent.
+   Instead, whenever a list of "bootstrappable domains" is obtained
+   other than directly from the parent, the parental agent MUST
+   ascertain that the child's delegation actually contains the
+   nameserver hostname seen during discovery, and ensure that signaling
+   record queries are only made against the proper set of nameservers as
+   listed in the child's delegation from the parent.
 
 4.4.  Limitations
 
@@ -529,9 +522,9 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    NS record set and remove it once bootstrapping is completed.
    Automation for this is available via CSYNC records, see [RFC7477].)
 
-   The protocol is further restricted by the fact that the fully
-   qualified signaling names fit within the general limits that apply to
-   DNS names (such as their length and label count).
+   Fully qualified signaling names must by valid DNS names.  Label count
+   and length requirements for DNS names imply that the protocol does
+   not work for unusually long child domain names or NS hostnames.
 
 5.  Operational Recommendations
 
@@ -545,13 +538,20 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    DNS operators, child DNS operators SHOULD support the multi-signer
    protocols described in [RFC8901].
 
-   Signaling domains SHOULD be delegated as zones of their own, so that
+   Signaling domains SHOULD be delegated as standalone zones, so that
    the signaling zone's apex coincides with the signaling domain (such
    as _signal.ns1.example.net).  While it is permissible for the
    signaling domain to be contained in a signaling zone of fewer labels
    (such as example.net), a zone cut ensures that bootstrapping
    activities do not require modifications of the zone containing the
    nameserver hostname.
+
+   Once a Child DNS Operator determines that specific signaling records
+   have been processed (e.g., by seeing the result in the parent zone),
+   they are advised to remove them.  This will reduce the size of the
+   Signaling Zone, and facilitate more efficient bulk processing (such
+   as via zone transfers).
+
 
 
 
@@ -562,19 +562,14 @@ Thomassen & Wisiol       Expires 13 October 2024               [Page 10]
 Internet-Draft            dnssec-bootstrapping                April 2024
 
 
-   To keep the size of the signaling zones minimal and bulk processing
-   efficient (such as via zone transfers), child DNS operators SHOULD
-   remove signaling records which are found to have been acted upon.
-
 5.2.  Parental Agent
 
-   It is RECOMMENDED to perform queries within signaling domains
-   (Section 4.2) with an (initially) cold resolver cache or to limit the
-   TTL of cached records to the interval between scans, as to retrieve
-   the most current information regardless of TTL.  (When a batch job is
-   used to attempt bootstrapping for a large number of delegations, the
-   cache does not need to get cleared in between queries pertaining to
-   different children.)
+   In order to ensure timely DNSSEC bootstrapping of insecure domains,
+   stalemate situations due to mismatch of cached records (Step 4 of
+   Section 4.2) need to be avoided.  It is thus RECOMMENDED to perform
+   queries into signaling domains with an (initially) cold resolver
+   cache, or to disable caching for them (e.g., by limiting response
+   TTLs to the interval between scans).
 
 6.  Security Considerations
 
@@ -606,7 +601,12 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    Per [RFC8552], IANA is requested to add the following entries to the
    "Underscored and Globally Scoped DNS Node Names" registry:
 
-
+   +---------+------------+-----------------------------------------+
+   | RR Type | _NODE NAME | Reference                               |
+   +---------+------------+-----------------------------------------+
+   | CDS     | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
+   | CDNSKEY | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
+   +---------+------------+-----------------------------------------+
 
 
 
@@ -617,13 +617,6 @@ Thomassen & Wisiol       Expires 13 October 2024               [Page 11]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
-
-   +---------+------------+-----------------------------------------+
-   | RR Type | _NODE NAME | Reference                               |
-   +---------+------------+-----------------------------------------+
-   | CDS     | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
-   | CDNSKEY | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
-   +---------+------------+-----------------------------------------+
 
 8.  Implementation Status
 
@@ -667,19 +660,19 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
    *  gTLD:
 
-
-
-Thomassen & Wisiol       Expires 13 October 2024               [Page 12]
-
-Internet-Draft            dnssec-bootstrapping                April 2024
-
-
       -  Knipp has implemented consumption of DNSSEC bootstrapping
          records in its TANGO and CORE registry systems.
 
       -  A deployment of this is running at .swiss.
 
    *  Registrars:
+
+
+
+Thomassen & Wisiol       Expires 13 October 2024               [Page 12]
+
+Internet-Draft            dnssec-bootstrapping                April 2024
+
 
       -  Glauca has implemented authenticated CDS processing.
 
@@ -719,17 +712,6 @@ Internet-Draft            dnssec-bootstrapping                April 2024
               RFC 4034, DOI 10.17487/RFC4034, March 2005,
               <https://www.rfc-editor.org/info/rfc4034>.
 
-
-
-
-
-
-
-Thomassen & Wisiol       Expires 13 October 2024               [Page 13]
-
-Internet-Draft            dnssec-bootstrapping                April 2024
-
-
    [RFC4035]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Protocol Modifications for the DNS Security
               Extensions", RFC 4035, DOI 10.17487/RFC4035, March 2005,
@@ -739,6 +721,14 @@ Internet-Draft            dnssec-bootstrapping                April 2024
               DNSSEC Delegation Trust Maintenance", RFC 7344,
               DOI 10.17487/RFC7344, September 2014,
               <https://www.rfc-editor.org/info/rfc7344>.
+
+
+
+
+Thomassen & Wisiol       Expires 13 October 2024               [Page 13]
+
+Internet-Draft            dnssec-bootstrapping                April 2024
+
 
    [RFC7477]  Hardaker, W., "Child-to-Parent Synchronization in DNS",
               RFC 7477, DOI 10.17487/RFC7477, March 2015,
@@ -778,14 +768,8 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-08
 
-
-
-
-Thomassen & Wisiol       Expires 13 October 2024               [Page 14]
-
-Internet-Draft            dnssec-bootstrapping                April 2024
-
-
+   |  Editorial changes from AD Review
+   |  
    |  Updated implementation section
    |  
    |  Change capitalization of terms from terminology section
@@ -794,6 +778,14 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
    |  Add Glauca registrar implementation
    |  
+
+
+
+Thomassen & Wisiol       Expires 13 October 2024               [Page 14]
+
+Internet-Draft            dnssec-bootstrapping                April 2024
+
+
    |  Editorial changes to Security Considerations
    |  
    |  Add/discuss on-demand triggers (notifications)
@@ -834,14 +826,6 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    |  
    |  Editorial changes.
 
-
-
-
-Thomassen & Wisiol       Expires 13 October 2024               [Page 15]
-
-Internet-Draft            dnssec-bootstrapping                April 2024
-
-
    *  draft-ietf-dnsop-dnssec-bootstrapping-01
 
    |  Allow bootstrapping when some (not all) NS hostnames are in
@@ -850,6 +834,14 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    |  Clarified Operational Recommendations according to operator
    |  feedback.
    |  
+
+
+
+Thomassen & Wisiol       Expires 13 October 2024               [Page 15]
+
+Internet-Draft            dnssec-bootstrapping                April 2024
+
+
    |  Turn loose Security Considerations points into coherent text.
    |  
    |  Do no longer suggest NSEC-walking Signaling Domains.  (It does not
@@ -890,14 +882,6 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    |  
    |  Triggers need to fetch NS records (if not implicit from context).
    |  
-
-
-
-Thomassen & Wisiol       Expires 13 October 2024               [Page 16]
-
-Internet-Draft            dnssec-bootstrapping                April 2024
-
-
    |  Improved title.
    |  
    |  Recognized that hash collisions are dealt with by Child apex
@@ -906,6 +890,14 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    *  draft-thomassen-dnsop-dnssec-bootstrapping-01
 
    |  Add section on Triggers.
+
+
+
+Thomassen & Wisiol       Expires 13 October 2024               [Page 16]
+
+Internet-Draft            dnssec-bootstrapping                April 2024
+
+
    |  
    |  Clarified title.
    |  
@@ -943,6 +935,14 @@ Authors' Addresses
    Berlin
    Germany
    Email: nils@desec.io
+
+
+
+
+
+
+
+
 
 
 
