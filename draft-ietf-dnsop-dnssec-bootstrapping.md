@@ -542,9 +542,9 @@ by the community at <https://github.com/oskar456/cds-updates>.
     names `_signal.ns1.desec.io` and `_signal.ns2.desec.org`.
 
 * Authoritative nameserver support:
+  - Knot DNS supports signaling record synthesis since version 3.3.5.
   - An implementation of bootstrapping record synthesis in PowerDNS is
     available at https://github.com/desec-io/desec-ns/pull/46.
-  - Knot DNS supports manual creation of non-apex CDS/CDNSKEY records.
 
 ## Parental Agent-side
 
@@ -585,6 +585,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-08
+
+> Updated implementation section
 
 > Change capitalization of terms from terminology section
 
