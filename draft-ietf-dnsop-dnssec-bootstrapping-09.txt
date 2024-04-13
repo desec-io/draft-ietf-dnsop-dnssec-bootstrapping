@@ -565,11 +565,11 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 5.2.  Parental Agent
 
    In order to ensure timely DNSSEC bootstrapping of insecure domains,
-   stalemate situations due to mismatch of cached records (Step 4 of
-   Section 4.2) need to be avoided.  It is thus RECOMMENDED to perform
-   queries into signaling domains with an (initially) cold resolver
-   cache, or to disable caching for them (e.g., by limiting response
-   TTLs to the interval between scans).
+   stalemate situations due to mismatch of stale cached records (Step 4
+   of Section 4.2) need to be avoided.  It is thus RECOMMENDED to
+   perform queries into signaling domains with an (initially) cold
+   resolver cache, or using some other method for retrieving fresh data
+   from authoritative servers.
 
 6.  Security Considerations
 
@@ -768,6 +768,8 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-09
 
+   |  Editorial suggestion from John Levine
+
    *  draft-ietf-dnsop-dnssec-bootstrapping-08
 
    |  Editorial changes from AD Review
@@ -776,8 +778,6 @@ Appendix A.  Change History (to be removed before publication)
    |  
    |  Change capitalization of terms from terminology section
 
-   *  draft-ietf-dnsop-dnssec-bootstrapping-07
-
 
 
 
@@ -785,6 +785,8 @@ Thomassen & Wisiol       Expires 15 October 2024               [Page 14]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
+
+   *  draft-ietf-dnsop-dnssec-bootstrapping-07
 
    |  Add Glauca registrar implementation
    |  
@@ -832,8 +834,6 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
    |  Allow bootstrapping when some (not all) NS hostnames are in
    |  bailiwick.
-   |  
-
 
 
 
@@ -842,6 +842,7 @@ Thomassen & Wisiol       Expires 15 October 2024               [Page 15]
 Internet-Draft            dnssec-bootstrapping                April 2024
 
 
+   |  
    |  Clarified Operational Recommendations according to operator
    |  feedback.
    |  
@@ -889,7 +890,6 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    |  
    |  Recognized that hash collisions are dealt with by Child apex
    |  check.
-
 
 
 

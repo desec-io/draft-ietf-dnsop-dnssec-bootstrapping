@@ -478,11 +478,11 @@ efficient bulk processing (such as via zone transfers).
 ## Parental Agent
 
 In order to ensure timely DNSSEC bootstrapping of insecure domains,
-stalemate situations due to mismatch of cached records (Step 4 of
+stalemate situations due to mismatch of stale cached records (Step 4 of
 (#cds-auth)) need to be avoided.
 It is thus RECOMMENDED to perform queries into signaling domains with an
-(initially) cold resolver cache, or to disable caching for them (e.g.,
-by limiting response TTLs to the interval between scans).
+(initially) cold resolver cache, or using some other method for
+retrieving fresh data from authoritative servers.
 
 
 # Security Considerations
@@ -586,6 +586,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-09
+
+> Editorial suggestion from John Levine
 
 * draft-ietf-dnsop-dnssec-bootstrapping-08
 
