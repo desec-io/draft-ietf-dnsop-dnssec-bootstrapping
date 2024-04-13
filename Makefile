@@ -1,4 +1,4 @@
-VERSION = 08
+VERSION = 09
 DOCNAME = draft-ietf-dnsop-dnssec-bootstrapping
 today := $(shell TZ=UTC date +%Y-%m-%dT00:00:00Z)
 
