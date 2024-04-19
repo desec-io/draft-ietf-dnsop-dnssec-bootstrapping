@@ -472,7 +472,7 @@ modifications of the zone containing the nameserver hostname.
 Once a Child DNS Operator determines that specific signaling records
 have been processed (e.g., by seeing the result in the parent zone),
 they are advised to remove them.
-This will reduce the size of the Signaling Zone, and facilitate more
+This will reduce the size of the signaling zone, and facilitate more
 efficient bulk processing (such as via zone transfers).
 
 ## Parental Agent
@@ -586,6 +586,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-09
+
+> Editorial nit by Scott Rose
 
 > Editorial suggestion from John Levine
 

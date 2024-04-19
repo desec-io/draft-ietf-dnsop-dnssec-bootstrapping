@@ -6,7 +6,7 @@ DNSOP Working Group                                         P. Thomassen
 Internet-Draft                         deSEC, Secure Systems Engineering
 Updates: 7344, 8078 (if approved)                              N. Wisiol
 Intended status: Standards Track    deSEC, Technische Universität Berlin
-Expires: 15 October 2024                                   13 April 2024
+Expires: 21 October 2024                                   19 April 2024
 
 
   Automatic DNSSEC Bootstrapping using Authenticated Signals from the
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024                [Page 1]
+Thomassen & Wisiol       Expires 21 October 2024                [Page 1]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
@@ -63,7 +63,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 October 2024.
+   This Internet-Draft will expire on 21 October 2024.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024                [Page 2]
+Thomassen & Wisiol       Expires 21 October 2024                [Page 2]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
@@ -165,7 +165,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024                [Page 3]
+Thomassen & Wisiol       Expires 21 October 2024                [Page 3]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
@@ -221,7 +221,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024                [Page 4]
+Thomassen & Wisiol       Expires 21 October 2024                [Page 4]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
@@ -277,7 +277,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024                [Page 5]
+Thomassen & Wisiol       Expires 21 October 2024                [Page 5]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
@@ -333,7 +333,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024                [Page 6]
+Thomassen & Wisiol       Expires 21 October 2024                [Page 6]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
@@ -389,7 +389,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024                [Page 7]
+Thomassen & Wisiol       Expires 21 October 2024                [Page 7]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
@@ -445,7 +445,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024                [Page 8]
+Thomassen & Wisiol       Expires 21 October 2024                [Page 8]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
@@ -501,7 +501,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024                [Page 9]
+Thomassen & Wisiol       Expires 21 October 2024                [Page 9]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
@@ -549,7 +549,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    Once a Child DNS Operator determines that specific signaling records
    have been processed (e.g., by seeing the result in the parent zone),
    they are advised to remove them.  This will reduce the size of the
-   Signaling Zone, and facilitate more efficient bulk processing (such
+   signaling zone, and facilitate more efficient bulk processing (such
    as via zone transfers).
 
 
@@ -557,7 +557,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024               [Page 10]
+Thomassen & Wisiol       Expires 21 October 2024               [Page 10]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
@@ -613,7 +613,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024               [Page 11]
+Thomassen & Wisiol       Expires 21 October 2024               [Page 11]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
@@ -669,7 +669,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024               [Page 12]
+Thomassen & Wisiol       Expires 21 October 2024               [Page 12]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
@@ -725,7 +725,7 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024               [Page 13]
+Thomassen & Wisiol       Expires 21 October 2024               [Page 13]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
@@ -768,6 +768,8 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-09
 
+   |  Editorial nit by Scott Rose
+   |  
    |  Editorial suggestion from John Levine
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-08
@@ -776,15 +778,15 @@ Appendix A.  Change History (to be removed before publication)
    |  
    |  Updated implementation section
    |  
-   |  Change capitalization of terms from terminology section
 
 
 
-
-Thomassen & Wisiol       Expires 15 October 2024               [Page 14]
+Thomassen & Wisiol       Expires 21 October 2024               [Page 14]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
+
+   |  Change capitalization of terms from terminology section
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-07
 
@@ -832,16 +834,16 @@ Internet-Draft            dnssec-bootstrapping                April 2024
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-01
 
-   |  Allow bootstrapping when some (not all) NS hostnames are in
-   |  bailiwick.
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024               [Page 15]
+Thomassen & Wisiol       Expires 21 October 2024               [Page 15]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
 
+   |  Allow bootstrapping when some (not all) NS hostnames are in
+   |  bailiwick.
    |  
    |  Clarified Operational Recommendations according to operator
    |  feedback.
@@ -888,15 +890,16 @@ Internet-Draft            dnssec-bootstrapping                April 2024
    |  
    |  Improved title.
    |  
-   |  Recognized that hash collisions are dealt with by Child apex
-   |  check.
 
 
 
-Thomassen & Wisiol       Expires 15 October 2024               [Page 16]
+Thomassen & Wisiol       Expires 21 October 2024               [Page 16]
 
 Internet-Draft            dnssec-bootstrapping                April 2024
 
+
+   |  Recognized that hash collisions are dealt with by Child apex
+   |  check.
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-01
 
@@ -946,7 +949,4 @@ Authors' Addresses
 
 
 
-
-
-
-Thomassen & Wisiol       Expires 15 October 2024               [Page 17]
+Thomassen & Wisiol       Expires 21 October 2024               [Page 17]
