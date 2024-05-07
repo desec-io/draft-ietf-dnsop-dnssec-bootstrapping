@@ -215,7 +215,7 @@ Authenticity is ensured through standard DNSSEC validation.
 ## Chain of Trust
 
 If a child DNS operator implements the protocol, each signaling zone
-MUST be signed and be validatable by the parental agent (i.e. have a
+MUST be signed and be validatable by the parental agent (i.e., have a
 valid DNSSEC chain of trust).
 This is typically achieved by securely delegating each signaling zone.
 
@@ -397,11 +397,11 @@ once one of the following conditions is fulfilled:
     wishes to have its CDS/CDNSKEY RRset processed;
 
   - The parental agent encounters a signaling record during a proactive,
-    opportunistic scan (e.g. daily queries of signaling records for some
-    or all of its delegations);
+    opportunistic scan (e.g., daily queries of signaling records for
+    some or all of its delegations);
 
   - The parental agent encounters a signaling record during an NSEC walk
-    or when parsing a signaling zone (e.g. when made available via AXFR
+    or when parsing a signaling zone (e.g., when made available via AXFR
     by the child DNS operator);
 
   - Any other condition as deemed appropriate by local policy.
@@ -491,7 +491,7 @@ The DNSSEC bootstrapping method introduced in this document is based on
 the (now deprecated) approaches described in [@!RFC8078] Section 3, but
 adds authentication to the CDS/CDNSKEY concept.
 Its security level is therefore strictly higher than that of existing
-approaches described in that document (e.g. "Accept after Delay").
+approaches described in that document (e.g., "Accept after Delay").
 Apart from this general improvement, the same Security Considerations
 apply as in [@!RFC8078].
 
@@ -574,8 +574,9 @@ by the community at <https://github.com/oskar456/cds-updates>.
 
 Thanks to Brian Dickson, Ondřej Caletka, John R. Levine, Christian
 Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari,
-Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters, Paul Hoffman for
-reviewing draft proposals and offering comments and suggestions.
+Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters, Paul Hoffman,
+Peter Yee for reviewing draft proposals and offering comments and
+suggestions.
 
 Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.
@@ -586,6 +587,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-09
+
+> Editorial nits by Peter Yee
 
 > Editorial nit by Scott Rose
 
