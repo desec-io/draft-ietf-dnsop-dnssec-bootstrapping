@@ -444,9 +444,9 @@ initial NS record set and remove it once bootstrapping is completed.
 Automation for this is available via CSYNC records, see [@!RFC7477].)
 
 Fully qualified signaling names must by valid DNS names.
-Label count and length requirements for DNS names imply that the
-protocol does not work for unusually long child domain names or NS
-hostnames.
+Label count and length requirements for DNS names ([@!RFC1035] Section
+3.1) imply that the protocol does not work for unusually long child
+domain names or NS hostnames.
 
 
 # Operational Recommendations
@@ -575,8 +575,8 @@ by the community at <https://github.com/oskar456/cds-updates>.
 Thanks to Brian Dickson, Ondřej Caletka, John R. Levine, Christian
 Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari,
 Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters, Paul Hoffman,
-Peter Yee for reviewing draft proposals and offering comments and
-suggestions.
+Peter Yee, Benson Muite for reviewing draft proposals and offering
+comments and suggestions.
 
 Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.
@@ -587,6 +587,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-09
+
+> Editorial nits by Benson Muite
 
 > Editorial nits by Peter Yee
 

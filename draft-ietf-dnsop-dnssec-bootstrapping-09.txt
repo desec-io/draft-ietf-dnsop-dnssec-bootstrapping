@@ -523,8 +523,9 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    Automation for this is available via CSYNC records, see [RFC7477].)
 
    Fully qualified signaling names must by valid DNS names.  Label count
-   and length requirements for DNS names imply that the protocol does
-   not work for unusually long child domain names or NS hostnames.
+   and length requirements for DNS names ([RFC1035] Section 3.1) imply
+   that the protocol does not work for unusually long child domain names
+   or NS hostnames.
 
 5.  Operational Recommendations
 
@@ -551,7 +552,6 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    they are advised to remove them.  This will reduce the size of the
    signaling zone, and facilitate more efficient bulk processing (such
    as via zone transfers).
-
 
 
 
@@ -689,13 +689,17 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    Thanks to Brian Dickson, Ond&#345;ej Caletka, John R.  Levine,
    Christian Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan,
    Warren Kumari, Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters,
-   Paul Hoffman, Peter Yee for reviewing draft proposals and offering
-   comments and suggestions.
+   Paul Hoffman, Peter Yee, Benson Muite for reviewing draft proposals
+   and offering comments and suggestions.
 
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
 
 10.  Normative References
+
+   [RFC1035]  Mockapetris, P., "Domain names - implementation and
+              specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
+              November 1987, <https://www.rfc-editor.org/info/rfc1035>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -717,10 +721,6 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
               Extensions", RFC 4035, DOI 10.17487/RFC4035, March 2005,
               <https://www.rfc-editor.org/info/rfc4035>.
 
-   [RFC7344]  Kumari, W., Gudmundsson, O., and G. Barwood, "Automating
-              DNSSEC Delegation Trust Maintenance", RFC 7344,
-              DOI 10.17487/RFC7344, September 2014,
-              <https://www.rfc-editor.org/info/rfc7344>.
 
 
 
@@ -729,6 +729,11 @@ Thomassen & Wisiol      Expires 16 November 2024               [Page 13]
 
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
+
+   [RFC7344]  Kumari, W., Gudmundsson, O., and G. Barwood, "Automating
+              DNSSEC Delegation Trust Maintenance", RFC 7344,
+              DOI 10.17487/RFC7344, September 2014,
+              <https://www.rfc-editor.org/info/rfc7344>.
 
    [RFC7477]  Hardaker, W., "Child-to-Parent Synchronization in DNS",
               RFC 7477, DOI 10.17487/RFC7477, March 2015,
@@ -768,16 +773,11 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-09
 
+   |  Editorial nits by Benson Muite
+   |  
    |  Editorial nits by Peter Yee
    |  
    |  Editorial nit by Scott Rose
-   |  
-   |  Editorial suggestion from John Levine
-
-   *  draft-ietf-dnsop-dnssec-bootstrapping-08
-
-   |  Editorial changes from AD Review
-   |  
 
 
 
@@ -786,6 +786,13 @@ Thomassen & Wisiol      Expires 16 November 2024               [Page 14]
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
+   |  
+   |  Editorial suggestion from John Levine
+
+   *  draft-ietf-dnsop-dnssec-bootstrapping-08
+
+   |  Editorial changes from AD Review
+   |  
    |  Updated implementation section
    |  
    |  Change capitalization of terms from terminology section
@@ -827,13 +834,6 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    |  Clarified that RFC 8078 Section 3 is not replaced, but its methods
    |  are deprecated.
    |  
-   |  Added new deployments to Implementation section.
-   |  
-   |  Included NSEC walk / AXFR as possible triggers for DS
-   |  bootstrapping.
-   |  
-   |  Editorial changes.
-
 
 
 
@@ -841,6 +841,13 @@ Thomassen & Wisiol      Expires 16 November 2024               [Page 15]
 
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
+
+   |  Added new deployments to Implementation section.
+   |  
+   |  Included NSEC walk / AXFR as possible triggers for DS
+   |  bootstrapping.
+   |  
+   |  Editorial changes.
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-01
 
@@ -884,13 +891,6 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
 
    *  draft-thomassen-dnsop-dnssec-bootstrapping-02
 
-   |  Reframed as an authentication mechanism for RFC 8078.
-   |  
-   |  Removed multi-signer use case (focus on RFC 8078 authentication).
-   |  
-   |  Triggers need to fetch NS records (if not implicit from context).
-   |  
-
 
 
 Thomassen & Wisiol      Expires 16 November 2024               [Page 16]
@@ -898,6 +898,12 @@ Thomassen & Wisiol      Expires 16 November 2024               [Page 16]
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
+   |  Reframed as an authentication mechanism for RFC 8078.
+   |  
+   |  Removed multi-signer use case (focus on RFC 8078 authentication).
+   |  
+   |  Triggers need to fetch NS records (if not implicit from context).
+   |  
    |  Improved title.
    |  
    |  Recognized that hash collisions are dealt with by Child apex
@@ -938,6 +944,16 @@ Authors' Addresses
    Email: peter@desec.io
 
 
+
+
+
+
+
+Thomassen & Wisiol      Expires 16 November 2024               [Page 17]
+
+Internet-Draft            dnssec-bootstrapping                  May 2024
+
+
    Nils Wisiol
    deSEC, Technische Universität Berlin
    Berlin
@@ -949,4 +965,44 @@ Authors' Addresses
 
 
 
-Thomassen & Wisiol      Expires 16 November 2024               [Page 17]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thomassen & Wisiol      Expires 16 November 2024               [Page 18]

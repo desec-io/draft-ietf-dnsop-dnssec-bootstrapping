@@ -1826,9 +1826,9 @@ trust to the child domain is available during bootstrapping.
 initial NS record set and remove it once bootstrapping is completed.
 Automation for this is available via CSYNC records, see <span>[<a href="#RFC7477" class="xref">RFC7477</a>]</span>.)<a href="#section-4.4-1" class="pilcrow">¶</a></p>
 <p id="section-4.4-2">Fully qualified signaling names must by valid DNS names.
-Label count and length requirements for DNS names imply that the
-protocol does not work for unusually long child domain names or NS
-hostnames.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+Label count and length requirements for DNS names (<span>[<a href="#RFC1035" class="xref">RFC1035</a>]</span> Section
+3.1) imply that the protocol does not work for unusually long child
+domain names or NS hostnames.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2019,8 +2019,8 @@ to the parent zone.<a href="#section-8.2-1.4.1" class="pilcrow">¶</a></p>
 <p id="section-9-1">Thanks to Brian Dickson, Ond&amp;#345;ej Caletka, John R. Levine, Christian
 Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari,
 Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters, Paul Hoffman,
-Peter Yee for reviewing draft proposals and offering comments and
-suggestions.<a href="#section-9-1" class="pilcrow">¶</a></p>
+Peter Yee, Benson Muite for reviewing draft proposals and offering
+comments and suggestions.<a href="#section-9-1" class="pilcrow">¶</a></p>
 <p id="section-9-2">Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.<a href="#section-9-2" class="pilcrow">¶</a></p>
 </section>
@@ -2030,6 +2030,10 @@ early-stage brainstorming.<a href="#section-9-2" class="pilcrow">¶</a></p>
 <a href="#section-10" class="section-number selfRef">10. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
       </h2>
 <dl class="references">
+<dt id="RFC1035">[RFC1035]</dt>
+      <dd>
+<span class="refAuthor">Mockapetris, P.</span>, <span class="refTitle">"Domain names - implementation and specification"</span>, <span class="seriesInfo">STD 13</span>, <span class="seriesInfo">RFC 1035</span>, <span class="seriesInfo">DOI 10.17487/RFC1035</span>, <time datetime="1987-11" class="refDate">November 1987</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc1035">https://www.rfc-editor.org/info/rfc1035</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
       <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
@@ -2097,9 +2101,10 @@ early-stage brainstorming.<a href="#section-9-2" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <blockquote id="appendix-A-2">
-        <p id="appendix-A-2.1">Editorial nits by Peter Yee<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
-<p id="appendix-A-2.2">Editorial nit by Scott Rose<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
-<p id="appendix-A-2.3">Editorial suggestion from John Levine<a href="#appendix-A-2.3" class="pilcrow">¶</a></p>
+        <p id="appendix-A-2.1">Editorial nits by Benson Muite<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.2">Editorial nits by Peter Yee<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.3">Editorial nit by Scott Rose<a href="#appendix-A-2.3" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.4">Editorial suggestion from John Levine<a href="#appendix-A-2.4" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
 <li class="normal" id="appendix-A-3.1">draft-ietf-dnsop-dnssec-bootstrapping-08<a href="#appendix-A-3.1" class="pilcrow">¶</a>
