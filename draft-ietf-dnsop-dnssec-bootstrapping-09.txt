@@ -195,12 +195,12 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    CDS/CDNSKEY  This notation refers to CDS and/or CDNSKEY, i.e., one or
       both.
 
-   Child  see [RFC8499] Section 7
+   Child  see [RFC9499] Section 7
 
    Child DNS operator  The entity that maintains and publishes the zone
       information for the child DNS.
 
-   Parent  see [RFC8499] Section 7
+   Parent  see [RFC9499] Section 7
 
    Parental agent  The entity that has the authority to insert DS
       records into the parent zone on behalf of the child.  (It could be
@@ -582,7 +582,7 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    in [RFC8078].
 
    The level of rigor in Section 4.2 is needed to prevent publication of
-   a half-baked DS RRset (authorized only under a subset of NS
+   a ill-conceived DS RRset (authorized only under a subset of NS
    hostnames).  This ensures, for example, that an operator in a multi-
    homed setup cannot enable DNSSEC unless all other operators agree.
 
@@ -601,15 +601,15 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    Per [RFC8552], IANA is requested to add the following entries to the
    "Underscored and Globally Scoped DNS Node Names" registry:
 
-   +---------+------------+-----------------------------------------+
-   | RR Type | _NODE NAME | Reference                               |
-   +---------+------------+-----------------------------------------+
-   | CDS     | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
-   | CDNSKEY | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
-   +---------+------------+-----------------------------------------+
+   +---------+------------+------------+
+   | RR Type | _NODE NAME | Reference  |
+   +---------+------------+------------+
+   | CDS     | _signal    | [This RFC] |
+   | CDNSKEY | _signal    | [This RFC] |
+   +---------+------------+------------+
 
-
-
+   *Note to the RFC Editor*: please replace "This RFC" in the above
+   table with a proper reference.
 
 
 
@@ -689,8 +689,8 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    Thanks to Brian Dickson, Ond&#345;ej Caletka, John R.  Levine,
    Christian Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan,
    Warren Kumari, Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters,
-   Paul Hoffman, Peter Yee, Benson Muite for reviewing draft proposals
-   and offering comments and suggestions.
+   Paul Hoffman, Peter Yee, Benson Muite, Roman Danyliw for reviewing
+   draft proposals and offering comments and suggestions.
 
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
@@ -748,14 +748,14 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
-   [RFC8499]  Hoffman, P., Sullivan, A., and K. Fujiwara, "DNS
-              Terminology", RFC 8499, DOI 10.17487/RFC8499, January
-              2019, <https://www.rfc-editor.org/info/rfc8499>.
-
    [RFC8552]  Crocker, D., "Scoped Interpretation of DNS Resource
               Records through "Underscored" Naming of Attribute Leaves",
               BCP 222, RFC 8552, DOI 10.17487/RFC8552, March 2019,
               <https://www.rfc-editor.org/info/rfc8552>.
+
+   [RFC9499]  Hoffman, P. and K. Fujiwara, "DNS Terminology", BCP 219,
+              RFC 9499, DOI 10.17487/RFC9499, March 2024,
+              <https://www.rfc-editor.org/info/rfc9499>.
 
 11.  Informative References
 
@@ -773,11 +773,11 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-09
 
+   |  Editorial nits by Roman Danyliw
+   |  
    |  Editorial nits by Benson Muite
    |  
    |  Editorial nits by Peter Yee
-   |  
-   |  Editorial nit by Scott Rose
 
 
 
@@ -786,6 +786,8 @@ Thomassen & Wisiol      Expires 16 November 2024               [Page 14]
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
+   |  
+   |  Editorial nit by Scott Rose
    |  
    |  Editorial suggestion from John Levine
 
@@ -831,9 +833,7 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-02
 
-   |  Clarified that RFC 8078 Section 3 is not replaced, but its methods
-   |  are deprecated.
-   |  
+
 
 
 
@@ -842,6 +842,9 @@ Thomassen & Wisiol      Expires 16 November 2024               [Page 15]
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
+   |  Clarified that RFC 8078 Section 3 is not replaced, but its methods
+   |  are deprecated.
+   |  
    |  Added new deployments to Implementation section.
    |  
    |  Included NSEC walk / AXFR as possible triggers for DS
@@ -887,9 +890,6 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    |  
    |  Removed hashing of Child name components in Signaling Names.
    |  
-   |  Editorial changes.
-
-   *  draft-thomassen-dnsop-dnssec-bootstrapping-02
 
 
 
@@ -897,6 +897,10 @@ Thomassen & Wisiol      Expires 16 November 2024               [Page 16]
 
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
+
+   |  Editorial changes.
+
+   *  draft-thomassen-dnsop-dnssec-bootstrapping-02
 
    |  Reframed as an authentication mechanism for RFC 8078.
    |  
@@ -942,10 +946,6 @@ Authors' Addresses
    Berlin
    Germany
    Email: peter@desec.io
-
-
-
-
 
 
 

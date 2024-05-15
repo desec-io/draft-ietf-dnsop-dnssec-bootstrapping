@@ -1469,7 +1469,7 @@ likes to make known (e.g., API endpoints for third-party interaction).<a href="#
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-2.3">Child</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.4">see <span>[<a href="#RFC8499" class="xref">RFC8499</a>]</span> Section 7<a href="#section-1.1-2.4" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.4">see <span>[<a href="#RFC9499" class="xref">RFC9499</a>]</span> Section 7<a href="#section-1.1-2.4" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-2.5">Child DNS operator</dt>
@@ -1478,7 +1478,7 @@ the child DNS.<a href="#section-1.1-2.6" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-2.7">Parent</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.8">see <span>[<a href="#RFC8499" class="xref">RFC8499</a>]</span> Section 7<a href="#section-1.1-2.8" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.8">see <span>[<a href="#RFC9499" class="xref">RFC9499</a>]</span> Section 7<a href="#section-1.1-2.8" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-2.9">Parental agent</dt>
@@ -1892,7 +1892,7 @@ approaches described in that document (e.g., "Accept after Delay").
 Apart from this general improvement, the same Security Considerations
 apply as in <span>[<a href="#RFC8078" class="xref">RFC8078</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">The level of rigor in <a href="#cds-auth" class="xref">Section 4.2</a> is needed to prevent publication of a
-half-baked DS RRset (authorized only under a subset of NS hostnames).
+ill-conceived DS RRset (authorized only under a subset of NS hostnames).
 This ensures, for example, that an operator in a multi-homed setup
 cannot enable DNSSEC unless all other operators agree.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <p id="section-6-3">In any case, as the child DNS operator has authoritative knowledge of
@@ -1913,14 +1913,15 @@ their TLD.<a href="#section-6-4" class="pilcrow">¶</a></p>
 <p id="section-7-1">Per <span>[<a href="#RFC8552" class="xref">RFC8552</a>]</span>, IANA is requested to add the following entries to the
 "Underscored and Globally Scoped DNS Node Names" registry:<a href="#section-7-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-7-2">
-<pre>+---------+------------+-----------------------------------------+
-| RR Type | _NODE NAME | Reference                               |
-+---------+------------+-----------------------------------------+
-| CDS     | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
-| CDNSKEY | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
-+---------+------------+-----------------------------------------+
+<pre>+---------+------------+------------+
+| RR Type | _NODE NAME | Reference  |
++---------+------------+------------+
+| CDS     | _signal    | [This RFC] |
+| CDNSKEY | _signal    | [This RFC] |
++---------+------------+------------+
 </pre><a href="#section-7-2" class="pilcrow">¶</a>
 </div>
+<p id="section-7-3"><strong>Note to the RFC Editor</strong>: please replace "This RFC" in the above table with a proper reference.<a href="#section-7-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="implementation-status">
@@ -2019,8 +2020,8 @@ to the parent zone.<a href="#section-8.2-1.4.1" class="pilcrow">¶</a></p>
 <p id="section-9-1">Thanks to Brian Dickson, Ond&amp;#345;ej Caletka, John R. Levine, Christian
 Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari,
 Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters, Paul Hoffman,
-Peter Yee, Benson Muite for reviewing draft proposals and offering
-comments and suggestions.<a href="#section-9-1" class="pilcrow">¶</a></p>
+Peter Yee, Benson Muite, Roman Danyliw for reviewing draft proposals and
+offering comments and suggestions.<a href="#section-9-1" class="pilcrow">¶</a></p>
 <p id="section-9-2">Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.<a href="#section-9-2" class="pilcrow">¶</a></p>
 </section>
@@ -2066,13 +2067,13 @@ early-stage brainstorming.<a href="#section-9-2" class="pilcrow">¶</a></p>
       <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8499">[RFC8499]</dt>
-      <dd>
-<span class="refAuthor">Hoffman, P.</span>, <span class="refAuthor">Sullivan, A.</span>, and <span class="refAuthor">K. Fujiwara</span>, <span class="refTitle">"DNS Terminology"</span>, <span class="seriesInfo">RFC 8499</span>, <span class="seriesInfo">DOI 10.17487/RFC8499</span>, <time datetime="2019-01" class="refDate">January 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8499">https://www.rfc-editor.org/info/rfc8499</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC8552">[RFC8552]</dt>
-    <dd>
+      <dd>
 <span class="refAuthor">Crocker, D.</span>, <span class="refTitle">"Scoped Interpretation of DNS Resource Records through "Underscored" Naming of Attribute Leaves"</span>, <span class="seriesInfo">BCP 222</span>, <span class="seriesInfo">RFC 8552</span>, <span class="seriesInfo">DOI 10.17487/RFC8552</span>, <time datetime="2019-03" class="refDate">March 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8552">https://www.rfc-editor.org/info/rfc8552</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9499">[RFC9499]</dt>
+    <dd>
+<span class="refAuthor">Hoffman, P.</span> and <span class="refAuthor">K. Fujiwara</span>, <span class="refTitle">"DNS Terminology"</span>, <span class="seriesInfo">BCP 219</span>, <span class="seriesInfo">RFC 9499</span>, <span class="seriesInfo">DOI 10.17487/RFC9499</span>, <time datetime="2024-03" class="refDate">March 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9499">https://www.rfc-editor.org/info/rfc9499</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -2101,10 +2102,11 @@ early-stage brainstorming.<a href="#section-9-2" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <blockquote id="appendix-A-2">
-        <p id="appendix-A-2.1">Editorial nits by Benson Muite<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
-<p id="appendix-A-2.2">Editorial nits by Peter Yee<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
-<p id="appendix-A-2.3">Editorial nit by Scott Rose<a href="#appendix-A-2.3" class="pilcrow">¶</a></p>
-<p id="appendix-A-2.4">Editorial suggestion from John Levine<a href="#appendix-A-2.4" class="pilcrow">¶</a></p>
+        <p id="appendix-A-2.1">Editorial nits by Roman Danyliw<a href="#appendix-A-2.1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.2">Editorial nits by Benson Muite<a href="#appendix-A-2.2" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.3">Editorial nits by Peter Yee<a href="#appendix-A-2.3" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.4">Editorial nit by Scott Rose<a href="#appendix-A-2.4" class="pilcrow">¶</a></p>
+<p id="appendix-A-2.5">Editorial suggestion from John Levine<a href="#appendix-A-2.5" class="pilcrow">¶</a></p>
 </blockquote>
 <ul class="normal">
 <li class="normal" id="appendix-A-3.1">draft-ietf-dnsop-dnssec-bootstrapping-08<a href="#appendix-A-3.1" class="pilcrow">¶</a>

@@ -140,14 +140,14 @@ CDS/CDNSKEY
 : This notation refers to CDS and/or CDNSKEY, i.e., one or both.
 
 Child
-: see [@!RFC8499] Section 7
+: see [@!RFC9499] Section 7
 
 Child DNS operator
 : The entity that maintains and publishes the zone information for
   the child DNS.
 
 Parent
-: see [@!RFC8499] Section 7
+: see [@!RFC9499] Section 7
 
 Parental agent
 : The entity that has the authority to insert DS records into the
@@ -496,7 +496,7 @@ Apart from this general improvement, the same Security Considerations
 apply as in [@!RFC8078].
 
 The level of rigor in (#cds-auth) is needed to prevent publication of a
-half-baked DS RRset (authorized only under a subset of NS hostnames).
+ill-conceived DS RRset (authorized only under a subset of NS hostnames).
 This ensures, for example, that an operator in a multi-homed setup
 cannot enable DNSSEC unless all other operators agree.
 
@@ -516,12 +516,14 @@ their TLD.
 Per [@!RFC8552], IANA is requested to add the following entries to the
 "Underscored and Globally Scoped DNS Node Names" registry:
 
-    +---------+------------+-----------------------------------------+
-    | RR Type | _NODE NAME | Reference                               |
-    +---------+------------+-----------------------------------------+
-    | CDS     | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
-    | CDNSKEY | _signal    | [draft-ietf-dnsop-dnssec-bootstrapping] |
-    +---------+------------+-----------------------------------------+
+    +---------+------------+------------+
+    | RR Type | _NODE NAME | Reference  |
+    +---------+------------+------------+
+    | CDS     | _signal    | [This RFC] |
+    | CDNSKEY | _signal    | [This RFC] |
+    +---------+------------+------------+
+
+**Note to the RFC Editor**: please replace "This RFC" in the above table with a proper reference.
 
 
 # Implementation Status
@@ -575,8 +577,8 @@ by the community at <https://github.com/oskar456/cds-updates>.
 Thanks to Brian Dickson, Ondřej Caletka, John R. Levine, Christian
 Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari,
 Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters, Paul Hoffman,
-Peter Yee, Benson Muite for reviewing draft proposals and offering
-comments and suggestions.
+Peter Yee, Benson Muite, Roman Danyliw for reviewing draft proposals and
+offering comments and suggestions.
 
 Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.
@@ -587,6 +589,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-09
+
+> Editorial nits by Roman Danyliw
 
 > Editorial nits by Benson Muite
 
