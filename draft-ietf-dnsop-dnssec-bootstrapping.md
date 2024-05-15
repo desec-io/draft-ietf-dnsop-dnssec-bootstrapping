@@ -84,8 +84,8 @@ Appendix A).
 As observed in [@!RFC7344], these dependencies often result in a manual
 process that is susceptible to mistakes and/or errors.
 In addition, due to the annoyance factor of the process, involved
-parties may avoid the process of getting a DS record set published in
-the first place.
+parties may avoid the process of getting a DS record set (RRset)
+published in the first place.
 
 To alleviate these problems, automated provisioning of DS records has
 been specified in ([@!RFC8078]).
@@ -93,7 +93,7 @@ It is based on the parental agent (registry or registrar) fetching
 DNSSEC key parameters from the CDS and CDNSKEY records ([@!RFC7344])
 located at the child zone's apex, and validating them somehow.
 This validation can be done using the child's existing DNSSEC chain of
-trust if the objective is to update an existing DS record set (such as
+trust if the objective is to update an existing DS RRset (such as
 during key rollover).
 However, when bootstrapping a DNSSEC delegation, the child zone has
 no existing DNSSEC validation path, and other means to ensure the
@@ -114,12 +114,12 @@ per-zone basis.
 The mechanism allows managed DNS operators to securely announce
 DNSSEC key parameters for zones under their management.
 The parent can then use this signal to cryptographically validate the
-CDS/CDNSKEY records found at an insecure child zone's apex and, upon
+CDS/CDNSKEY RRsets found at an insecure child zone's apex and, upon
 success, secure the delegation.
 
 While applicable to the vast majority of domains, the protocol does
 not support certain edge cases, such as excessively long child zone
-names, or DNSSEC bootstrapping for domains with in-bailick nameservers
+names, or DNSSEC bootstrapping for domains with in-domain nameservers
 only (see (#limitations)).
 
 DNSSEC bootstrapping is just one application of the generic signaling
@@ -128,8 +128,7 @@ Other applications might arise in the future, such as publishing
 operational metadata or auxiliary information which the DNS operator
 likes to make known (e.g., API endpoints for third-party interaction).
 
-Readers are expected to be familiar with DNSSEC, including [@!RFC4033],
-[@!RFC4034], [@!RFC4035], [@RFC6781], [@!RFC7344], and [@!RFC8078].
+Readers are expected to be familiar with DNSSEC [@BCP237].
 
 
 ## Terminology
@@ -156,7 +155,7 @@ Parental agent
   authorized entity.)
 
 Signaling domain
-: A hostname from the child's NS record set, prefixed with the label
+: A hostname from the child's NS RRset, prefixed with the label
   `_signal`.
   There are as many signaling domains as there are distinct NS
   targets.
@@ -214,9 +213,9 @@ Authenticity is ensured through standard DNSSEC validation.
 
 ## Chain of Trust
 
-If a child DNS operator implements the protocol, each signaling zone
-MUST be signed and be validatable by the parental agent (i.e., have a
-valid DNSSEC chain of trust).
+If a child DNS operator implements this specification, each signaling
+zone MUST be signed and be validatable by the parental agent (i.e., have
+a valid publicly resolvable DNSSEC chain of trust).
 This is typically achieved by securely delegating each signaling zone.
 
 For example, when publishing a signal that relates to a child zone
@@ -247,14 +246,14 @@ prefixed with a label containing the signaling type.
 
 When the child zone's CDS/CDNSKEY RRsets are used for setting up initial
 trust, they need to be authenticated.
-This is achieved by co-publishing the child's CDS/CDNSKEY records as an
+This is achieved by co-publishing the child's CDS/CDNSKEY RRsets as an
 authenticated signal as described in (#signaling).
 The parent can discover and validate it, thus transferring trust from
 the child DNS operator nameservers' chain of trust to the child zone.
 
 This protocol is not intended for updating an existing DS RRset.
 For this purpose, the parental agent can validate the child's
-CDS/CDNSKEY records directly, using the chain of trust established by
+CDS/CDNSKEY RRsets directly, using the chain of trust established by
 the existing DS RRset ([@!RFC7344] Section 4).
 
 
@@ -264,28 +263,23 @@ the existing DS RRset ([@!RFC7344] Section 4).
 To confirm its willingness to act as the child's delegated signer and
 authenticate the child's CDS/CDNSKEY RRsets, the child DNS operator
 MUST co-publish them at the corresponding signaling name under each
-out-of-bailiwick signaling domain ((#signalingnames)).
+signaling domain, excluding those that would fall within the child
+domain ((#signalingnames)).
 For simplicity, the child DNS operator MAY also co-publish the child's
-CDS/CDNSKEY RRsets under signaling domains that are in bailiwick,
+CDS/CDNSKEY RRsets under signaling domains within the child domain,
 although those signaling domains are not used for validation
 ((#cds-auth)).
 
-Unlike the CDS/CDNSKEY records at the child's apex, signaling
-records MUST be signed with the corresponding signaling zone's
-key(s).  Their contents MUST be identical to the corresponding
-records published at the child's apex.
+Unlike the CDS/CDNSKEY RRsets at the child's apex, a signaling
+record set MUST be signed with the corresponding signaling zone's
+key(s).  Its contents MUST be identical to the corresponding
+RRset published at the child's apex.
 
 Existing use of CDS/CDNSKEY records was specified at the child apex
 only ([@!RFC7344], Section 4.1).  This protocol extends the use of
 these record types to non-apex owner names for the purpose of DNSSEC
 bootstrapping.  To exclude the possibility of semantic collision,
 there MUST NOT be a zone cut at a signaling name.
-
-To avoid relying on the benevolence of a single signaling domain parent
-(such as the corresponding TLD registry), it is RECOMMENDED to diversify
-the path from the root to the child's nameserver hostnames.
-This is best achieved by using different and independently operated TLDs
-for each one.
 
 ### Example
 
@@ -295,16 +289,15 @@ the required signaling domains are `_signal.ns1.example.net` and
 `_signal.ns2.example.org`.
 
 In the zones containing these domains, the child DNS operator
-authenticates the CDS/CDNSKEY records found at the child's apex by
+authenticates the CDS/CDNSKEY RRsets found at the child's apex by
 co-publishing them at the names:
 ```
 _dsboot.example.co.uk._signal.ns1.example.net
 _dsboot.example.co.uk._signal.ns2.example.org
 ```
-The records are accompanied by RRSIG records created using the key(s)
-of the respective signaling zone.
+These RRsets are signed with DNSSEC just like any other zone data.
 
-Publication of signaling records under the in-bailiwick domain
+Publication of signaling records under the in-domain name
 `_signal.ns3.example.co.uk` is not required.
 
 {#cds-auth}
@@ -314,33 +307,33 @@ To validate a child's CDS/CDNSKEY RRset for DNSSEC bootstrapping, the
 parental agent, knowing both the child zone name and its NS
 hostnames, MUST execute the following steps:
 
-1. verify that the child is not currently securely delegated and that at
-   least one of its nameservers is out of bailiwick;
+1. verify that the child has no DS records published at the parent and
+   that at least one of its nameservers is outside the child domain;
 
-2. query the CDS/CDNSKEY records at the child zone apex directly from
+2. query the CDS/CDNSKEY RRset at the child zone apex directly from
    each of the authoritative servers as determined by the delegation's
-   NS record set (without caching);
+   (parent-side) NS RRset, without caching;
 
-3. query the CDS/CDNSKEY records located at the signaling name under
-   each out-of-bailiwick signaling domain using a trusted DNS resolver
-   and enforce DNSSEC validation;
+3. query the CDS/CDNSKEY RRset located at the signaling name under
+   each signaling domain (except those falling within the child domain)
+   using a trusted DNS resolver and enforce DNSSEC validation;
 
-4. check (separately by record type) that all record sets retrieved
+4. check (separately by record type) that all RRsets retrieved
    in Steps 2 and 3 have equal contents;
 
-If the above steps succeed without error, the CDS/CDNSKEY records are
-successfully validated, and the parental agent can proceed with the
-publication of the DS record set under the precautions described in
+If the above steps succeed without error, the CDS/CDNSKEY RRsets are
+successfully verified, and the parental agent can proceed with the
+publication of the DS RRset under the precautions described in
 [@!RFC8078], Section 5.
 
-However, the parental agent MUST abort the procedure if an error
+The parental agent MUST abort the procedure if an error
 condition occurs, in particular:
 
-- in Step 1: the child is already securely delegated or has in-bailiwick
+- in Step 1: the child is already securely delegated or has in-domain
   nameservers only;
 
 - in Step 2: any failure during the retrieval of the CDS/CDNSKEY
-  records located at the child apex from any of the authoritative
+  RRset located at the child apex from any of the authoritative
   nameservers;
 
 - in Step 3: any failure to retrieve the CDS/CDNSKEY RRsets located
@@ -348,40 +341,40 @@ condition occurs, in particular:
   of DNSSEC validation, or unauthenticated data (AD bit not set);
 
 - in Step 4: inconsistent responses (for at least one of the types),
-  including a record set that is empty in one of Steps 2 or 3, but
+  including an RRset that is empty in one of Steps 2 or 3, but
   non-empty in the other.
 
 ### Example
 
-To verify the CDS/CDNSKEY records for the child `example.co.uk`, the
+To verify the CDS/CDNSKEY RRsets for the child `example.co.uk`, the
 parental agent (assuming that the child delegation's NS records are
 `ns1.example.net`, `ns2.example.org`, and `ns3.example.co.uk`)
 
 1. checks that the child domain is not yet securely delegated;
 
-2. queries CDS/CDNSKEY records for `example.co.uk` directly from
+2. queries the CDS/CDNSKEY RRsets for `example.co.uk` directly from
    `ns1.example.net`, `ns2.example.org`, and `ns3.example.co.uk`
    (without caching);
 
-3. queries and validates the CDS/CDNSKEY records located at (see
-   (#signalingnames); `ns3.example.co.uk` is ignored because it is in
-   bailiwick)
+3. queries and validates the CDS/CDNSKEY RRsets located at (see
+   (#signalingnames); `ns3.example.co.uk` is ignored because it is
+   in-domain)
 
 ```
 _dsboot.example.co.uk._signal.ns1.example.net
 _dsboot.example.co.uk._signal.ns2.example.org
 ```
 
-4. checks that the CDS/CDNSKEY record sets retrieved in Steps 2
+4. checks that the CDS/CDNSKEY RRsets retrieved in Steps 2
    and 3 agree across responses.
 
 If all these steps succeed, the parental agent can proceed to publish
-a DS record set as indicated by the validated CDS/CDNSKEY records.
+a DS RRset as indicated by the validated CDS/CDNSKEY RRset.
 
-As in-bailiwick signaling names do not have a chain of trust at
+As in-domain signaling names do not have a chain of trust at
 bootstrapping time, the parental agent does not consider them during
 validation.
-Consequently, if all NS hostnames are in bailiwick, validation cannot be
+Consequently, if all NS hostnames are in-domain, validation cannot be
 completed, and DS records are not published.
 
 {#triggers}
@@ -390,7 +383,7 @@ completed, and DS records are not published.
 Parental agents SHOULD trigger the procedure described in (#cds-auth)
 once one of the following conditions is fulfilled:
 
-  - The parental agent receives a new or updated NS record set for a
+  - The parental agent receives a new or updated NS RRset for a
     child;
 
   - The parental agent receives a notification indicating that the child
@@ -413,12 +406,12 @@ DNS operators and parental agents are thus encouraged to use them,
 reducing both delays and the amount of scanning traffic.
 
 Most types of discovery (such as daily scans of delegations) are based
-directly on the delegation's NS record set.
+directly on the delegation's NS RRset.
 In this case, these NS names can be used as is by the bootstrapping
 algorithm ((#cds-auth)) for querying signaling records.
 
 Some discovery methods, however, do not imply reliable knowledge of the
-child's NS record set.
+delegation's NS RRset.
 For example, when discovering signaling names by performing an NSEC
 walk or zone transfer of a signaling zone, the parental agent MUST NOT
 assume that the nameserver(s) under whose signaling domain(s) a
@@ -437,10 +430,10 @@ listed in the child's delegation from the parent.
 ## Limitations
 
 As a consequence of Step 3 in (#cds-auth), DS bootstrapping does not
-work for fully in-bailiwick delegations, as no pre-existing chain of
+work for fully in-domain delegations, as no pre-existing chain of
 trust to the child domain is available during bootstrapping.
-(As a workaround, one can add an out-of-bailiwick nameserver to the
-initial NS record set and remove it once bootstrapping is completed.
+(As a workaround, one can add an out-of-domain nameserver to the
+initial NS RRset and remove it once bootstrapping is completed.
 Automation for this is available via CSYNC records, see [@!RFC7477].)
 
 Fully qualified signaling names must by valid DNS names.
@@ -469,7 +462,7 @@ in a signaling zone of fewer labels (such as `example.net`), a
 zone cut ensures that bootstrapping activities do not require
 modifications of the zone containing the nameserver hostname.
 
-Once a Child DNS Operator determines that specific signaling records
+Once a Child DNS Operator determines that specific signaling record sets
 have been processed (e.g., by seeing the result in the parent zone),
 they are advised to remove them.
 This will reduce the size of the signaling zone, and facilitate more
@@ -504,11 +497,11 @@ In any case, as the child DNS operator has authoritative knowledge of
 the child's CDS/CDNSKEY records, it can readily detect fraudulent
 provisioning of DS records.
 
-In order to prevent the TLD of nameserver hostnames from becoming a
+In order to prevent the parents of nameserver hostnames from becoming a
 single point of failure for a delegation (both in terms of resolution
 availability and for the trust model of this protocol), it is advisable
-to use NS hostnames that are independent from each other with respect to
-their TLD.
+to diversify the path from the root to the child's nameserver hostnames,
+such as by using different and independently operated TLDs for each one.
 
 
 # IANA Considerations
@@ -589,6 +582,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-09
+
+> Addressed comments by Paul Wouters
 
 > Editorial nits by Roman Danyliw
 
