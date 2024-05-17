@@ -347,7 +347,7 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
 
    In the zones containing these domains, the child DNS operator
    authenticates the CDS/CDNSKEY RRsets found at the child's apex by co-
-   publishing them at the names:
+   publishing them as CDS/CDNSKEY RRsets at the names:
 
    _dsboot.example.co.uk._signal.ns1.example.net
    _dsboot.example.co.uk._signal.ns2.example.org
@@ -679,8 +679,9 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    Thanks to Brian Dickson, Ond&#345;ej Caletka, John R.  Levine,
    Christian Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan,
    Warren Kumari, Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters,
-   Paul Hoffman, Peter Yee, Benson Muite, Roman Danyliw for reviewing
-   draft proposals and offering comments and suggestions.
+   Paul Hoffman, Peter Yee, Benson Muite, Roman Danyliw, and &#201;ric
+   Vyncke for reviewing draft proposals and offering comments and
+   suggestions.
 
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
@@ -724,7 +725,6 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
 
-
 Thomassen & Wisiol      Expires 18 November 2024               [Page 13]
 
 Internet-Draft            dnssec-bootstrapping                  May 2024
@@ -749,6 +749,8 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
 Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-10
+
+   |  Addressed comments by &#201;ric Vyncke
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-09
 
@@ -776,8 +778,6 @@ Appendix A.  Change History (to be removed before publication)
 
    |  Add Glauca registrar implementation
    |  
-   |  Editorial changes to Security Considerations
-   |  
 
 
 
@@ -786,6 +786,8 @@ Thomassen & Wisiol      Expires 18 November 2024               [Page 14]
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
+   |  Editorial changes to Security Considerations
+   |  
    |  Add/discuss on-demand triggers (notifications)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-06
@@ -832,8 +834,6 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    |  Clarified Operational Recommendations according to operator
    |  feedback.
    |  
-   |  Turn loose Security Considerations points into coherent text.
-   |  
 
 
 
@@ -842,6 +842,8 @@ Thomassen & Wisiol      Expires 18 November 2024               [Page 15]
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
+   |  Turn loose Security Considerations points into coherent text.
+   |  
    |  Do no longer suggest NSEC-walking Signaling Domains.  (It does not
    |  work well due to the Signaling Type prefix.  What's more, it's
    |  unclear who would do this: Parents know there delegations and can
@@ -888,8 +890,6 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    *  draft-thomassen-dnsop-dnssec-bootstrapping-01
 
    |  Add section on Triggers.
-   |  
-   |  Clarified title.
 
 
 
@@ -898,6 +898,8 @@ Thomassen & Wisiol      Expires 18 November 2024               [Page 16]
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
+   |  
+   |  Clarified title.
    |  
    |  Improved abstract.
    |  
@@ -933,8 +935,6 @@ Authors' Addresses
    Berlin
    Germany
    Email: nils@desec.io
-
-
 
 
 

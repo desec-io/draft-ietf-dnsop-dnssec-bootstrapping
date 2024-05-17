@@ -290,7 +290,7 @@ the required signaling domains are `_signal.ns1.example.net` and
 
 In the zones containing these domains, the child DNS operator
 authenticates the CDS/CDNSKEY RRsets found at the child's apex by
-co-publishing them at the names:
+co-publishing them as CDS/CDNSKEY RRsets at the names:
 ```
 _dsboot.example.co.uk._signal.ns1.example.net
 _dsboot.example.co.uk._signal.ns2.example.org
@@ -570,8 +570,8 @@ by the community at <https://github.com/oskar456/cds-updates>.
 Thanks to Brian Dickson, Ondřej Caletka, John R. Levine, Christian
 Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari,
 Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters, Paul Hoffman,
-Peter Yee, Benson Muite, Roman Danyliw for reviewing draft proposals and
-offering comments and suggestions.
+Peter Yee, Benson Muite, Roman Danyliw, and Éric Vyncke for reviewing
+draft proposals and offering comments and suggestions.
 
 Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.
@@ -582,6 +582,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-10
+
+> Addressed comments by Éric Vyncke
 
 
 * draft-ietf-dnsop-dnssec-bootstrapping-09
