@@ -581,6 +581,9 @@ early-stage brainstorming.
 
 # Change History (to be removed before publication)
 
+* draft-ietf-dnsop-dnssec-bootstrapping-10
+
+
 * draft-ietf-dnsop-dnssec-bootstrapping-09
 
 > Addressed comments by Paul Wouters
