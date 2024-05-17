@@ -78,7 +78,7 @@ relationship the child has with the parent.
 A typical situation is that the key is held by the child DNS
 operator; the communication thus often involves this entity.
 In addition, depending on the circumstances, it may also involve the
-Registrar, possibly via the Registrant (for details, see [@!RFC7344],
+registrar, possibly via the registrant (for details, see [@!RFC7344],
 Appendix A).
 
 As observed in [@!RFC7344], these dependencies often result in a manual
@@ -582,6 +582,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-10
+
+> Make capitalization of registrar/registrant consistent
 
 > Editorial nit by Joe Abley
 

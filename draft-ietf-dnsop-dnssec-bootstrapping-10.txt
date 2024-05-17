@@ -131,7 +131,7 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    A typical situation is that the key is held by the child DNS
    operator; the communication thus often involves this entity.  In
    addition, depending on the circumstances, it may also involve the
-   Registrar, possibly via the Registrant (for details, see [RFC7344],
+   registrar, possibly via the registrant (for details, see [RFC7344],
    Appendix A).
 
    As observed in [RFC7344], these dependencies often result in a manual
@@ -750,6 +750,8 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-10
 
+   |  Make capitalization of registrar/registrant consistent
+   |  
    |  Editorial nit by Joe Abley
    |  
    |  Addressed comments by &#201;ric Vyncke
@@ -776,8 +778,6 @@ Appendix A.  Change History (to be removed before publication)
    |  
    |  Change capitalization of terms from terminology section
 
-   *  draft-ietf-dnsop-dnssec-bootstrapping-07
-
 
 
 
@@ -785,6 +785,8 @@ Thomassen & Wisiol      Expires 18 November 2024               [Page 14]
 
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
+
+   *  draft-ietf-dnsop-dnssec-bootstrapping-07
 
    |  Add Glauca registrar implementation
    |  
@@ -832,8 +834,6 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
 
    |  Allow bootstrapping when some (not all) NS hostnames are in
    |  bailiwick.
-   |  
-
 
 
 
@@ -842,6 +842,7 @@ Thomassen & Wisiol      Expires 18 November 2024               [Page 15]
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
+   |  
    |  Clarified Operational Recommendations according to operator
    |  feedback.
    |  
@@ -889,7 +890,6 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    |  
    |  Recognized that hash collisions are dealt with by Child apex
    |  check.
-
 
 
 
