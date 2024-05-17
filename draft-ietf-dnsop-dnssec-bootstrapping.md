@@ -155,8 +155,8 @@ Parental agent
   authorized entity.)
 
 Signaling domain
-: A hostname from the child's NS RRset, prefixed with the label
-  `_signal`.
+: A domain name constructed by prepending the label `_signal` to a
+  hostname taken from the child's NS RRSet.
   There are as many signaling domains as there are distinct NS
   targets.
 
@@ -570,8 +570,8 @@ by the community at <https://github.com/oskar456/cds-updates>.
 Thanks to Brian Dickson, Ondřej Caletka, John R. Levine, Christian
 Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan, Warren Kumari,
 Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters, Paul Hoffman,
-Peter Yee, Benson Muite, Roman Danyliw, and Éric Vyncke for reviewing
-draft proposals and offering comments and suggestions.
+Peter Yee, Benson Muite, Roman Danyliw, Éric Vyncke, and Joe Abley for
+reviewing draft proposals and offering comments and suggestions.
 
 Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
 early-stage brainstorming.
@@ -582,6 +582,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-10
+
+> Editorial nit by Joe Abley
 
 > Addressed comments by Éric Vyncke
 

@@ -202,9 +202,9 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
       records into the parent zone on behalf of the child.  (It could be
       the registry, registrar, a reseller, or some other authorized
       entity.)
-   Signaling domain  A hostname from the child's NS RRset, prefixed with
-      the label _signal.  There are as many signaling domains as there
-      are distinct NS targets.
+   Signaling domain  A domain name constructed by prepending the label
+      _signal to a hostname taken from the child's NS RRSet.  There are
+      as many signaling domains as there are distinct NS targets.
    Signaling name  The labels that are prefixed to a signaling domain in
       order to identify a signaling type and a child zone's name (see
       Section 3.2).
@@ -679,9 +679,9 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    Thanks to Brian Dickson, Ond&#345;ej Caletka, John R.  Levine,
    Christian Elmerot, Oli Schacher, Donald Eastlake, Libor Peltan,
    Warren Kumari, Scott Rose, Linda Dunbar, Tim Wicinski, Paul Wouters,
-   Paul Hoffman, Peter Yee, Benson Muite, Roman Danyliw, and &#201;ric
-   Vyncke for reviewing draft proposals and offering comments and
-   suggestions.
+   Paul Hoffman, Peter Yee, Benson Muite, Roman Danyliw, &#201;ric
+   Vyncke, and Joe Abley for reviewing draft proposals and offering
+   comments and suggestions.
 
    Thanks also to Steve Crocker, Hugo Salgado, and Ulrich Wisser for
    early-stage brainstorming.
@@ -750,6 +750,8 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-10
 
+   |  Editorial nit by Joe Abley
+   |  
    |  Addressed comments by &#201;ric Vyncke
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-09
@@ -776,8 +778,6 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-07
 
-   |  Add Glauca registrar implementation
-   |  
 
 
 
@@ -786,6 +786,8 @@ Thomassen & Wisiol      Expires 18 November 2024               [Page 14]
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
+   |  Add Glauca registrar implementation
+   |  
    |  Editorial changes to Security Considerations
    |  
    |  Add/discuss on-demand triggers (notifications)
@@ -831,9 +833,7 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    |  Allow bootstrapping when some (not all) NS hostnames are in
    |  bailiwick.
    |  
-   |  Clarified Operational Recommendations according to operator
-   |  feedback.
-   |  
+
 
 
 
@@ -842,6 +842,9 @@ Thomassen & Wisiol      Expires 18 November 2024               [Page 15]
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
+   |  Clarified Operational Recommendations according to operator
+   |  feedback.
+   |  
    |  Turn loose Security Considerations points into coherent text.
    |  
    |  Do no longer suggest NSEC-walking Signaling Domains.  (It does not
@@ -887,9 +890,6 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    |  Recognized that hash collisions are dealt with by Child apex
    |  check.
 
-   *  draft-thomassen-dnsop-dnssec-bootstrapping-01
-
-   |  Add section on Triggers.
 
 
 
@@ -898,6 +898,9 @@ Thomassen & Wisiol      Expires 18 November 2024               [Page 16]
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
+   *  draft-thomassen-dnsop-dnssec-bootstrapping-01
+
+   |  Add section on Triggers.
    |  
    |  Clarified title.
    |  
@@ -935,9 +938,6 @@ Authors' Addresses
    Berlin
    Germany
    Email: nils@desec.io
-
-
-
 
 
 
