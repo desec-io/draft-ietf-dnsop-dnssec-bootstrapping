@@ -55,9 +55,9 @@ The parent can then provision DS records for the delegation without
 resorting to out-of-band validation or weaker types of cross-checks
 such as "Accept after Delay".
 
-This document deprecates the DS enrollment methods described in Section
-3 of RFC 8078 in favor of (#dnssec-bootstrapping) of this document, and
-also updates RFC 7344.
+This document establishes the DS enrollment method described in
+(#dnssec-bootstrapping) of this document as the preferred method over
+those from Section 3 of RFC 8078. It also updates RFC 7344.
 
 [ Ed note: This document is being collaborated on at
 <https://github.com/desec-io/draft-ietf-dnsop-dnssec-bootstrapping/>.
@@ -189,12 +189,12 @@ capitals, as shown here.
 
 # Updates to RFCs
 
-The DS enrollment methods described in Section 3 of [@!RFC8078] are
-deprecated and SHOULD NOT be used.
-Child DNS operators and parental agents who wish to use CDS/CDNSKEY
-records for initial DS enrollment SHOULD instead support the
-authentication protocol described in (#dnssec-bootstrapping) of this
+The DS enrollment methods described in Section 3 of [@!RFC8078] are less
+secure than the method described in (#dnssec-bootstrapping) of this
 document.
+Child DNS operators and parental agents wishing to use CDS/CDNSKEY
+records for initial DS enrollment SHOULD therefore support the
+authentication protocol described here.
 
 In order to facilitate publication of signaling records for the purpose
 of DNSSEC bootstrapping (see (#signalingrecords)), the first bullet
@@ -420,7 +420,7 @@ child.
 
 Instead, whenever a list of "bootstrappable domains" is obtained other
 than directly from the parent, the parental
-agent MUST ascertain that the child's delegation actually contains the
+agent MUST ascertain that the delegation actually contains the
 nameserver hostname seen during discovery, and ensure that signaling
 record queries are only made against the proper set of nameservers as
 listed in the child's delegation from the parent.
@@ -446,13 +446,20 @@ domain names or NS hostnames.
 
 ## Child DNS Operator
 
-CDS/CDNSKEY records and corresponding signaling records MUST NOT be
-published without the zone owner's consent.
-Likewise, the child DNS operator MUST enable the zone owner to signal
-the desire to turn off DNSSEC by publication of the special-value
-CDS/CDNSKEY RRset specified in [@!RFC8078] Section 4.
-To facilitate transitions between DNS operators, child DNS operators
-SHOULD support the multi-signer protocols described in [@RFC8901].
+It is possible to add CDS/CDNSKEY records and corresponding signaling
+records to a zone without the domain owner's explicit knowledge.
+To spare domain owners from being caught off guard by the ensuing DS
+changes, child DNS operators following this practice are advised to make
+that transparent, such as by informing the domain owner during zone
+creation (e.g., in a GUI), or by notifying them via email.
+
+When transferring a zone to another DNS operator, the old and new child
+DNS operators need to cooperate to achieve a smooth transition, e.g.,
+by using the multi-signer protocols described in [@RFC8901].
+If all else fails, the domain owner might have to request the removal of
+all DS records (e.g., by using the special-value CDS/CDNSKEY RRset
+specified in [@!RFC8078] Section 4) and have the transfer performed
+insecurely (see [@I-D.hardaker-dnsop-intentionally-temporary-insec].)
 
 Signaling domains SHOULD be delegated as standalone zones, so
 that the signaling zone's apex coincides with the signaling domain (such
@@ -474,14 +481,19 @@ In order to ensure timely DNSSEC bootstrapping of insecure domains,
 stalemate situations due to mismatch of stale cached records (Step 4 of
 (#cds-auth)) need to be avoided.
 It is thus RECOMMENDED to perform queries into signaling domains with an
-(initially) cold resolver cache, or using some other method for
+(initially) empty resolver cache, or using some other method for
 retrieving fresh data from authoritative servers.
 
+It is also RECOMMENDED to use QNAME minimization [@!RFC9156] when
+resolving queries for signaling records, to guard against certain
+attacks (see (#security)).
 
+
+{#security}
 # Security Considerations
 
 The DNSSEC bootstrapping method introduced in this document is based on
-the (now deprecated) approaches described in [@!RFC8078] Section 3, but
+the approaches described in [@!RFC8078] Section 3, but
 adds authentication to the CDS/CDNSKEY concept.
 Its security level is therefore strictly higher than that of existing
 approaches described in that document (e.g., "Accept after Delay").
@@ -502,6 +514,12 @@ single point of failure for a delegation (both in terms of resolution
 availability and for the trust model of this protocol), it is advisable
 to diversify the path from the root to the child's nameserver hostnames,
 such as by using different and independently operated TLDs for each one.
+
+If QNAME minimization [@!RFC9156] is not used when querying for
+signaling records, an upstream parent of a signaling domain will see
+those CDS/CDNSKEY queries and could respond with an authoritative answer
+signed with its own key, instead of sending the referral.
+Enabling QNAME minimization reduces the attack surface for such forgery.
 
 
 # IANA Considerations
@@ -582,6 +600,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-10
+
+> Addressed comments by Paul Wouters
 
 > Make capitalization of registrar/registrant consistent
 
