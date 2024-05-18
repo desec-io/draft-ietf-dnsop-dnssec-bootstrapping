@@ -484,8 +484,8 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    Some discovery methods, however, do not imply reliable knowledge of
    the delegation's NS RRset.  For example, when discovering signaling
    names by performing an NSEC walk or zone transfer of a signaling
-   zone, the parental agent MUST NOT assume that the nameserver(s) under
-   whose signaling domain(s) a signaling name appears is actually
+   zone, the parental agent MUST NOT assume that a nameserver under
+   whose signaling domain a signaling record appears is actually
    authoritative for the corresponding child.
 
    Instead, whenever a list of "bootstrappable domains" is obtained
@@ -795,6 +795,8 @@ Appendix A.  Change History (to be removed before publication)
 
    *  draft-ietf-dnsop-dnssec-bootstrapping-10
 
+   |  Editorial nit
+   |  
    |  Addressed comments by Paul Wouters
    |  
    |  Make capitalization of registrar/registrant consistent
@@ -833,14 +835,14 @@ Appendix A.  Change History (to be removed before publication)
    |  
    |  Add/discuss on-demand triggers (notifications)
 
-   *  draft-ietf-dnsop-dnssec-bootstrapping-06
-
 
 
 Thomassen & Wisiol      Expires 21 November 2024               [Page 15]
 
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
+
+   *  draft-ietf-dnsop-dnssec-bootstrapping-06
 
    |  Add section "Updates to RFCs"
    |  
@@ -886,10 +888,8 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    |  
    |  Turn loose Security Considerations points into coherent text.
    |  
-   |  Do no longer suggest NSEC-walking Signaling Domains.  (It does not
-   |  work well due to the Signaling Type prefix.  What's more, it's
-   |  unclear who would do this: Parents know there delegations and can
-   |  do a targeted scan; others are not interested.)
+
+
 
 
 
@@ -898,6 +898,10 @@ Thomassen & Wisiol      Expires 21 November 2024               [Page 16]
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
+   |  Do no longer suggest NSEC-walking Signaling Domains.  (It does not
+   |  work well due to the Signaling Type prefix.  What's more, it's
+   |  unclear who would do this: Parents know there delegations and can
+   |  do a targeted scan; others are not interested.)
    |  
    |  Editorial changes.
    |  
@@ -942,10 +946,6 @@ Internet-Draft            dnssec-bootstrapping                  May 2024
    |  Add section on Triggers.
    |  
    |  Clarified title.
-   |  
-   |  Improved abstract.
-   |  
-   |  Require CDS/CDNSKEY records at the Child.
 
 
 
@@ -954,6 +954,10 @@ Thomassen & Wisiol      Expires 21 November 2024               [Page 17]
 Internet-Draft            dnssec-bootstrapping                  May 2024
 
 
+   |  
+   |  Improved abstract.
+   |  
+   |  Require CDS/CDNSKEY records at the Child.
    |  
    |  Reworked Signaling Name scheme.
    |  
@@ -985,10 +989,6 @@ Authors' Addresses
    Berlin
    Germany
    Email: nils@desec.io
-
-
-
-
 
 
 

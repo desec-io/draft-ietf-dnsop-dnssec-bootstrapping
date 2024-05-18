@@ -414,9 +414,8 @@ Some discovery methods, however, do not imply reliable knowledge of the
 delegation's NS RRset.
 For example, when discovering signaling names by performing an NSEC
 walk or zone transfer of a signaling zone, the parental agent MUST NOT
-assume that the nameserver(s) under whose signaling domain(s) a
-signaling name appears is actually authoritative for the corresponding
-child.
+assume that a nameserver under whose signaling domain a signaling
+record appears is actually authoritative for the corresponding child.
 
 Instead, whenever a list of "bootstrappable domains" is obtained other
 than directly from the parent, the parental
@@ -600,6 +599,8 @@ early-stage brainstorming.
 # Change History (to be removed before publication)
 
 * draft-ietf-dnsop-dnssec-bootstrapping-10
+
+> Editorial nit
 
 > Addressed comments by Paul Wouters
 
