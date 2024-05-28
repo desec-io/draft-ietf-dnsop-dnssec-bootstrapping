@@ -598,6 +598,9 @@ early-stage brainstorming.
 
 # Change History (to be removed before publication)
 
+* draft-ietf-dnsop-dnssec-bootstrapping-11
+
+
 * draft-ietf-dnsop-dnssec-bootstrapping-10
 
 > Editorial nit
