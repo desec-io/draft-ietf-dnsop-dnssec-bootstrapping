@@ -456,9 +456,8 @@ When transferring a zone to another DNS operator, the old and new child
 DNS operators need to cooperate to achieve a smooth transition, e.g.,
 by using the multi-signer protocols described in [@RFC8901].
 If all else fails, the domain owner might have to request the removal of
-all DS records (e.g., by using the special-value CDS/CDNSKEY RRset
-specified in [@!RFC8078] Section 4) and have the transfer performed
-insecurely (see [@I-D.hardaker-dnsop-intentionally-temporary-insec].)
+all DS records and have the transfer performed insecurely (see
+[@I-D.hardaker-dnsop-intentionally-temporary-insec]).
 
 Signaling domains SHOULD be delegated as standalone zones, so
 that the signaling zone's apex coincides with the signaling domain (such
@@ -600,6 +599,7 @@ early-stage brainstorming.
 
 * draft-ietf-dnsop-dnssec-bootstrapping-11
 
+> Addressed comment by Paul Wouters
 
 * draft-ietf-dnsop-dnssec-bootstrapping-10
 
